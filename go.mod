@@ -1,4 +1,4 @@
-module go_web_SCM
+module go_file_scync
 
 go 1.18
 
