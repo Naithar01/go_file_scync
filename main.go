@@ -16,9 +16,13 @@ func main() {
 	app := NewApp()
 
 	err := wails.Run(&options.App{
-		Title:  "go_web_SCM",
-		Width:  1024,
-		Height: 768,
+		Title:     "go_web_SCM",
+		Width:     1024,
+		Height:    768,
+		MaxWidth:  1024,
+		MaxHeight: 768,
+		MinWidth:  1024,
+		MinHeight: 768,
 		AssetServer: &assetserver.Options{
 			Assets: assets,
 		},

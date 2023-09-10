@@ -45,6 +45,8 @@ func (a *App) applicationMenu() *menu.Menu {
 					return
 				}
 
+				// 폴더 선택을 하지 않았을 때, 그냥 Dialog를 닫았을 때 에러 메시지 출력하게 수정, 밑 코드 실행하지 않게
+
 				_, err = runtime.MessageDialog(a.ctx, runtime.MessageDialogOptions{
 					Type:          "info",
 					Title:         "Selected Directory",
@@ -63,6 +65,9 @@ func (a *App) applicationMenu() *menu.Menu {
 			menu.Text("Quit", keys.CmdOrCtrl("q"), func(_ *menu.CallbackData) {
 				runtime.Quit(a.ctx)
 			}),
+		)),
+		menu.SubMenu("Quit", menu.NewMenuFromItems(
+			menu.Separator(),
 		)),
 	)
 
