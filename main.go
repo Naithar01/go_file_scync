@@ -16,7 +16,7 @@ func main() {
 	app := NewApp()
 
 	err := wails.Run(&options.App{
-		Title:     "go_web_SCM",
+		Title:     "go_file_scync",
 		Width:     1024,
 		Height:    768,
 		MaxWidth:  1024,

@@ -2,7 +2,6 @@ package main
 
 import (
 	"context"
-	"fmt"
 
 	"github.com/wailsapp/wails/v2/pkg/menu"
 	"github.com/wailsapp/wails/v2/pkg/menu/keys"
@@ -26,8 +25,6 @@ func (a *App) startup(ctx context.Context) {
 }
 
 func (a *App) applicationMenu() *menu.Menu {
-	// Menus can be updated by callbacks. Updates will get reflected after
-	// calling `runtime.Menu.UpdateApplicationMenu()`
 	return menu.NewMenuFromItems(
 		menu.SubMenu("File", menu.NewMenuFromItems(
 			menu.Text("Open Directory", keys.CmdOrCtrl("o"), func(cbdata *menu.CallbackData) {
@@ -66,14 +63,5 @@ func (a *App) applicationMenu() *menu.Menu {
 				runtime.Quit(a.ctx)
 			}),
 		)),
-		menu.SubMenu("Quit", menu.NewMenuFromItems(
-			menu.Separator(),
-		)),
 	)
-
-}
-
-// Greet returns a greeting for the given name
-func (a *App) Greet(name string) string {
-	return fmt.Sprintf("Hello %s, It's show time!", name)
 }
