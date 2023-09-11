@@ -26,12 +26,43 @@ func NewApp() *App {
 // so we can call the runtime methods
 func (a *App) startup(ctx context.Context) {
 	a.ctx = ctx
+
+	directory_path, err := runtime.OpenDirectoryDialog(a.ctx, runtime.OpenDialogOptions{
+		DefaultDirectory:           "",
+		DefaultFilename:            "",
+		Title:                      "Select Directory",
+		Filters:                    nil,
+		ShowHiddenFiles:            false,
+		CanCreateDirectories:       false,
+		ResolvesAliases:            false,
+		TreatPackagesAsDirectories: true,
+	})
+	if err != nil {
+		return
+	}
+
+	files, err := file.NewFiles(directory_path)
+	if err != nil {
+		runtime.MessageDialog(a.ctx, runtime.MessageDialogOptions{
+			Type:          runtime.ErrorDialog,
+			Title:         "Error",
+			Message:       "Can't Find Directory",
+			Buttons:       nil,
+			DefaultButton: "",
+			CancelButton:  "",
+		})
+		return
+	}
+
+	a.Files = files
+
+	fmt.Println(a.Files)
 }
 
 func (a *App) applicationMenu() *menu.Menu {
 	return menu.NewMenuFromItems(
 		menu.SubMenu("File", menu.NewMenuFromItems(
-			menu.Text("Open Directory", keys.CmdOrCtrl("o"), func(cbdata *menu.CallbackData) {
+			menu.Text("Setting Directory", keys.CmdOrCtrl("o"), func(cbdata *menu.CallbackData) {
 				directory_path, err := runtime.OpenDirectoryDialog(a.ctx, runtime.OpenDialogOptions{
 					DefaultDirectory:           "",
 					DefaultFilename:            "",
@@ -83,4 +114,9 @@ func (a *App) applicationMenu() *menu.Menu {
 			}),
 		)),
 	)
+}
+
+func (a *App) ResponseFileData() []file.File {
+	fmt.Println(a.Files)
+	return a.Files
 }
