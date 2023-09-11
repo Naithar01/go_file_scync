@@ -75,7 +75,7 @@ func (a *App) applicationMenu() *menu.Menu {
 					return
 				}
 
-				// runtime.BrowserOpenURL(a.ctx, directory_path)
+				runtime.BrowserOpenURL(a.ctx, directory_path)
 			}),
 			menu.Separator(), // <br />
 			menu.Text("Quit", keys.CmdOrCtrl("q"), func(_ *menu.CallbackData) {
