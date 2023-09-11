@@ -2,6 +2,8 @@ package main
 
 import (
 	"context"
+	"fmt"
+	"go_file_sync/src/file"
 
 	"github.com/wailsapp/wails/v2/pkg/menu"
 	"github.com/wailsapp/wails/v2/pkg/menu/keys"
@@ -11,6 +13,8 @@ import (
 // App struct
 type App struct {
 	ctx context.Context
+
+	Files []file.File
 }
 
 // NewApp creates a new App application struct
@@ -31,18 +35,33 @@ func (a *App) applicationMenu() *menu.Menu {
 				directory_path, err := runtime.OpenDirectoryDialog(a.ctx, runtime.OpenDialogOptions{
 					DefaultDirectory:           "",
 					DefaultFilename:            "",
-					Title:                      "Selct Directory",
+					Title:                      "Select Directory",
 					Filters:                    nil,
 					ShowHiddenFiles:            false,
 					CanCreateDirectories:       false,
 					ResolvesAliases:            false,
-					TreatPackagesAsDirectories: false,
+					TreatPackagesAsDirectories: true,
 				})
 				if err != nil {
 					return
 				}
 
-				// 폴더 선택을 하지 않았을 때, 그냥 Dialog를 닫았을 때 에러 메시지 출력하게 수정, 밑 코드 실행하지 않게
+				files, err := file.NewFiles(directory_path)
+				if err != nil {
+					runtime.MessageDialog(a.ctx, runtime.MessageDialogOptions{
+						Type:          runtime.ErrorDialog,
+						Title:         "Error",
+						Message:       "Can't Find Directory",
+						Buttons:       nil,
+						DefaultButton: "",
+						CancelButton:  "",
+					})
+					return
+				}
+
+				a.Files = files
+
+				fmt.Println(a.Files)
 
 				_, err = runtime.MessageDialog(a.ctx, runtime.MessageDialogOptions{
 					Type:          "info",
@@ -56,7 +75,7 @@ func (a *App) applicationMenu() *menu.Menu {
 					return
 				}
 
-				runtime.BrowserOpenURL(a.ctx, directory_path)
+				// runtime.BrowserOpenURL(a.ctx, directory_path)
 			}),
 			menu.Separator(), // <br />
 			menu.Text("Quit", keys.CmdOrCtrl("q"), func(_ *menu.CallbackData) {
