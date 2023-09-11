@@ -1,4 +1,4 @@
-module go_file_scync
+module go_file_sync
 
 go 1.18
 
