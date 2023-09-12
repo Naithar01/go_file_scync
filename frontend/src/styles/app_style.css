@@ -1,0 +1,20 @@
+.main {
+  display: flex;
+  padding: 1px;
+  margin-top: 15px;
+}
+
+#folderStructure {
+  width: 50%;
+  height: 95vh;
+  margin-right: auto;
+  padding-left: 10px;
+}
+
+#connect_folderStructure {
+  width: 50%;
+  height: 95vh;
+  border-left: 1px solid black;
+  margin-left: auto;
+  padding-left: 10px;
+}

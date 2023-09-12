@@ -3,6 +3,8 @@ import { Fragment, useEffect, useState } from "react"
 import Loading from "./components/common/Loading"
 import Layout from "./components/layouts/Layout"
 
+import "./styles/app_style.css"
+
 import { OpenDirectory } from "../wailsjs/go/main/App"
 import { main } from "../wailsjs/go/models"
 import { file } from "../wailsjs/go/models"
@@ -63,7 +65,12 @@ function App() {
 			<Loading />
 			: 
 			<Fragment>
-				<div id="folderStructure"></div>
+        <div className="main">
+          <div id="folderStructure">Hello? zz</div>
+          <div id="connect_folderStructure">
+            연결 된 PC 파일 정보들...
+          </div>
+        </div>
 			</Fragment>}
 		</Layout>
 	)
