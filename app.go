@@ -85,6 +85,7 @@ func (a *App) applicationMenu() *menu.Menu {
 type ResponseFileStruct struct {
 	Root_path string                 `json:"root_path"`
 	Files     map[string][]file.File `json:"files"`
+	File      file.File              `json:"file"`
 }
 
 // root path, files
