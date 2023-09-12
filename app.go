@@ -31,50 +31,50 @@ func (a *App) startup(ctx context.Context) {
 func (a *App) applicationMenu() *menu.Menu {
 	return menu.NewMenuFromItems(
 		menu.SubMenu("File", menu.NewMenuFromItems(
-			menu.Text("Setting Directory", keys.CmdOrCtrl("o"), func(cbdata *menu.CallbackData) {
-				directory_path, err := runtime.OpenDirectoryDialog(a.ctx, runtime.OpenDialogOptions{
-					DefaultDirectory:           "",
-					DefaultFilename:            "",
-					Title:                      "Select Directory",
-					Filters:                    nil,
-					ShowHiddenFiles:            false,
-					CanCreateDirectories:       false,
-					ResolvesAliases:            false,
-					TreatPackagesAsDirectories: true,
-				})
-				if err != nil {
-					return
-				}
+			// menu.Text("Setting Directory", keys.CmdOrCtrl("o"), func(cbdata *menu.CallbackData) {
+			// 	directory_path, err := runtime.OpenDirectoryDialog(a.ctx, runtime.OpenDialogOptions{
+			// 		DefaultDirectory:           "",
+			// 		DefaultFilename:            "",
+			// 		Title:                      "Select Directory",
+			// 		Filters:                    nil,
+			// 		ShowHiddenFiles:            false,
+			// 		CanCreateDirectories:       false,
+			// 		ResolvesAliases:            false,
+			// 		TreatPackagesAsDirectories: true,
+			// 	})
+			// 	if err != nil {
+			// 		return
+			// 	}
 
-				files, err := file.NewFiles(directory_path)
-				if err != nil {
-					runtime.MessageDialog(a.ctx, runtime.MessageDialogOptions{
-						Type:          runtime.ErrorDialog,
-						Title:         "Error",
-						Message:       "Can't Find Directory",
-						Buttons:       nil,
-						DefaultButton: "",
-						CancelButton:  "",
-					})
-					return
-				}
+			// 	files, err := file.NewFiles(directory_path)
+			// 	if err != nil {
+			// 		runtime.MessageDialog(a.ctx, runtime.MessageDialogOptions{
+			// 			Type:          runtime.ErrorDialog,
+			// 			Title:         "Error",
+			// 			Message:       "Can't Find Directory",
+			// 			Buttons:       nil,
+			// 			DefaultButton: "",
+			// 			CancelButton:  "",
+			// 		})
+			// 		return
+			// 	}
 
-				a.Files = files
+			// 	a.Files = files
 
-				_, err = runtime.MessageDialog(a.ctx, runtime.MessageDialogOptions{
-					Type:          "info",
-					Title:         "Selected Directory",
-					Message:       directory_path,
-					Buttons:       nil,
-					DefaultButton: "",
-					CancelButton:  "",
-				})
-				if err != nil {
-					return
-				}
+			// 	_, err = runtime.MessageDialog(a.ctx, runtime.MessageDialogOptions{
+			// 		Type:          "info",
+			// 		Title:         "Selected Directory",
+			// 		Message:       directory_path,
+			// 		Buttons:       nil,
+			// 		DefaultButton: "",
+			// 		CancelButton:  "",
+			// 	})
+			// 	if err != nil {
+			// 		return
+			// 	}
 
-				// runtime.BrowserOpenURL(a.ctx, directory_path)
-			}),
+			// 	// runtime.BrowserOpenURL(a.ctx, directory_path)
+			// }),
 			menu.Separator(), // <br />
 			menu.Text("Quit", keys.CmdOrCtrl("q"), func(_ *menu.CallbackData) {
 				runtime.Quit(a.ctx)
@@ -89,7 +89,7 @@ type ResponseFileStruct struct {
 }
 
 // root path, files
-func (a *App) ResponseFileData() ResponseFileStruct {
+func (a *App) OpenDirectory() ResponseFileStruct {
 	directory_path, err := runtime.OpenDirectoryDialog(a.ctx, runtime.OpenDialogOptions{
 		DefaultDirectory:           "",
 		DefaultFilename:            "",
