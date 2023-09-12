@@ -10,7 +10,6 @@ function App() {
 	const [isLoading ,setIsLoading] = useState<boolean>(true)
 
   const [data, setData] = useState<file.File[]>([]);
-  const [intervalId, setIntervalId] = useState<number>(0);
 
   useEffect(() => {
 		FetchFileData()
@@ -26,7 +25,6 @@ function App() {
 			}
 			setData(res);
 			setIsLoading(false);
-			console.log(res);
 		} catch (error) {
 			console.error("Error fetching data:", error);
 			FetchFileData()
