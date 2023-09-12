@@ -66,9 +66,24 @@ function App() {
 			: 
 			<Fragment>
         <div className="main">
-          <div id="folderStructure">Hello? zz</div>
+          <div id="folderStructure">
+            {JSON.stringify(resFileData) }
+            {JSON.stringify(resFileData) }
+            {JSON.stringify(resFileData) }
+            {JSON.stringify(resFileData) }
+            {JSON.stringify(resFileData) }
+            {JSON.stringify(resFileData) }
+            {JSON.stringify(resFileData) }
+          </div>
           <div id="connect_folderStructure">
             연결 된 PC 파일 정보들...
+            {JSON.stringify(resFileData) }
+            {JSON.stringify(resFileData) }
+            {JSON.stringify(resFileData) }
+            {JSON.stringify(resFileData) }
+            {JSON.stringify(resFileData) }
+            {JSON.stringify(resFileData) }
+
           </div>
         </div>
 			</Fragment>}
