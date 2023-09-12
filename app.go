@@ -61,8 +61,6 @@ func (a *App) applicationMenu() *menu.Menu {
 
 				a.Files = files
 
-				fmt.Println(a.Files)
-
 				_, err = runtime.MessageDialog(a.ctx, runtime.MessageDialogOptions{
 					Type:          "info",
 					Title:         "Selected Directory",
@@ -75,7 +73,7 @@ func (a *App) applicationMenu() *menu.Menu {
 					return
 				}
 
-				runtime.BrowserOpenURL(a.ctx, directory_path)
+				// runtime.BrowserOpenURL(a.ctx, directory_path)
 			}),
 			menu.Separator(), // <br />
 			menu.Text("Quit", keys.CmdOrCtrl("q"), func(_ *menu.CallbackData) {
@@ -85,7 +83,13 @@ func (a *App) applicationMenu() *menu.Menu {
 	)
 }
 
-func (a *App) ResponseFileData() []file.File {
+type ResponseFileStruct struct {
+	Root_path string      `json:"root_path"`
+	Files     []file.File `json:"files"`
+}
+
+// root path, files
+func (a *App) ResponseFileData() ResponseFileStruct {
 	directory_path, err := runtime.OpenDirectoryDialog(a.ctx, runtime.OpenDialogOptions{
 		DefaultDirectory:           "",
 		DefaultFilename:            "",
@@ -97,7 +101,10 @@ func (a *App) ResponseFileData() []file.File {
 		TreatPackagesAsDirectories: true,
 	})
 	if err != nil {
-		return nil
+		return ResponseFileStruct{
+			Root_path: "",
+			Files:     nil,
+		}
 	}
 
 	files, err := file.NewFiles(directory_path)
@@ -110,9 +117,21 @@ func (a *App) ResponseFileData() []file.File {
 			DefaultButton: "",
 			CancelButton:  "",
 		})
-		return nil
+		return ResponseFileStruct{
+			Root_path: "",
+			Files:     nil,
+		}
+	}
+
+	fmt.Println(files)
+
+	for _, v := range files {
+		fmt.Println(v.DirectoryPath, ">", v.FileName)
 	}
 
 	a.Files = files
-	return a.Files
+	return ResponseFileStruct{
+		Root_path: directory_path,
+		Files:     a.Files,
+	}
 }

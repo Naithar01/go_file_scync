@@ -4,12 +4,11 @@ import Loading from "./components/common/Loading"
 import Layout from "./components/layouts/Layout"
 
 import { ResponseFileData } from "../wailsjs/go/main/App"
-import { file } from "../wailsjs/go/models"
+import { main } from "../wailsjs/go/models"
 
 function App() {
 	const [isLoading ,setIsLoading] = useState<boolean>(true)
-
-  const [data, setData] = useState<file.File[]>([]);
+  const [resFileData, setResFileData] = useState<main.ResponseFileStruct>()
 
   useEffect(() => {
 		FetchFileData()
@@ -19,12 +18,13 @@ function App() {
 		try {
 			const res = await ResponseFileData();
 
-			if (!res) {
+			if (res.root_path.length == 0 || !res.root_path) {
 				FetchFileData()
 				return
 			}
-			setData(res);
 			setIsLoading(false);
+      setResFileData(res)
+      alert(res.root_path)
 		} catch (error) {
 			console.error("Error fetching data:", error);
 			FetchFileData()
