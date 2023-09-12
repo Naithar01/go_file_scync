@@ -5,7 +5,6 @@ import Layout from "./components/layouts/Layout"
 
 import { OpenDirectory } from "../wailsjs/go/main/App"
 import { main } from "../wailsjs/go/models"
-import { file } from "../wailsjs/go/models"
 
 function App() {
 	const [isLoading ,setIsLoading] = useState<boolean>(true)
