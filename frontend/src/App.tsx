@@ -5,6 +5,7 @@ import Layout from "./components/layouts/Layout"
 
 import { OpenDirectory } from "../wailsjs/go/main/App"
 import { main } from "../wailsjs/go/models"
+import { file } from "../wailsjs/go/models"
 
 function App() {
 	const [isLoading ,setIsLoading] = useState<boolean>(true)
@@ -24,7 +25,8 @@ function App() {
 			}
 			setIsLoading(false);
       setResFileData(res)
-      alert(res.root_path)
+      console.log(res.files);
+      
 		} catch (error) {
 			console.error("Error fetching data:", error);
 			FetchFileData()
@@ -37,7 +39,7 @@ function App() {
 			<Loading />
 			: 
 			<Fragment>
-				Loadding Success
+				<div id="folderStructure"></div>
 			</Fragment>}
 		</Layout>
 	)

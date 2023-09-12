@@ -35,3 +35,13 @@ func NewFiles(directoryPath string) ([]File, error) {
 	}
 	return files, nil
 }
+
+func ParseDirectoryFiles(filesInfo []File) map[string][]File {
+	var fileDir = map[string][]File{}
+
+	for _, v := range filesInfo {
+		fileDir[v.DirectoryPath] = append(fileDir[v.DirectoryPath], v)
+	}
+
+	return fileDir
+}

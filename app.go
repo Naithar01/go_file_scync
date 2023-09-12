@@ -2,7 +2,6 @@ package main
 
 import (
 	"context"
-	"fmt"
 	"go_file_sync/src/file"
 
 	"github.com/wailsapp/wails/v2/pkg/menu"
@@ -84,8 +83,8 @@ func (a *App) applicationMenu() *menu.Menu {
 }
 
 type ResponseFileStruct struct {
-	Root_path string      `json:"root_path"`
-	Files     []file.File `json:"files"`
+	Root_path string                 `json:"root_path"`
+	Files     map[string][]file.File `json:"files"`
 }
 
 // root path, files
@@ -123,15 +122,11 @@ func (a *App) OpenDirectory() ResponseFileStruct {
 		}
 	}
 
-	fmt.Println(files)
-
-	for _, v := range files {
-		fmt.Println(v.DirectoryPath, ">", v.FileName)
-	}
-
 	a.Files = files
+	fileDir := file.ParseDirectoryFiles(a.Files)
+
 	return ResponseFileStruct{
 		Root_path: directory_path,
-		Files:     a.Files,
+		Files:     fileDir,
 	}
 }
