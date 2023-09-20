@@ -15,7 +15,7 @@ function App() {
   const [resFileData, setResFileData] = useState<{[key: string]: file.File[]}>()
 
   useEffect(() => {
-		FetchFileData()
+		// FetchFileData()
   }, []);
 
   // 서버로부터 파일 정보와, 선택 된 폴더 경로를 받아옴
@@ -68,22 +68,9 @@ function App() {
         <div className="main">
           <div id="folderStructure">
             {JSON.stringify(resFileData) }
-            {JSON.stringify(resFileData) }
-            {JSON.stringify(resFileData) }
-            {JSON.stringify(resFileData) }
-            {JSON.stringify(resFileData) }
-            {JSON.stringify(resFileData) }
-            {JSON.stringify(resFileData) }
           </div>
           <div id="connect_folderStructure">
-            연결 된 PC 파일 정보들...
-            {JSON.stringify(resFileData) }
-            {JSON.stringify(resFileData) }
-            {JSON.stringify(resFileData) }
-            {JSON.stringify(resFileData) }
-            {JSON.stringify(resFileData) }
-            {JSON.stringify(resFileData) }
-
+            연결 된 상대 PC 파일 정보들...
           </div>
         </div>
 			</Fragment>}

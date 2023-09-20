@@ -19,10 +19,8 @@ func main() {
 		Title:     "go_file_sync",
 		Width:     1024,
 		Height:    768,
-		MaxWidth:  1024,
-		MaxHeight: 768,
-		MinWidth:  1024,
-		MinHeight: 768,
+		MinWidth:  800,
+		MinHeight: 600,
 		AssetServer: &assetserver.Options{
 			Assets: assets,
 		},
