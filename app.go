@@ -74,8 +74,11 @@ func (a *App) applicationMenu() *menu.Menu {
 
 			// 	// runtime.BrowserOpenURL(a.ctx, directory_path)
 			// }),
+			menu.Text("새로고침", keys.CmdOrCtrl("r"), func(_ *menu.CallbackData) {
+				runtime.WindowReloadApp(a.ctx)
+			}),
 			menu.Separator(), // <br />
-			menu.Text("Quit", keys.CmdOrCtrl("q"), func(_ *menu.CallbackData) {
+			menu.Text("종료", keys.CmdOrCtrl("q"), func(_ *menu.CallbackData) {
 				runtime.Quit(a.ctx)
 			}),
 		)),
