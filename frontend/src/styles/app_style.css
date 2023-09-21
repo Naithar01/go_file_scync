@@ -6,20 +6,19 @@
 }
 
 #folderStructure {
-  width: 50%;
-  height: 100vh;
   margin-right: 10px;
-  padding-left: 10px;
-  box-sizing: border-box;
-  overflow: auto;
 }
 
 #connect_folderStructure {
-  width: 50%;
   border-left: 1px solid #d8dee4;
-  height: 100vh;
   margin-left: auto;
-  padding-left: 10px;
+}
+
+#folderStructure, 
+#connect_folderStructure {
+  width: 50%;
+  height: 100vh;
+  padding: 0px 0px 10px 10px;
   box-sizing: border-box;
   overflow: auto;
 }

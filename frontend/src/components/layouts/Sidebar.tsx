@@ -34,9 +34,9 @@ const Sidebar = () => {
         </div>
         <div className="sidebar_content">
           <ul>
-            <li><a>Content 1</a></li>
-            <li><a>Content 2</a></li>
-            <li><a>Content 3</a></li>
+            <li><p>폴더 재선택</p></li>
+            <li><a>Content2</a></li>
+            <li><a>Content3</a></li>
           </ul>
         </div>
       </div>
