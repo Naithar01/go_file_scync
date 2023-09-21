@@ -2,6 +2,7 @@
   display: flex;
   padding: 1px;
   height: 100%;
+  margin: 60px 0px 0px 0px;
 }
 
 #folderStructure {
@@ -15,7 +16,7 @@
 
 #connect_folderStructure {
   width: 50%;
-  border-left: 1px solid black;
+  border-left: 1px solid #d8dee4;
   height: 100vh;
   margin-left: auto;
   padding-left: 10px;

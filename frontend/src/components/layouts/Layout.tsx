@@ -1,3 +1,5 @@
+import Sidebar from "./Sidebar"
+
 import "../../styles/common/layout_style.css"
 
 type Props = {
@@ -7,6 +9,7 @@ type Props = {
 const Layout = ({children}: Props) => {
   return (
     <div className="layout">
+      <Sidebar />
       {children}
     </div>
   )

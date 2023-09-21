@@ -61,12 +61,13 @@ function App() {
 
 	return (
 		<Layout>
-			{ isLoading ? 
+			{ !isLoading ? 
 			<Loading />
 			: 
 			<Fragment>
         <div className="main">
           <div id="folderStructure">
+            PC 파일 정보들...
             {JSON.stringify(resFileData) }
           </div>
           <div id="connect_folderStructure">
