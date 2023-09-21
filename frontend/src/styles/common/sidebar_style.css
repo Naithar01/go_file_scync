@@ -1,11 +1,9 @@
 .sidebar_nav {
   display: flex;
   align-items: center;
-  position: fixed;
   width: 100%;
   height: 60px;
   padding: 10px;
-  margin: 0px 0px 60px 0px;
   background-color:#f6f8fa;
   box-sizing: border-box;
   color: black;
@@ -22,10 +20,11 @@
 }
 
 .sidebar_nav_toggle_icon > button svg {
-  font-size: 20px;
+  font-size: 2rem;
   padding: 5px;
 }
 
 .sidebar_nav_logo {
+  font-size: 2rem;
   margin: 0px 0px 0px 1rem;
 }
