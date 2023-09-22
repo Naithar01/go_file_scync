@@ -5,3 +5,7 @@
 export function OpenDirectory() {
   return window['go']['main']['App']['OpenDirectory']();
 }
+
+export function ReloadApp() {
+  return window['go']['main']['App']['ReloadApp']();
+}

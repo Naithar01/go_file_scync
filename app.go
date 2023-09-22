@@ -75,7 +75,7 @@ func (a *App) applicationMenu() *menu.Menu {
 			// 	// runtime.BrowserOpenURL(a.ctx, directory_path)
 			// }),
 			menu.Text("새로고침", keys.CmdOrCtrl("r"), func(_ *menu.CallbackData) {
-				runtime.WindowReloadApp(a.ctx)
+				a.ReloadApp()
 			}),
 			menu.Separator(), // <br />
 			menu.Text("종료", keys.CmdOrCtrl("q"), func(_ *menu.CallbackData) {
@@ -133,4 +133,9 @@ func (a *App) OpenDirectory() ResponseFileStruct {
 		Root_path: directory_path,
 		Files:     fileDir,
 	}
+}
+
+// Reload App
+func (a *App) ReloadApp() {
+	runtime.WindowReloadApp(a.ctx)
 }

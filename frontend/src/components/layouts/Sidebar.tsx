@@ -5,6 +5,8 @@ import { faBars, faX } from "@fortawesome/free-solid-svg-icons"
 
 import "../../styles/common/sidebar_style.css"
 
+import { ReloadApp } from "../../../wailsjs/go/main/App"
+
 const Sidebar = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false)
 
@@ -34,9 +36,7 @@ const Sidebar = () => {
         </div>
         <div className="sidebar_content">
           <ul>
-            <li><p>폴더 재선택</p></li>
-            <li><a>Content2</a></li>
-            <li><a>Content3</a></li>
+            <li onClick={ReloadApp}><p>폴더 재선택</p></li>
           </ul>
         </div>
       </div>
