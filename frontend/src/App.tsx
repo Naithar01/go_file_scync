@@ -34,7 +34,7 @@ function App() {
         return res
       })
       setResFileData(() => {
-        return renameFileData(res)
+        return renameFile(res)
       })
       
 		} catch (error) {
@@ -44,7 +44,7 @@ function App() {
 	}
 
   // 폴더 경로를 기준으로, root path는 지워주는 함수
-  const renameFileData = (fileData: main.ResponseFileStruct): { [key: string]: file.File[] } => {
+  const renameFile = (fileData: main.ResponseFileStruct): { [key: string]: file.File[] } => {
     let renameFileData: { [key: string]: file.File[] } = {}
     for (const path_key in fileData.files) {
       let renameKey = path_key.replace(fileData.root_path, "")
@@ -55,7 +55,8 @@ function App() {
       // @ts-ignore
       renameFileData[renameKey] = fileData.files[path_key]
     }
-
+    console.log(renameFileData);
+    
     return renameFileData
   }
 
@@ -68,7 +69,7 @@ function App() {
         <div className="main">
           <div id="folderStructure">
             PC 파일 정보들...
-            {JSON.stringify(resFileData) }
+            {JSON.stringify(resFileData)}
           </div>
           <div id="connect_folderStructure">
             연결 된 상대 PC 파일 정보들...
