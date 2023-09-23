@@ -1,12 +1,8 @@
 .main {
   display: flex;
-  padding: 1px;
-  height: 100%;
+  width: 100%;
+  min-height: 100vh;
   font-size: 1.5rem;
-}
-
-#folderStructure {
-  margin-right: 10px;
 }
 
 #connect_folderStructure {
@@ -17,8 +13,7 @@
 #folderStructure, 
 #connect_folderStructure {
   width: 50%;
-  height: 100vh;
-  padding: 0px 0px 10px 10px;
-  box-sizing: border-box;
-  overflow: auto;
+  min-height: 100%;
+  padding: 10px;
+  overflow-wrap: break-word;
 }
