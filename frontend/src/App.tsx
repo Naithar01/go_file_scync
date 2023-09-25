@@ -49,12 +49,13 @@ function App() {
 		}
 	}
 
+  // 이 함수는 주어진 파일 데이터를 가공하여 경로를 수정하고, 각 파일의 깊이를 계산한 후 이 정보를 배열로 정리하여 반환합니다.
+  // 반환된 데이터는 RenameFileData 형식의 배열입니다.
   const renameFile = (fileData: main.ResponseFileStruct): RenameFileData[] => {
     let renameFileData: RenameFileData[] = []
     for (const path_key in fileData.files) {
       let renameKey = path_key.replace(fileData.root_path, "")
-
-      renameKey = renameKey.replace("\\", "/")
+      renameKey = renameKey.replace(/\\/g, '/')
 
       if (renameKey.startsWith("/")) {
         renameKey = renameKey.slice(1)
@@ -67,7 +68,6 @@ function App() {
         files: fileData.files[path_key],
       })
     }
-    
     return renameFileData
   }
 

@@ -1,7 +1,6 @@
 package file
 
 import (
-	"fmt"
 	"os"
 	"path/filepath"
 	"strings"
@@ -19,7 +18,6 @@ type File struct {
 func NewFiles(directoryPath string, rootDepth int) ([]File, error) {
 	var files []File
 	err := filepath.Walk(directoryPath, func(path string, info os.FileInfo, err error) error {
-		fmt.Println(path)
 		if err != nil {
 			return err
 		}
