@@ -80,7 +80,7 @@ function App() {
         <div className="main">
           <div className="folderStructure">
             {resFileData && resFileData.length && resFileData.map((DirData) => (
-              <div className={`folder ${DirData.key}`} key={DirData.key}>
+              <div className={`folder ${DirData.key}`} key={DirData.key} style={{ marginLeft: `${DirData.depth * 6}px` }}>
                 <i className="folder_icon"></i> ({DirData.depth}) {DirData.key}: {DirData.files.length}
               </div>
             ))}
