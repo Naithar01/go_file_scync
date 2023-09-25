@@ -6,6 +6,7 @@ export namespace file {
 	    filesize: number;
 	    // Go type: time
 	    filemodtime: any;
+	    depth: number;
 	
 	    static createFrom(source: any = {}) {
 	        return new File(source);
@@ -17,6 +18,7 @@ export namespace file {
 	        this.filename = source["filename"];
 	        this.filesize = source["filesize"];
 	        this.filemodtime = this.convertValues(source["filemodtime"], null);
+	        this.depth = source["depth"];
 	    }
 	
 		convertValues(a: any, classs: any, asMap: boolean = false): any {

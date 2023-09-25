@@ -110,7 +110,7 @@ func (a *App) OpenDirectory() ResponseFileStruct {
 		}
 	}
 
-	files, err := file.NewFiles(directory_path)
+	files, err := file.NewFiles(directory_path, 0)
 	if err != nil {
 		runtime.MessageDialog(a.ctx, runtime.MessageDialogOptions{
 			Type:          runtime.ErrorDialog,
@@ -128,7 +128,6 @@ func (a *App) OpenDirectory() ResponseFileStruct {
 
 	a.Files = files
 	fileDir := file.ParseDirectoryFiles(a.Files)
-
 	return ResponseFileStruct{
 		Root_path: directory_path,
 		Files:     fileDir,
