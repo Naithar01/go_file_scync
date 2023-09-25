@@ -9,10 +9,16 @@ import { OpenDirectory } from "../wailsjs/go/main/App"
 import { main } from "../wailsjs/go/models"
 import { file } from "../wailsjs/go/models"
 
+interface RenameFileData {
+  key: string;
+  depth: number;
+  files: file.File[];
+}
+
 function App() {
 	const [isLoading ,setIsLoading] = useState<boolean>(true)
-  const [projectData, setProjectData] = useState< main.ResponseFileStruct>()
-  const [resFileData, setResFileData] = useState<{[key: string]: file.File[]}>()
+  const [projectData, setProjectData] = useState<main.ResponseFileStruct>()
+  const [resFileData, setResFileData] = useState<RenameFileData[]>()
 
   useEffect(() => {
 		FetchFileData()
@@ -43,19 +49,24 @@ function App() {
 		}
 	}
 
-  // 폴더 경로를 기준으로, root path는 지워주는 함수
-  const renameFile = (fileData: main.ResponseFileStruct): { [key: string]: file.File[] } => {
-    let renameFileData: { [key: string]: file.File[] } = {}
+  const renameFile = (fileData: main.ResponseFileStruct): RenameFileData[] => {
+    let renameFileData: RenameFileData[] = []
     for (const path_key in fileData.files) {
       let renameKey = path_key.replace(fileData.root_path, "")
+
+      renameKey = renameKey.replace("/", "\\")
 
       if (renameKey.startsWith("\\")) {
         renameKey = renameKey.slice(1)
       }
-      // @ts-ignore
-      renameFileData[renameKey] = fileData.files[path_key]
+
+      renameFileData.push({
+        key: renameKey,
+        depth: renameKey == "" ? 0: renameKey.split("/").length,
+        // @ts-ignore
+        files: fileData.files[path_key],
+      })
     }
-    console.log(renameFileData);
     
     return renameFileData
   }
