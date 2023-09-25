@@ -54,9 +54,9 @@ function App() {
     for (const path_key in fileData.files) {
       let renameKey = path_key.replace(fileData.root_path, "")
 
-      renameKey = renameKey.replace("/", "\\")
+      renameKey = renameKey.replace("\\", "/")
 
-      if (renameKey.startsWith("\\")) {
+      if (renameKey.startsWith("/")) {
         renameKey = renameKey.slice(1)
       }
 
@@ -81,7 +81,7 @@ function App() {
           <div className="folderStructure">
             {resFileData && resFileData.length && resFileData.map((DirData) => (
               <div className={`folder ${DirData.key}`} key={DirData.key}>
-                <i className="folder_icon"></i> {DirData.key}: {DirData.files.length}
+                <i className="folder_icon"></i> ({DirData.depth}) {DirData.key}: {DirData.files.length}
               </div>
             ))}
           </div>
