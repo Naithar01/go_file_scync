@@ -78,11 +78,14 @@ function App() {
 			: 
 			<Fragment>
         <div className="main">
-          <div id="folderStructure">
-            PC 파일 정보들...
-            {JSON.stringify(resFileData)}
+          <div className="folderStructure">
+            {resFileData && resFileData.length && resFileData.map((DirData) => (
+              <div className={`folder ${DirData.key}`} key={DirData.key}>
+                <i className="folder_icon"></i> {DirData.key}: {DirData.files.length}
+              </div>
+            ))}
           </div>
-          <div id="connect_folderStructure">
+          <div className="connect_folderStructure">
             연결 된 상대 PC 파일 정보들...
           </div>
         </div>

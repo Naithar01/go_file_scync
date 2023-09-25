@@ -5,15 +5,31 @@
   font-size: 1.5rem;
 }
 
-#connect_folderStructure {
+.connect_folderStructure {
   border-left: 1px solid #d8dee4;
   margin-left: auto;
 }
 
-#folderStructure, 
-#connect_folderStructure {
+.folderStructure, 
+.connect_folderStructure {
   width: 50%;
   min-height: 100%;
   padding: 10px;
   overflow-wrap: break-word;
+}
+
+.folder {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.folder_icon {
+  display: inline-block;
+  background-image: url("../assets//images//appicon.png");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  width: 2rem;
+  height: 2rem;
 }
