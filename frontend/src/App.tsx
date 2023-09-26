@@ -82,7 +82,7 @@ function App() {
           {resFileData && resFileData.length > 0 && resFileData.map((DirData) => {
             const marginLeft = `${DirData.depth * 6}px`;
             const paddingLeft = `${DirData.depth * 6}px`;
-            const verticalLineHeight = `${((resFileData.filter((fileStr) => fileStr.key.includes(DirData.key) && fileStr.key.startsWith(DirData.key))).length - 1) * 20 + 8}px`;
+            const verticalLineHeight = `${((resFileData.filter((fileStr) => fileStr.key.includes(DirData.key) && fileStr.key.startsWith(DirData.key))).length - 1) * 20 + 10}px`;
 
             return (
               <div className="folder_wrap" key={DirData.key} style={{ marginLeft, paddingLeft }}>
