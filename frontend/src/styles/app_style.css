@@ -2,7 +2,7 @@
   display: flex;
   width: 100%;
   min-height: 100vh;
-  font-size: 1.5rem;
+  font-size: 1.2rem;
 }
 
 .connect_folderStructure {
@@ -18,10 +18,23 @@
   overflow-wrap: break-word;
 }
 
+.folder_wrap {
+  display: flex;
+}
+
+.verticalLine {
+  position: absolute;
+  width: 0.1rem; 
+  background-color: #ddd;
+  padding: 5px 0px;
+  margin: 0px 0px 0px 6px;
+}
+
 .folder {
   display: flex;
   align-items: center;
   justify-content: flex-start;
+  padding-left: 10px;
 }
 
 .folder_icon {

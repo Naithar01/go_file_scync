@@ -28,6 +28,8 @@ function App() {
 	const FetchFileData = async (): Promise<void> => {
 		try {
 			const res = await OpenDirectory();
+      console.log(res);
+      
 
 			if (res.root_path.length == 0 || !res.root_path) {
 				FetchFileData()
@@ -78,13 +80,24 @@ function App() {
 			: 
 			<Fragment>
         <div className="main">
-          <div className="folderStructure">
-            {resFileData && resFileData.length && resFileData.map((DirData) => (
-              <div className={`folder ${DirData.key}`} key={DirData.key} style={{ marginLeft: `${DirData.depth * 6}px` }}>
-                <i className="folder_icon"></i> ({DirData.depth}) {DirData.key}: {DirData.files.length}
+        <div className="folderStructure">
+          {resFileData && resFileData.length > 0 && resFileData.map((DirData) => {
+            const marginLeft = `${DirData.depth * 6}px`;
+            const paddingLeft = `${DirData.depth * 6}px`;
+            const verticalLineHeight = `${((resFileData.filter((fileStr) => fileStr.key.includes(DirData.key))).length - 1) * 20 + 10}px`;
+
+            return (
+              <div className="folder_wrap" key={DirData.key} style={{ marginLeft, paddingLeft }}>
+                {DirData.depth > 0 && (
+                  <div className="verticalLine" style={{ height: verticalLineHeight }}></div>
+                )}
+                <div className={`folder ${DirData.key}`}>
+                  <i className="folder_icon"></i>{DirData.key}
+                </div>
               </div>
-            ))}
-          </div>
+            );
+          })}
+        </div>
           <div className="connect_folderStructure">
             연결 된 상대 PC 파일 정보들...
           </div>
