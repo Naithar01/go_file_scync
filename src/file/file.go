@@ -31,6 +31,16 @@ func NewFiles(directoryPath string, rootDepth int) ([]File, error) {
 				FileModTime:   info.ModTime(),
 				Depth:         depth + rootDepth,
 			})
+		} else {
+			dirPath := path
+			depth := strings.Count(dirPath, string(filepath.Separator)) - strings.Count(directoryPath, string(filepath.Separator))
+			files = append(files, File{
+				DirectoryPath: dirPath,
+				FileName:      "",
+				FileSize:      0,
+				FileModTime:   info.ModTime(),
+				Depth:         depth + rootDepth,
+			})
 		}
 		return nil
 	})
