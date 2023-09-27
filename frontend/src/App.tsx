@@ -54,7 +54,9 @@ function App() {
   const renameFile = (fileData: main.ResponseFileStruct): RenameFileData[] => {
     let renameFileData: RenameFileData[] = []
     for (const path_key in fileData.files) {
+      console.log(path_key);
       let renameKey = path_key.replace(fileData.root_path, "")
+      
       renameKey = renameKey.replace(/\\/g, '/')
 
       if (renameKey.startsWith("/")) {
@@ -62,7 +64,7 @@ function App() {
       }
 
       renameFileData.push({
-        key: renameKey,
+        key: renameKey == "" ? path_key : renameKey,
         depth: renameKey == "" ? 0: renameKey.split("/").length,
         // @ts-ignore
         files: fileData.files[path_key],
