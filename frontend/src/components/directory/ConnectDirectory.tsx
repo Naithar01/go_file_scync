@@ -7,6 +7,7 @@ type Props = {
 const ConnectDirectory = ({resFileData}: Props) => {
   return (
     <div className="connect_folderStructure">
+      연결 된 PC의 정보 * 임시
       {resFileData && resFileData.length > 0 && resFileData.map((DirData) => {
         const marginLeft = `${DirData.depth * 6}px`;
         const paddingLeft = `${DirData.depth * 6}px`;

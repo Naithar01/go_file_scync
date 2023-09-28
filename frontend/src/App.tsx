@@ -84,7 +84,6 @@ function App() {
 			<Fragment>
         <div className="main">
           { resFileData && <Directory resFileData={resFileData} /> }
-            연결 된 PC의 정보 * 임시
           { resFileData && <ConnectDirectory resFileData={resFileData} /> }
         </div>
 			</Fragment>}
