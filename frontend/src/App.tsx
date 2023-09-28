@@ -2,6 +2,8 @@ import { Fragment, useEffect, useState } from "react"
 
 import Loading from "./components/common/Loading"
 import Layout from "./components/layouts/Layout"
+import Directory from "./components/directory/Directory"
+import ConnectDirectory from "./components/directory/ConnectDirectory"
 
 import "./styles/app_style.css"
 
@@ -9,7 +11,8 @@ import { OpenDirectory } from "../wailsjs/go/main/App"
 import { main } from "../wailsjs/go/models"
 import { file } from "../wailsjs/go/models"
 
-interface RenameFileData {
+
+export interface RenameFileData {
   key: string;
   depth: number;
   files: file.File[];
@@ -80,27 +83,9 @@ function App() {
 			: 
 			<Fragment>
         <div className="main">
-          <div className="folderStructure">
-            {resFileData && resFileData.length > 0 && resFileData.map((DirData) => {
-              const marginLeft = `${DirData.depth * 6}px`;
-              const paddingLeft = `${DirData.depth * 6}px`;
-              const verticalLineHeight = `${((resFileData.filter((fileStr) => fileStr.key.includes(DirData.key) && fileStr.key.startsWith(DirData.key))).length - 1) * 20 + 10}px`;
-
-              return (
-                <div className="folder_wrap" key={DirData.key} style={{ marginLeft, paddingLeft }}>
-                  {DirData.depth > 0 && (
-                    <div className="verticalLine" style={{ height: verticalLineHeight }}></div>
-                  )}
-                  <div className={`folder ${DirData.key}`}>
-                    <i className="folder_icon"></i>{DirData.key}
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-          <div className="connect_folderStructure">
-            연결 된 상대 PC 파일 정보들...
-          </div>
+          { resFileData && <Directory resFileData={resFileData} /> }
+            연결 된 PC의 정보 * 임시
+          { resFileData && <ConnectDirectory resFileData={resFileData} /> }
         </div>
 			</Fragment>}
 		</Layout>

@@ -1,18 +1,16 @@
 .main {
   display: grid;
-  height: 100vh;
-  grid-template-rows: auto;
-  grid-template-areas: 
-  "leftFolderStructure rightFolderStructure";
+  grid-template-columns: 1fr 1fr;
+  min-height: 100vh;
+  height: 100%;
   font-size: 1.2rem;
 }
 
 .folderStructure {
-  grid-template-areas: leftFolderStructure;
+  border-right: 1px solid #d8dee4;
 }
 
 .connect_folderStructure {
-  grid-template-areas: rightFolderStructure;
   border-left: 1px solid #d8dee4;
 }
 
@@ -21,6 +19,7 @@
   min-height: 100%;
   padding: 10px;
   overflow-wrap: break-word;
+  box-sizing: border-box;
 }
 
 .folder_wrap {
