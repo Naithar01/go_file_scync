@@ -40,14 +40,14 @@
   margin: 0px 0px 0px 6px;
 }
 
-.folder {
+.folder_header {
   display: flex;
   align-items: center;
   justify-content: flex-start;
   padding-left: 10px;
 }
 
-.folder_icon {
+.folder_header_icon {
   display: inline-block;
   background-image: url("../assets//images//appicon.png");
   background-position: center;

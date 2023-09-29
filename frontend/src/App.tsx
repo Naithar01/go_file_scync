@@ -57,7 +57,6 @@ function App() {
   const renameFile = (fileData: main.ResponseFileStruct): RenameFileData[] => {
     let renameFileData: RenameFileData[] = []
     for (const path_key in fileData.files) {
-      console.log(path_key);
       let renameKey = path_key.replace(fileData.root_path, "")
       
       renameKey = renameKey.replace(/\\/g, '/')
@@ -84,7 +83,7 @@ function App() {
 			<Fragment>
         <div className="main">
           { resFileData && <Directory resFileData={resFileData} /> }
-          { resFileData && <ConnectDirectory resFileData={resFileData} /> }
+          {/* { resFileData && <ConnectDirectory resFileData={resFileData} /> } */}
         </div>
 			</Fragment>}
 		</Layout>

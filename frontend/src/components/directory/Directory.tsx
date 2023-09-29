@@ -5,6 +5,8 @@ type Props = {
 }
 
 const Directory = ({resFileData}: Props) => {
+  console.log(resFileData);
+  
   return (
     <div className="folderStructure">
       {resFileData && resFileData.length > 0 && resFileData.map((DirData) => {
@@ -18,7 +20,16 @@ const Directory = ({resFileData}: Props) => {
               <div className="verticalLine" style={{ height: verticalLineHeight }}></div>
             )}
             <div className={`folder ${DirData.key}`}>
-              <i className="folder_icon"></i>{DirData.key}
+              <div className="folder_header">
+                <i className="folder_header_icon"></i>{DirData.key}
+              </div>
+              { DirData.files && DirData.files.length > 0 && DirData.files.map((FielData) => {
+                return (
+                  <div className="folder_files_wrap">
+                    
+                  </div>
+                )
+              }) }
             </div>
           </div>
         );
