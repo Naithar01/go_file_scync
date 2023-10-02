@@ -40,7 +40,8 @@
   margin: 0px 0px 0px 6px;
 }
 
-.folder_header {
+.folder_header,
+.file_header {
   display: flex;
   align-items: center;
   justify-content: flex-start;
@@ -55,4 +56,15 @@
   background-size: cover;
   width: 2rem;
   height: 2rem;
+}
+
+.file_header_icon {
+  display: inline-block;
+  background-image: url("../assets//images//fileicon.png");
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  margin: 0px 0.3rem;
+  width: 1.5rem;
+  height: 1.5rem;
 }

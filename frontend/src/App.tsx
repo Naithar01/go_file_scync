@@ -2,8 +2,7 @@ import { Fragment, useEffect, useState } from "react"
 
 import Loading from "./components/common/Loading"
 import Layout from "./components/layouts/Layout"
-import Directory from "./components/directory/Directory"
-import ConnectDirectory from "./components/directory/ConnectDirectory"
+import DirectoryList from "./components/directory/DirectoryList"
 
 import "./styles/app_style.css"
 
@@ -82,8 +81,7 @@ function App() {
 			: 
 			<Fragment>
         <div className="main">
-          { resFileData && <Directory resFileData={resFileData} /> }
-          {/* { resFileData && <ConnectDirectory resFileData={resFileData} /> } */}
+          { resFileData && <DirectoryList resFileData={resFileData} /> }
         </div>
 			</Fragment>}
 		</Layout>
