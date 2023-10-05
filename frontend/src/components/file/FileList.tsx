@@ -1,15 +1,13 @@
 import { file } from "../../../wailsjs/go/models"
 
 type Props = {
-  marginLeft: string 
-  paddingLeft: string
-  verticalLineHeight: string
+  marginLeft: number 
+  paddingLeft: number
+  verticalLineHeight: number
   files: file.File[]
 }
 
 const FileList = ({marginLeft, paddingLeft, verticalLineHeight, files}: Props) => {
-  console.log(files);
-  
   return (
     <div className="folder_files_wrap" style={{ marginLeft, paddingLeft}}>
       { files && files.length > 0 && files.map((FileData) => {
