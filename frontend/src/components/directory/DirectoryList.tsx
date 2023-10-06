@@ -14,14 +14,16 @@ const DirectoryList = ({resFileData}: Props) => {
         const paddingLeft = DirData.depth * 6;
         const fileMarginLeft =  index_st == 0 ? 6 : DirData.depth * 6;
         const filePaddingLeft = index_st == 0 ? 6 : DirData.depth * 6;
+
+        const matchDirs = resFileData.filter((fileStr) => fileStr.key != DirData.key && fileStr.key.includes(DirData.key) && fileStr.key.startsWith(DirData.key) && fileStr.depth != DirData.depth)
+
+        const verticalLineHeight = (
+          (matchDirs).length
+        + matchDirs.concat(DirData).flatMap((fileStr) => fileStr.files.length).reduce((acc, currentValue) => acc + currentValue, 0)
+        - matchDirs.concat(DirData).length) * 20 + 10;
         
-        const verticalLineHeight = ((
-          resFileData.filter((fileStr) => fileStr.key != DirData.key && fileStr.key.includes(DirData.key) && fileStr.key.startsWith(DirData.key) && fileStr.depth != DirData.depth)).length
-        + resFileData.filter((fileStr) => fileStr.key != DirData.key && fileStr.key.includes(DirData.key) && fileStr.key.startsWith(DirData.key) && fileStr.depth != DirData.depth).concat(DirData).flatMap((fileStr) => fileStr.files.length).reduce((acc, currentValue) => acc + currentValue, 0)
-        - resFileData.filter((fileStr) => fileStr.key != DirData.key && fileStr.key.includes(DirData.key) && fileStr.key.startsWith(DirData.key) && fileStr.depth != DirData.depth).concat(DirData).length) * 20 + 10;
         
-        
-        const fileVerticalLineHeight = ((resFileData.filter((fileStr) => fileStr.key != DirData.key && fileStr.key.includes(DirData.key) && fileStr.key.startsWith(DirData.key) && fileStr.depth != DirData.depth)).length) * 11 + 15;
+        const fileVerticalLineHeight = (matchDirs.length) * 11 + 15;
 
         return (
           <div className="folder_wrap" key={DirData.key} style={{ marginLeft, paddingLeft }}>
