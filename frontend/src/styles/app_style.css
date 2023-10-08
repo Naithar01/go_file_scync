@@ -28,43 +28,12 @@
   box-sizing: border-box;
 }
 
-.folder_wrap {
-  display: flex;
+.vertical-line {
+  margin-right: 5px;
+  color: gray;
 }
 
-.verticalLine {
-  position: absolute;
-  width: 0.1rem; 
-  background-color: #ddd;
-  padding: 3px 0px;
-  margin: 0px 0px 0px 6px;
-}
-
-.folder_header,
-.file_header {
+.file {
   display: flex;
   align-items: center;
-  justify-content: flex-start;
-  padding-left: 10px;
-}
-
-.folder_header_icon {
-  display: inline-block;
-  background-image: url("../assets//images//appicon.png");
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: cover;
-  width: 2rem;
-  height: 2rem;
-}
-
-.file_header_icon {
-  display: inline-block;
-  background-image: url("../assets//images//fileicon.png");
-  background-position: center;
-  background-repeat: no-repeat;
-  background-size: cover;
-  margin: 0px 0.3rem;
-  width: 1.5rem;
-  height: 1.5rem;
 }
