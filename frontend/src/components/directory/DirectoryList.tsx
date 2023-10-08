@@ -10,9 +10,9 @@ const DirectoryList = ({resFileData}: Props) => {
   return (
     <div className="folderStructure">
       {resFileData && resFileData.length > 0 && resFileData.map((DirData, index_st) => {
-        const marginLeft =  DirData.depth > 1 ? DirData.depth * 9 : DirData.depth * 6;
-        const paddingLeft = DirData.depth > 1 ? DirData.depth * 9 : DirData.depth * 6;
-        const fileMarginLeft =  index_st == 0 ? 6 : DirData.depth * 6;
+        const marginLeft =  DirData.depth >= 1 ? DirData.depth * 8 : DirData.depth * 6;
+        const paddingLeft = DirData.depth * 6;
+        const fileMarginLeft =  index_st == 0 ? 6 : DirData.depth >= 1 ? DirData.depth * 6 : DirData.depth * 6;
         const filePaddingLeft = index_st == 0 ? 6 : DirData.depth * 6;
 
         return (
