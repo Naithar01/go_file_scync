@@ -1,7 +1,6 @@
 package file
 
 import (
-	"fmt"
 	"os"
 	"path/filepath"
 	"strings"
@@ -33,7 +32,6 @@ func NewFiles(directoryPath string, rootDepth int) ([]File, error) {
 				Depth:         depth + rootDepth,
 			})
 		} else {
-			fmt.Println(path)
 			dirPath := path
 			depth := strings.Count(dirPath, string(filepath.Separator)) - strings.Count(directoryPath, string(filepath.Separator))
 			files = append(files, File{
