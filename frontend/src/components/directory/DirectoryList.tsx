@@ -10,31 +10,21 @@ const DirectoryList = ({resFileData}: Props) => {
   return (
     <div className="folderStructure">
       {resFileData && resFileData.length > 0 && resFileData.map((DirData, index_st) => {
-        const marginLeft =  DirData.depth * 6;
-        const paddingLeft = DirData.depth * 6;
+        const marginLeft =  DirData.depth > 1 ? DirData.depth * 9 : DirData.depth * 6;
+        const paddingLeft = DirData.depth > 1 ? DirData.depth * 9 : DirData.depth * 6;
         const fileMarginLeft =  index_st == 0 ? 6 : DirData.depth * 6;
         const filePaddingLeft = index_st == 0 ? 6 : DirData.depth * 6;
 
-        const matchDirs = resFileData.filter((fileStr) => fileStr.key != DirData.key && fileStr.key.includes(DirData.key) && fileStr.key.startsWith(DirData.key) && fileStr.depth != DirData.depth)
-
-        const verticalLineHeight = (
-          (matchDirs).length
-        + matchDirs.concat(DirData).flatMap((fileStr) => fileStr.files.length).reduce((acc, currentValue) => acc + currentValue, 0)
-        - matchDirs.concat(DirData).length) * 20 + 10;
-        
-        
-        const fileVerticalLineHeight = (matchDirs.length) * 11 + 15;
-
         return (
-          <div className="folder_wrap" key={DirData.key} style={{ marginLeft, paddingLeft }}>
-            {DirData.depth > 0 && DirData.files && (
-              <div className="verticalLine" style={{ height: verticalLineHeight }}></div>
-            )}
+          <div className={`folder_wrap ${DirData.depth}`} key={DirData.key} style={{ marginLeft, paddingLeft }}>
+            {Array.from({ length: DirData.depth }, (_, index) => (
+              <div className="verticalLine" key={index} style={{ height: 14, left: `${(index + 1) * 17}px` }}></div>
+            ))}
             <div className={`folder ${DirData.key}`}>
               <div className="folder_header">
                 <i className="folder_header_icon"></i>{DirData.key}
               </div>
-              <FileList marginLeft={fileMarginLeft} paddingLeft={filePaddingLeft} verticalLineHeight={fileVerticalLineHeight} files={DirData.files} />
+              <FileList marginLeft={fileMarginLeft} paddingLeft={filePaddingLeft} fileDepth={DirData.depth} files={DirData.files} />
             </div>
           </div>
         );
