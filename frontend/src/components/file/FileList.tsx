@@ -1,27 +1,22 @@
-import { file } from "../../../wailsjs/go/models"
+import { file } from "../../../wailsjs/go/models";
+
+import FileTree from "./FileTree";
 
 type Props = {
-  marginLeft: number 
-  paddingLeft: number
-  verticalLineHeight: number
+  depth: number
   files: file.File[]
 }
 
-const FileList = ({marginLeft, paddingLeft, verticalLineHeight, files}: Props) => {
+const FileList = ({files, depth}: Props) => {
   return (
-    <div className="folder_files_wrap" style={{ marginLeft, paddingLeft}}>
-      { files && files.length > 0 && files.map((FileData) => {
-        return (
-          FileData.filename &&
-          <div className="folder_files" key={FileData.filename}>
-            {/* <div className="verticalLine" style={{ height: verticalLineHeight }}></div> */}
-            <div className="file_header">
-                <i className="file_header_icon"></i>{FileData.filename}
-            </div>
-          </div>
-        )
-      }) }
-    </div>
+    files.map((fileItem, index) => (
+      fileItem.filename && <FileTree
+        key={index}
+        name={fileItem.filename}
+        depth={depth + 1}
+        isLastFile={index === files.length - 1}
+      />
+    ))
   )
 }
 
