@@ -27,9 +27,9 @@ const DirectoryList = ({resFileData}: Props) => {
 
         return (
           <div className="folder_wrap" key={DirData.key} style={{ marginLeft, paddingLeft }}>
-            {DirData.depth > 0 && DirData.files && (
+            {/* {DirData.depth > 0 && DirData.files && (
               <div className="verticalLine" style={{ height: verticalLineHeight }}></div>
-            )}
+            )} */}
             <div className={`folder ${DirData.key}`}>
               <div className="folder_header">
                 <i className="folder_header_icon"></i>{DirData.key}
