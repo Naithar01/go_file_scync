@@ -32,6 +32,10 @@
   color: gray;
 }
 
+.folder-icon {
+  cursor: pointer;
+}
+
 .file {
   display: flex;
   align-items: center;

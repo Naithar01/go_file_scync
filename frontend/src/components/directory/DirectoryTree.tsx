@@ -1,3 +1,5 @@
+import { useState } from "react";
+
 import { file } from "../../../wailsjs/go/models";
 
 import FileList from "../file/FileList";
@@ -10,14 +12,24 @@ type Props = {
 }
 
 const DirectoryTree = ({ name, depth, files, isLastDir }: Props) => {
+  const [isExpanded, setExpanded] = useState(false);
+
+  const toggleExpansion = () => {
+    setExpanded(!isExpanded);
+  };
+
   return (
-  <div className="folder" >
+  <div className={`folder ${name}`}>
     {depth > 0 && (
-      <span className="vertical-line">{isLastDir ? "└" : "├"}</span>
+      <span className="vertical-line">
+        {isLastDir ? "└" : "├"}
+      </span>
     )}
     <span className="vertical-line">{"─".repeat(depth * 1)}</span>
-    📁 {name}
-    <FileList files={files} depth={depth} />
+    <span className="folder-icon" onClick={toggleExpansion}>
+      {isExpanded ? "📂" : "📁"} {name}
+    </span>
+    {isExpanded && <FileList files={files} depth={depth} />}
   </div>
   )
 }
