@@ -9,3 +9,7 @@ export function OpenDirectory() {
 export function ReloadApp() {
   return window['go']['main']['App']['ReloadApp']();
 }
+
+export function ShowConnectWindow() {
+  return window['go']['main']['App']['ShowConnectWindow']();
+}

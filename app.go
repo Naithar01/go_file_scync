@@ -74,6 +74,10 @@ func (a *App) applicationMenu() *menu.Menu {
 
 			// 	// runtime.BrowserOpenURL(a.ctx, directory_path)
 			// }),
+			menu.Text("연결", keys.CmdOrCtrl("c"), func(_ *menu.CallbackData) {
+				a.ShowConnectWindow()
+			}),
+			menu.Separator(),
 			menu.Text("새로고침", keys.CmdOrCtrl("r"), func(_ *menu.CallbackData) {
 				a.ReloadApp()
 			}),
@@ -83,6 +87,9 @@ func (a *App) applicationMenu() *menu.Menu {
 			}),
 		)),
 	)
+}
+
+func (a *App) ShowConnectWindow() {
 }
 
 type ResponseFileStruct struct {

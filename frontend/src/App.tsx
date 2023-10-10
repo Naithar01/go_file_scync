@@ -23,7 +23,7 @@ function App() {
   const [resFileData, setResFileData] = useState<RenameFileData[]>()
 
   useEffect(() => {
-		FetchFileData()
+		// FetchFileData()
   }, []);
 
   // 서버로부터 파일 정보와, 선택 된 폴더 경로를 받아옴
