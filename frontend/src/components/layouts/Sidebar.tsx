@@ -1,7 +1,7 @@
 import { Fragment, useState } from "react"
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
-import { faBars, faX } from "@fortawesome/free-solid-svg-icons"
+import { faBars, faX, faArrowRightArrowLeft } from "@fortawesome/free-solid-svg-icons"
 
 import "../../styles/common/sidebar_style.css"
 
@@ -25,7 +25,11 @@ const Sidebar = () => {
             <FontAwesomeIcon icon={faBars} />
           </button>
         </div>
-        <p className="sidebar_nav_logo">폴더 동기화</p>
+        <div className="sidebar_sync_toggle_icon">
+          <button className="sidebar_nav_toggle_btn" type="button">
+              <FontAwesomeIcon icon={faArrowRightArrowLeft} />
+          </button>
+        </div>
       </nav>
       <div className={`sidebar ${isOpen == true ? 'active' : ''}`}>
         <div className="sidebar_header">
