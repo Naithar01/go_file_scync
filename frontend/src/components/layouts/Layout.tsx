@@ -1,16 +1,15 @@
 import Sidebar from "./Sidebar"
 
 import "../../styles/common/layout_style.css"
+import { Outlet } from "react-router-dom"
 
-type Props = {
-  children: React.ReactNode
-}
-
-const Layout = ({children}: Props) => {
+const Layout = () => {
   return (
     <div className="layout">
       <Sidebar />
-      {children}
+      <main>
+        <Outlet />
+      </main>
     </div>
   )
 }

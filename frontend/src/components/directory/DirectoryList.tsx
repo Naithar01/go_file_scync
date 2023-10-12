@@ -1,4 +1,4 @@
-import { RenameFileData } from "../../App";
+import { RenameFileData } from "../../pages/MainPage";
 
 import DirectoryTree from "./DirectoryTree";
 
