@@ -9,6 +9,7 @@ import "./styles/app_style.css"
 import { OpenDirectory } from "../wailsjs/go/main/App"
 import { main } from "../wailsjs/go/models"
 import { file } from "../wailsjs/go/models"
+import Modal from "./components/common/Modal"
 
 
 export interface RenameFileData {
@@ -21,6 +22,15 @@ function App() {
 	const [isLoading ,setIsLoading] = useState<boolean>(true)
   const [projectData, setProjectData] = useState<main.ResponseFileStruct>()
   const [resFileData, setResFileData] = useState<RenameFileData[]>()
+
+  const [isOpen, setIsOpen] = useState<boolean>(true)
+
+  const ToggleModal = (): void => {
+    setIsOpen((prev) => {
+      return !prev
+    })
+    return 
+  }
 
   useEffect(() => {
 		FetchFileData()
@@ -80,8 +90,10 @@ function App() {
 			<Loading />
 			: 
 			<Fragment>
+        <Modal isOpen={isOpen} onClose={ToggleModal}>
+        </Modal>
         <div className="main">
-          { resFileData && <DirectoryList resFileData={resFileData} /> }
+            { resFileData && <DirectoryList resFileData={resFileData} /> }
         </div>
 			</Fragment>}
 		</Layout>
