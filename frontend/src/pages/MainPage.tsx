@@ -1,6 +1,6 @@
 import { Fragment, useEffect, useState } from "react";
 
-import { OpenDirectory } from "../../wailsjs/go/main/App";
+import { InitialSnycDirectoryListPage, OpenDirectory } from "../../wailsjs/go/main/App";
 import { file, main } from "../../wailsjs/go/models";
 
 import DirectoryList from "../components/directory/DirectoryList";
@@ -27,6 +27,7 @@ const MainPage = () => {
   // }
 
   useEffect(() => {
+    InitialSnycDirectoryListPage()
     FetchFileData()
   }, []);
 

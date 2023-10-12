@@ -14,10 +14,11 @@ var assets embed.FS
 func main() {
 	app := NewApp()
 
+	// Default Size 1024, 768 ( Width, Height )
 	err := wails.Run(&options.App{
 		Title:     "go_file_sync",
-		Width:     1024,
-		Height:    768,
+		Width:     300,
+		Height:    300,
 		MinWidth:  800,
 		MinHeight: 600,
 		AssetServer: &assetserver.Options{

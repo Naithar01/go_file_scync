@@ -2,15 +2,16 @@ import { Route, Routes } from "react-router-dom"
 
 import MainPage from "./pages/MainPage"
 
-import "./styles/app_style.css"
-import { Link } from "react-router-dom"
 import Layout from "./components/layouts/Layout"
+import InputPortPage from "./pages/InputPortPage"
+
+import "./styles/app_style.css"
 
 function App() {
 	return (
   <Routes>
     <Route path="/" element={<Layout />}>
-      <Route index element={<>여기에 Port 입력 페이지 <Link to="/dir">Dir</Link></>} />
+      <Route index element={<InputPortPage />} />
       <Route path="dir" element={<MainPage />} />
     </Route>
   </Routes>
