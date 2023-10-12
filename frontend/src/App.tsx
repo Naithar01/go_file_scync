@@ -4,15 +4,16 @@ import MainPage from "./pages/MainPage"
 
 import "./styles/app_style.css"
 import { Link } from "react-router-dom"
+import Layout from "./components/layouts/Layout"
 
 function App() {
 	return (
-    <Routes>
-      <Route path="/">
-        <Route index element={<>여기에 Port 입력 페이지 <Link to="/dir">Dir</Link></>} />
-        <Route path="dir" element={<MainPage />} />
-      </Route>
-    </Routes>
+  <Routes>
+    <Route path="/" element={<Layout />}>
+      <Route index element={<>여기에 Port 입력 페이지 <Link to="/dir">Dir</Link></>} />
+      <Route path="dir" element={<MainPage />} />
+    </Route>
+  </Routes>
 	)
 }
 
