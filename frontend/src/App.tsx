@@ -10,9 +10,10 @@ import "./styles/app_style.css"
 function App() {
 	return (
   <Routes>
-    <Route path="/" element={<Layout />}>
-      <Route index element={<InputPortPage />} />
-      <Route path="dir" element={<MainPage />} />
+    <Route path="/" element={<InputPortPage />}>
+    </Route>
+    <Route path="/dir" element={<Layout />}>
+      <Route index  element={<MainPage />} />
     </Route>
   </Routes>
 	)
