@@ -1,3 +1,11 @@
 .input_port_page {
   font-size: 1.5rem;
 }
+
+.input_port_page_port_inp_areas {
+  margin-top: 10rem;
+}
+
+.input_port_page_port_inp_area {
+  text-align: center;
+}
