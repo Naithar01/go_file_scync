@@ -1,4 +1,5 @@
 import { Fragment, useState } from "react"
+import { useNavigate } from "react-router-dom"
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faBars, faX, faArrowRightArrowLeft } from "@fortawesome/free-solid-svg-icons"
@@ -8,6 +9,7 @@ import "../../styles/common/sidebar_style.css"
 import { ReStartServer } from "../../../wailsjs/go/tcpserver/TCPServer"
 
 const Sidebar = () => {
+  const navigatate = useNavigate()
   const [isOpen, setIsOpen] = useState<boolean>(false)
 
   const ToggleSidebar = (): void => {
@@ -15,6 +17,11 @@ const Sidebar = () => {
       return !prev
     })
     return 
+  }
+
+  const ReStartServerHandler = (): void => {
+    navigatate("/")
+    ReStartServer()
   }
 
   return (
@@ -40,7 +47,7 @@ const Sidebar = () => {
         </div>
         <div className="sidebar_content">
           <ul>
-            <li onClick={ReStartServer}><p>서버 재실행</p></li>
+            <li onClick={ReStartServerHandler}><p>서버 재실행</p></li>
           </ul>
         </div>
       </div>

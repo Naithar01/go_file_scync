@@ -41,13 +41,13 @@ const InputPortPage = () => {
   return (
     <Fragment>
       <div className="input_port_page">
-        <Alert text="Enter the PORT for opening the TCP server" />
+        <Alert text="TCP 서버를 열기 위한 포트를 입력하세요." />
         <div className="input_port_page_port_inp_areas">
           <div className="input_port_page_port_inp_area">
-            <input type="text" inputMode="numeric" value={portState} placeholder="Enter Server Port" onChange={ChangePortStateHandler}/>
+            <input type="text" inputMode="numeric" value={portState} placeholder="포트를 입력하세요." onChange={ChangePortStateHandler}/>
           </div>
           <div className="input_port_page_port_inp_area">
-            <button type="button" onClick={ConnectServerHandler}>Start Server</button>
+            <button type="button" onClick={ConnectServerHandler}>서버 시작</button>
           </div>
         </div>
       </div>
