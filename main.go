@@ -28,8 +28,8 @@ func main() {
 		Title:     "go_file_sync",
 		Width:     300,
 		Height:    300,
-		MinWidth:  800,
-		MinHeight: 600,
+		MinWidth:  300,
+		MinHeight: 300,
 		AssetServer: &assetserver.Options{
 			Assets: assets,
 		},

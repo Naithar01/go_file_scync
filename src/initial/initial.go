@@ -19,6 +19,7 @@ func NewInitial(ctx *context.Context) *Initial {
 // Initial Sync Directory List Page...
 func (i *Initial) InitialSnycDirectoryListPage() {
 	runtime.WindowSetTitle(*i.ctx, "go_file_sync - Directory List Page")
+	runtime.WindowSetMinSize(*i.ctx, 800, 600)
 	runtime.WindowSetSize(*i.ctx, 1024, 768)
 	runtime.WindowCenter(*i.ctx)
 }
@@ -26,6 +27,7 @@ func (i *Initial) InitialSnycDirectoryListPage() {
 // Initial InputPortPage Setting...
 func (i *Initial) InitialInputPortPage() {
 	runtime.WindowSetTitle(*i.ctx, "go_file_sync - Input Port Page")
+	runtime.WindowSetMinSize(*i.ctx, 300, 300)
 	runtime.WindowSetSize(*i.ctx, 300, 300)
 	runtime.WindowCenter(*i.ctx)
 }
