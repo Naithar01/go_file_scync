@@ -22,9 +22,7 @@ func NewTCPServer(ctx *context.Context) *TCPServer {
 
 // 실행되고 있는 서버 리스너 닫기, 앱 재실행
 func (t *TCPServer) ReStartServer() {
-	if t.listener != nil {
-		t.listener.Close()
-	}
+	t.Close()
 	runtime.WindowReloadApp(*t.ctx)
 }
 
@@ -57,28 +55,28 @@ func (t *TCPServer) startServer() error {
 	}
 	t.listener = listener
 
-	fmt.Printf("TCP server is listening on port %d\n", t.port)
+	// fmt.Printf("TCP server is listening on port %d\n", t.port) ...Port로 서버 실행 중
 
 	go t.acceptConnections()
 
 	return nil
 }
 
+// 클라이언트 연결 수락
 func (t *TCPServer) acceptConnections() {
 	for {
 		conn, err := t.listener.Accept()
 		if err != nil {
-			fmt.Println("Error accepting connection:", err)
+			// fmt.Println("Error accepting connection:", err) 클라이언트로부터 연결 받기 실패 오류
 			continue
 		}
 		go t.handleConnection(conn)
 	}
 }
 
+// 클라이언트 연결 수락 시에 어떤 로직을 할지,
 func (t *TCPServer) handleConnection(conn net.Conn) {
 	defer conn.Close()
-
-	// Handle the connection here, e.g., read and write data.
 }
 
 func (t *TCPServer) Close() {
