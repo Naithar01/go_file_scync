@@ -11,17 +11,17 @@ import (
 // netstat -tuln
 
 type TCPServer struct {
-	ctx          *context.Context
-	port         int
-	listener     net.Listener
-	connectState bool
+	ctx                  *context.Context
+	port                 int
+	listener             net.Listener
+	serverListeningState bool
 }
 
 func NewTCPServer(ctx *context.Context) *TCPServer {
 	return &TCPServer{
-		ctx:          ctx,
-		listener:     nil,
-		connectState: false,
+		ctx:                  ctx,
+		listener:             nil,
+		serverListeningState: false,
 	}
 }
 
@@ -48,7 +48,15 @@ func (t *TCPServer) SetServerPort(port int) bool {
 		})
 		return false
 	}
-	t.connectState = true
+	t.serverListeningState = true
+	runtime.MessageDialog(*t.ctx, runtime.MessageDialogOptions{
+		Type:          runtime.InfoDialog,
+		Title:         "Server Start Success",
+		Message:       "TCP server is listening",
+		Buttons:       nil,
+		DefaultButton: "",
+		CancelButton:  "",
+	})
 	return true
 }
 
