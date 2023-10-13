@@ -6,8 +6,10 @@ import { SetServerPort } from "../../wailsjs/go/tcpserver/TCPServer"
 import Alert from "../components/common/Alert"
 
 import "../styles/pages/input_port_page_style.css" 
+import { useNavigate } from "react-router-dom"
 
 const InputPortPage = () => {
+  const navigate = useNavigate()
   const [portState, setPortState] = useState<number>()
 
   useEffect(() => {
@@ -25,8 +27,14 @@ const InputPortPage = () => {
       return
     }
 
-    const ConnectState: boolean = await SetServerPort(portState)
-    alert(ConnectState);
+    const serverListeningState: boolean = await SetServerPort(portState)
+
+    // 서버 실행 실패 시에...
+    if (!serverListeningState) {
+      return 
+    }
+
+    navigate("/dir")
     
   }  
 
