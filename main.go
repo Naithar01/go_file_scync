@@ -2,6 +2,7 @@ package main
 
 import (
 	"embed"
+	"go_file_sync/src/initial"
 
 	"github.com/wailsapp/wails/v2"
 	"github.com/wailsapp/wails/v2/pkg/options"
@@ -13,6 +14,7 @@ var assets embed.FS
 
 func main() {
 	app := NewApp()
+	initial := initial.NewInitial(&app.ctx)
 
 	// Default Size 1024, 768 ( Width, Height )
 	err := wails.Run(&options.App{
@@ -29,6 +31,7 @@ func main() {
 		Menu:             app.applicationMenu(),
 		Bind: []interface{}{
 			app,
+			initial,
 		},
 	})
 

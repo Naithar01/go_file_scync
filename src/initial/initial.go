@@ -1,0 +1,31 @@
+package initial
+
+import (
+	"context"
+
+	"github.com/wailsapp/wails/v2/pkg/runtime"
+)
+
+type Initial struct {
+	ctx *context.Context
+}
+
+func NewInitial(ctx *context.Context) *Initial {
+	return &Initial{
+		ctx: ctx,
+	}
+}
+
+// Initial Sync Directory List Page...
+func (i *Initial) InitialSnycDirectoryListPage() {
+	runtime.WindowSetTitle(*i.ctx, "go_file_sync - Directory List Page")
+	runtime.WindowSetSize(*i.ctx, 1024, 768)
+	runtime.WindowCenter(*i.ctx)
+}
+
+// Initial InputPortPage Setting...
+func (i *Initial) InitialInputPortPage() {
+	runtime.WindowSetTitle(*i.ctx, "go_file_sync - Input Port Page")
+	runtime.WindowSetSize(*i.ctx, 300, 300)
+	runtime.WindowCenter(*i.ctx)
+}

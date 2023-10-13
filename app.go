@@ -145,18 +145,3 @@ func (a *App) OpenDirectory() ResponseFileStruct {
 func (a *App) ReloadApp() {
 	runtime.WindowReload(a.ctx)
 }
-
-// Initial Sync Directory List Page...
-func (a *App) InitialSnycDirectoryListPage() {
-	runtime.WindowSetTitle(a.ctx, "go_file_sync - Directory List Page")
-	runtime.WindowSetSize(a.ctx, 1024, 768)
-	runtime.WindowCenter(a.ctx)
-
-}
-
-// Initial InputPortPage Setting...
-func (a *App) InitialInputPortPage() {
-	runtime.WindowSetTitle(a.ctx, "go_file_sync - Input Port Page")
-	runtime.WindowSetSize(a.ctx, 300, 300)
-	runtime.WindowCenter(a.ctx)
-}

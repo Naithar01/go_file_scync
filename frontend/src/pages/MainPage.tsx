@@ -1,6 +1,7 @@
 import { Fragment, useEffect, useState } from "react";
 
-import { InitialSnycDirectoryListPage, OpenDirectory } from "../../wailsjs/go/main/App";
+import { OpenDirectory } from "../../wailsjs/go/main/App";
+import { InitialSnycDirectoryListPage } from "../../wailsjs/go/initial/Initial";
 import { file, main } from "../../wailsjs/go/models";
 
 import DirectoryList from "../components/directory/DirectoryList";

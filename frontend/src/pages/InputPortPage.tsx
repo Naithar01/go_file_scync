@@ -1,6 +1,6 @@
 import { Fragment, useEffect } from "react"
 
-import { InitialInputPortPage } from "../../wailsjs/go/main/App"
+import { InitialInputPortPage } from "../../wailsjs/go/initial/Initial"
 
 import styles from "../styles/pages/input_port_page_style.module.css" 
 
