@@ -8,22 +8,27 @@ import (
 	"github.com/wailsapp/wails/v2/pkg/runtime"
 )
 
+// netstat -tuln
+
 type TCPServer struct {
-	ctx      *context.Context
-	port     int
-	listener net.Listener
+	ctx          *context.Context
+	port         int
+	listener     net.Listener
+	connectState bool
 }
 
 func NewTCPServer(ctx *context.Context) *TCPServer {
 	return &TCPServer{
-		ctx: ctx,
+		ctx:          ctx,
+		listener:     nil,
+		connectState: false,
 	}
 }
 
 // 실행되고 있는 서버 리스너 닫기, 앱 재실행
 func (t *TCPServer) ReStartServer() {
 	t.Close()
-	runtime.WindowReloadApp(*t.ctx)
+	runtime.WindowReload(*t.ctx)
 }
 
 // TCP 서버 실행 성공 시에 True, 중복되는 PORT 사용 시에는 False, 에러 문구
@@ -43,7 +48,7 @@ func (t *TCPServer) SetServerPort(port int) bool {
 		})
 		return false
 	}
-
+	t.connectState = true
 	return true
 }
 
