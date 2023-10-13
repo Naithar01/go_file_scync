@@ -1,0 +1,10 @@
+.page_alert {
+  background-color: #ddd;
+  color: black;
+  padding: 15px; 
+  border-radius: 5px;
+  font-size: 1.4rem; 
+  width: 80%;
+  margin: 10px auto;
+  text-align: center;
+}

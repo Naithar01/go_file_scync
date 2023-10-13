@@ -1,0 +1,17 @@
+.input_port_page {
+  font-size: 1.5rem;
+}
+
+.input_port_page_port_inp_areas {
+  margin-top: 3rem;
+}
+
+.input_port_page_port_inp_area {
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.input_port_page_port_inp_area > input,
+.input_port_page_port_inp_area > button {
+  padding: 3px;
+}

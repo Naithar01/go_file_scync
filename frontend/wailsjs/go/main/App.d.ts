@@ -3,7 +3,3 @@
 import {main} from '../models';
 
 export function OpenDirectory():Promise<main.ResponseFileStruct>;
-
-export function ReloadApp():Promise<void>;
-
-export function ShowConnectWindow():Promise<void>;
