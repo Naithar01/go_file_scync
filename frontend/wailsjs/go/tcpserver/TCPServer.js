@@ -6,6 +6,10 @@ export function Close() {
   return window['go']['tcpserver']['TCPServer']['Close']();
 }
 
+export function ReStartServer() {
+  return window['go']['tcpserver']['TCPServer']['ReStartServer']();
+}
+
 export function SetServerPort(arg1) {
   return window['go']['tcpserver']['TCPServer']['SetServerPort'](arg1);
 }

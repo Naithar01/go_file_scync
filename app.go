@@ -143,5 +143,5 @@ func (a *App) OpenDirectory() ResponseFileStruct {
 
 // Reload App
 func (a *App) ReloadApp() {
-	runtime.WindowReload(a.ctx)
+	runtime.WindowReloadApp(a.ctx)
 }

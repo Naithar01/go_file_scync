@@ -20,6 +20,14 @@ func NewTCPServer(ctx *context.Context) *TCPServer {
 	}
 }
 
+// 실행되고 있는 서버 리스너 닫기, 앱 재실행
+func (t *TCPServer) ReStartServer() {
+	if t.listener != nil {
+		t.listener.Close()
+	}
+	runtime.WindowReloadApp(*t.ctx)
+}
+
 // TCP 서버 실행 성공 시에 True, 중복되는 PORT 사용 시에는 False, 에러 문구
 func (t *TCPServer) SetServerPort(port int) bool {
 	t.port = port

@@ -5,7 +5,7 @@ import { faBars, faX, faArrowRightArrowLeft } from "@fortawesome/free-solid-svg-
 
 import "../../styles/common/sidebar_style.css"
 
-import { ReloadApp } from "../../../wailsjs/go/main/App"
+import { ReStartServer } from "../../../wailsjs/go/tcpserver/TCPServer"
 
 const Sidebar = () => {
   const [isOpen, setIsOpen] = useState<boolean>(false)
@@ -40,7 +40,7 @@ const Sidebar = () => {
         </div>
         <div className="sidebar_content">
           <ul>
-            <li onClick={ReloadApp}><p>폴더 재선택</p></li>
+            <li onClick={ReStartServer}><p>서버 재실행</p></li>
           </ul>
         </div>
       </div>
