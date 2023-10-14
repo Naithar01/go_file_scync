@@ -86,3 +86,15 @@ func (a *App) OpenDirectory() ResponseFileStruct {
 		Files:     fileDir,
 	}
 }
+
+// Custom Error Dialog
+func (a *App) CustomErrorDialog(errorMessage string) {
+	runtime.MessageDialog(a.ctx, runtime.MessageDialogOptions{
+		Type:          runtime.ErrorDialog,
+		Title:         "Error",
+		Message:       errorMessage,
+		Buttons:       nil,
+		DefaultButton: "",
+		CancelButton:  "",
+	})
+}
