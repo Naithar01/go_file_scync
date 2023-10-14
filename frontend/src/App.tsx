@@ -4,6 +4,7 @@ import MainPage from "./pages/MainPage"
 
 import Layout from "./components/layouts/Layout"
 import InputPortPage from "./pages/InputPortPage"
+import ConnectServerPage from "./pages/ConnectServerPage"
 
 import "./styles/app_style.css"
 
@@ -12,8 +13,9 @@ function App() {
   <Routes>
     <Route path="/" element={<InputPortPage />}>
     </Route>
-    <Route path="/dir" element={<Layout />}>
-      <Route index  element={<MainPage />} />
+    <Route path="/" element={<Layout />}>
+      <Route path="/connect"  element={<ConnectServerPage />} />
+      <Route path="/dir"  element={<MainPage />} />
     </Route>
   </Routes>
 	)

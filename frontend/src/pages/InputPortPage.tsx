@@ -22,7 +22,7 @@ const InputPortPage = () => {
     if (!Number.isNaN(enteredPort)) setPortState(() => enteredPort);
   }
 
-  const ConnectServerHandler = async (): Promise<void> => {
+  const StartServerHandler = async (): Promise<void> => {
     if (!portState) {
       return
     }
@@ -34,8 +34,8 @@ const InputPortPage = () => {
       return 
     }
 
-    navigate("/dir")
-    
+    navigate("/connect")
+    return
   }  
 
   return (
@@ -47,7 +47,7 @@ const InputPortPage = () => {
             <input type="text" inputMode="numeric" value={portState} placeholder="포트를 입력하세요." onChange={ChangePortStateHandler}/>
           </div>
           <div className="input_port_page_port_inp_area">
-            <button type="button" onClick={ConnectServerHandler}>서버 시작</button>
+            <button type="button" onClick={StartServerHandler}>서버 시작</button>
           </div>
         </div>
       </div>
