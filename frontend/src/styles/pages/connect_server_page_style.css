@@ -1,0 +1,17 @@
+.connect_server_page {
+  font-size: 1.5rem;
+}
+
+.connect_server_page_port_inp_areas {
+  margin-top: 3rem;
+}
+
+.connect_server_page_port_inp_area {
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.connect_server_page_port_inp_area > input,
+.connect_server_page_port_inp_area > button {
+  padding: 3px;
+}
