@@ -26,7 +26,15 @@ func (i *Initial) InitialSnycDirectoryListPage() {
 
 // Initial InputPortPage Setting...
 func (i *Initial) InitialInputPortPage() {
-	runtime.WindowSetTitle(*i.ctx, "go_file_sync - Input Port Page")
+	runtime.WindowSetTitle(*i.ctx, "go_file_sync - Start Server")
+	runtime.WindowSetMinSize(*i.ctx, 500, 500)
+	runtime.WindowSetSize(*i.ctx, 500, 500)
+	runtime.WindowCenter(*i.ctx)
+}
+
+// Initial ConnectServerPage Setting...
+func (i *Initial) InitialConnectServerPage() {
+	runtime.WindowSetTitle(*i.ctx, "go_file_sync - Input Connect Server")
 	runtime.WindowSetMinSize(*i.ctx, 500, 500)
 	runtime.WindowSetSize(*i.ctx, 500, 500)
 	runtime.WindowCenter(*i.ctx)

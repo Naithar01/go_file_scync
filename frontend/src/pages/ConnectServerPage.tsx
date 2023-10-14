@@ -1,4 +1,6 @@
-import { Fragment, useState } from "react"
+import { Fragment, useEffect, useState } from "react"
+
+import { InitialConnectServerPage } from "../../wailsjs/go/initial/Initial"
 
 import Alert from "../components/common/Alert"
 
@@ -6,6 +8,10 @@ import "../styles/pages/connect_server_page_style.css"
 
 const ConnectServerPage = () => {
   const [portState, setPortState] = useState<number>()
+
+  useEffect(() => {
+    InitialConnectServerPage()
+  }, [])
 
   const ChangePortStateHandler = (e: React.ChangeEvent<HTMLInputElement>): void => {
     const enteredPort: number = +e.target.value;
