@@ -9,18 +9,18 @@ import (
 )
 
 type TCPClient struct {
-	ctx   *context.Context
-	conn  net.Conn
-	ip    string
-	port  int
-	ready bool
+	ctx          *context.Context
+	conn         net.Conn
+	ip           string
+	port         int
+	connectState bool
 }
 
 func NewTCPClient(ctx *context.Context) *TCPClient {
 	return &TCPClient{
-		ctx:   ctx,
-		conn:  nil,
-		ready: false,
+		ctx:          ctx,
+		conn:         nil,
+		connectState: false,
 	}
 }
 
@@ -43,7 +43,7 @@ func (c *TCPClient) StartClient(ip string, port int) bool {
 		return false
 	}
 
-	c.ready = true
+	c.connectState = true
 	runtime.MessageDialog(*c.ctx, runtime.MessageDialogOptions{
 		Type:          runtime.InfoDialog,
 		Title:         "Connected",
@@ -69,6 +69,7 @@ func (c *TCPClient) connectToServer() error {
 
 func (c *TCPClient) Close() {
 	if c.conn != nil {
+		c.connectState = false
 		c.conn.Close()
 	}
 }
