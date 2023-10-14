@@ -28,6 +28,8 @@ const ConnectServerPage = () => {
     if (await GetPort() == portState) {
       CustomErrorDialog("현재 PC에서 실행 중인 서버에 접속할 수 없습니다.")
     }
+
+    
   }
 
   return (
