@@ -25,6 +25,10 @@ func NewTCPServer(ctx *context.Context) *TCPServer {
 	}
 }
 
+func (t *TCPServer) GetPort() int {
+	return t.port
+}
+
 // 실행되고 있는 서버 리스너 닫기, 앱 재실행
 func (t *TCPServer) ReStartServer() {
 	t.Close()
