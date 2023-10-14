@@ -3,6 +3,7 @@ package main
 import (
 	"embed"
 	"go_file_sync/src/initial"
+	"go_file_sync/src/tcpclient"
 	"go_file_sync/src/tcpserver"
 
 	"github.com/wailsapp/wails/v2"
@@ -22,6 +23,7 @@ func main() {
 	app := NewApp()
 	initial := initial.NewInitial(&app.ctx)
 	tcpServer := tcpserver.NewTCPServer(&app.ctx)
+	tcpClient := tcpclient.NewTCPClient(&app.ctx)
 
 	// Default Size 1024, 768 ( Width, Height )
 	err := wails.Run(&options.App{
@@ -40,6 +42,7 @@ func main() {
 			app,
 			initial,
 			tcpServer,
+			tcpClient,
 		},
 		Windows: &windows.Options{
 			WebviewIsTransparent: false,
