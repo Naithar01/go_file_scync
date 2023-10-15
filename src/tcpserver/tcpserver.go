@@ -15,6 +15,7 @@ type TCPServer struct {
 	port                 int
 	listener             net.Listener
 	serverListeningState bool
+	clientListeningState bool
 }
 
 func NewTCPServer(ctx *context.Context) *TCPServer {
@@ -22,6 +23,7 @@ func NewTCPServer(ctx *context.Context) *TCPServer {
 		ctx:                  ctx,
 		listener:             nil,
 		serverListeningState: false,
+		clientListeningState: false,
 	}
 }
 
@@ -81,12 +83,13 @@ func (t *TCPServer) startServer() error {
 
 // 클라이언트 연결 수락
 func (t *TCPServer) acceptConnections() {
-	for {
+	for t.clientListeningState != true {
 		conn, err := t.listener.Accept()
 		if err != nil {
 			// fmt.Println("Error accepting connection:", err) 클라이언트로부터 연결 받기 실패 오류
 			continue
 		}
+		t.clientListeningState = true
 		go t.handleConnection(conn)
 	}
 }
