@@ -83,7 +83,7 @@ func (t *TCPServer) startServer() error {
 
 // 클라이언트 연결 수락
 func (t *TCPServer) acceptConnections() {
-	for t.clientListeningState != true {
+	for !t.clientListeningState {
 		conn, err := t.listener.Accept()
 		if err != nil {
 			// fmt.Println("Error accepting connection:", err) 클라이언트로부터 연결 받기 실패 오류
