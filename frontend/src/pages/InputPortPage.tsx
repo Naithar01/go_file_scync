@@ -1,4 +1,5 @@
 import { Fragment, useEffect, useState } from "react"
+import { useNavigate } from "react-router-dom"
 
 import { InitialInputPortPage } from "../../wailsjs/go/initial/Initial"
 import { SetServerPort } from "../../wailsjs/go/tcpserver/TCPServer"
@@ -6,7 +7,6 @@ import { SetServerPort } from "../../wailsjs/go/tcpserver/TCPServer"
 import Alert from "../components/common/Alert"
 
 import "../styles/pages/input_port_page_style.css" 
-import { useNavigate } from "react-router-dom"
 
 const InputPortPage = () => {
   const navigate = useNavigate()

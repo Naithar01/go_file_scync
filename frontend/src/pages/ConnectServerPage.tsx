@@ -1,4 +1,6 @@
 import { Fragment, useEffect, useState } from "react"
+import { useNavigate } from "react-router-dom"
+
 
 import { CustomErrorDialog } from "../../wailsjs/go/main/App"
 import { InitialConnectServerPage } from "../../wailsjs/go/initial/Initial"
@@ -10,6 +12,7 @@ import Alert from "../components/common/Alert"
 import "../styles/pages/connect_server_page_style.css"
 
 const ConnectServerPage = () => {
+  const navigate = useNavigate()
   const [portState, setPortState] = useState<number>()
 
   useEffect(() => {
@@ -29,6 +32,17 @@ const ConnectServerPage = () => {
       CustomErrorDialog("현재 PC에서 실행 중인 서버에 접속할 수 없습니다.")
     }
 
+    if (!portState) {
+      return
+    }
+
+    const serverConnectState = await StartClient("127.0.0.1", portState)
+
+    if (!serverConnectState) {
+      return
+    }
+
+    console.log(serverConnectState);
     
   }
 
