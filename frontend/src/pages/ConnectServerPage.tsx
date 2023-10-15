@@ -43,7 +43,8 @@ const ConnectServerPage = () => {
     }
 
     console.log(serverConnectState);
-    
+
+    navigate("/dir")
   }
 
   return (

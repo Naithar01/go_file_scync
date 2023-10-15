@@ -14,8 +14,8 @@ function App() {
     <Route path="/" element={<InputPortPage />}>
     </Route>
     <Route path="/" element={<Layout />}>
-      <Route path="/connect"  element={<ConnectServerPage />} />
-      <Route path="/dir"  element={<MainPage />} />
+      <Route path="/connect" element={<ConnectServerPage />} />
+      <Route path="/dir" element={<MainPage />} />
     </Route>
   </Routes>
 	)
