@@ -75,8 +75,7 @@ func (t *TCPServer) startServer() error {
 		return err
 	}
 	t.listener = listener
-
-	// fmt.Printf("TCP server is listening on port %d\n", t.port) ...Port로 서버 실행 중
+	fmt.Printf("TCP server is listening on port %d\n", t.port)
 
 	go t.acceptConnections()
 
@@ -99,6 +98,8 @@ func (t *TCPServer) acceptConnections() {
 
 		fmt.Println("Client Connect")
 		t.clientListeningState = true
+		// 클라이언트로부터 연결을 받으면 View로 로딩 끝 신호를 보냄
+		runtime.EventsEmit(*t.ctx, "server_accept_success", true)
 		go t.handleConnection(conn)
 	}
 }

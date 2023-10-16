@@ -6,6 +6,7 @@ import { CustomErrorDialog } from "../../wailsjs/go/main/App"
 import { InitialConnectServerPage } from "../../wailsjs/go/initial/Initial"
 import { StartClient } from "../../wailsjs/go/tcpclient/TCPClient"
 import { GetPort } from "../../wailsjs/go/tcpserver/TCPServer"
+import { EventsOn } from "../../wailsjs/runtime/runtime"
 
 import Alert from "../components/common/Alert"
 
@@ -17,6 +18,7 @@ const ConnectServerPage = () => {
   const [portState, setPortState] = useState<number>()
   // 상대 PC가 실행 중인 PC에 연결을 했는지...
   const [connectListeningLoading, setConnectListeningLoading] = useState<boolean>(false)
+  const [acceptSuccessState, setAcceptSuccessState] = useState<Boolean>(false)
 
   useEffect(() => {
     InitialConnectServerPage()
@@ -29,7 +31,6 @@ const ConnectServerPage = () => {
   }
 
   // 현재 실행 중인 서버의 Port는 접속 불가능 하게
-  // 연결 성공 시에 폴더 구조 페이지로 이동
   const StartClientHandler = async () => {
     if (await GetPort() == portState) {
       CustomErrorDialog("현재 PC에서 실행 중인 서버에 접속할 수 없습니다.")
@@ -47,7 +48,23 @@ const ConnectServerPage = () => {
     }
 
     setConnectListeningLoading(() => true)
+
+    // 상대 PC로부터 연결을 받은 상태이며 서버를 연결 한다면...
+    if (acceptSuccessState) {
+      navigate("/dir")
+    }
   }
+
+  // 상대 PC 연결 이후에 로딩 상태라면...
+  // 상대 PC 연결을 안 하고 연결을 받았다면...
+  EventsOn("server_accept_success", (accept_success: boolean) => {
+    setAcceptSuccessState(() => true)
+    if (connectListeningLoading) {
+      navigate("/dir")
+      return
+    }
+    alert("Accept Success")
+  })
 
   return (
     <Fragment>
