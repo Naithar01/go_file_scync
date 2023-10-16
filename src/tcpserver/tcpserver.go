@@ -111,8 +111,6 @@ func (t *TCPServer) handleConnection(conn net.Conn) {
 
 func (t *TCPServer) Close() {
 	if t.listener != nil {
-		t.serverListeningState = false
-		t.serverListeningState = false
 		t.listener.Close()
 	}
 }
