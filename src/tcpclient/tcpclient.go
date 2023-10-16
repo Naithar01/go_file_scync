@@ -54,6 +54,8 @@ func (c *TCPClient) StartClient(ip string, port int) bool {
 		DefaultButton: "",
 		CancelButton:  "",
 	})
+
+	go c.ReceiveMessages() // 클라이언트가 메시지를 받을 수 있도록 고루틴 시작
 	return true
 }
 
@@ -67,6 +69,26 @@ func (c *TCPClient) connectToServer() error {
 
 	// 클라이언트와 서버 연결 성공
 	return nil
+}
+
+func (c *TCPClient) ReceiveMessages() {
+	for {
+		buffer := make([]byte, 1024)
+		n, err := c.conn.Read(buffer)
+		if err != nil {
+			fmt.Println("Error receiving message:", err)
+			c.Close()
+			return
+		}
+
+		message := string(buffer[:n])
+		fmt.Println("Received message:", message)
+
+		if message == "close server" {
+			fmt.Println("Server has closed. Disconnecting...")
+			c.Close()
+		}
+	}
 }
 
 func (c *TCPClient) Close() {
