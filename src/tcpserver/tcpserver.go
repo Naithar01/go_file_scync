@@ -8,38 +8,38 @@ import (
 	"github.com/wailsapp/wails/v2/pkg/runtime"
 )
 
-// netstat -tuln
-
-// serverListeningState: 서버 실행 유무
-// clientListeningState: 클라이언트 접속 유무
+// TCPServer는 서버 및 클라이언트 연결을 관리합니다.
+// 클라이언트 접속 유무는 client filed의 nil 확인
 type TCPServer struct {
 	ctx                  *context.Context
 	port                 int
 	listener             net.Listener
 	serverListeningState bool
-	clientListeningState bool
+	client               net.Conn
 }
 
+// NewTCPServer는 새 TCPServer 인스턴스를 생성합니다.
 func NewTCPServer(ctx *context.Context) *TCPServer {
 	return &TCPServer{
 		ctx:                  ctx,
 		listener:             nil,
 		serverListeningState: false,
-		clientListeningState: false,
+		client:               nil,
 	}
 }
 
+// GetPort는 현재 설정된 포트를 반환합니다.
 func (t *TCPServer) GetPort() int {
 	return t.port
 }
 
-// 실행되고 있는 서버 리스너 닫기, 앱 재실행
+// ReStartServer는 실행 중인 서버를 종료하고 앱을 다시로드합니다.
 func (t *TCPServer) ReStartServer() {
 	t.Close()
 	runtime.WindowReload(*t.ctx)
 }
 
-// TCP 서버 실행 성공 시에 True, 중복되는 PORT 사용 시에는 False, 에러 문구
+// SetServerPort는 서버를 지정된 포트에서 실행합니다.
 func (t *TCPServer) SetServerPort(port int) bool {
 	t.port = port
 
@@ -49,7 +49,7 @@ func (t *TCPServer) SetServerPort(port int) bool {
 		runtime.MessageDialog(*t.ctx, runtime.MessageDialogOptions{
 			Type:          runtime.ErrorDialog,
 			Title:         "Error",
-			Message:       "Port is already use",
+			Message:       "Port is already in use",
 			Buttons:       nil,
 			DefaultButton: "",
 			CancelButton:  "",
@@ -68,6 +68,7 @@ func (t *TCPServer) SetServerPort(port int) bool {
 	return true
 }
 
+// startServer는 서버를 시작합니다.
 func (t *TCPServer) startServer() error {
 	listenAddress := fmt.Sprintf(":%d", t.port)
 	listener, err := net.Listen("tcp", listenAddress)
@@ -82,35 +83,33 @@ func (t *TCPServer) startServer() error {
 	return nil
 }
 
-// 클라이언트 연결 수락
+// acceptConnections는 클라이언트 연결을 수락하고 처리합니다.
 func (t *TCPServer) acceptConnections() {
-	for {
-		conn, err := t.listener.Accept()
-		if err != nil {
-			// fmt.Println("Error accepting connection:", err) 클라이언트로부터 연결 받기 실패 오류
-			continue
-		}
-
-		// 연결 된 클라이언트가 하나라도 있으면 이후에 연결되는 클라이언트는 모두 종료
-		if t.clientListeningState {
-			conn.Close()
-		}
-
-		fmt.Println("Client Connect")
-		t.clientListeningState = true
-		// 클라이언트로부터 연결을 받으면 View로 로딩 끝 신호를 보냄
-		runtime.EventsEmit(*t.ctx, "server_accept_success", true)
-		go t.handleConnection(conn)
+	conn, err := t.listener.Accept()
+	if err != nil {
+		return
 	}
+
+	// 이미 연결된 클라이언트가 있다면 새로운 클라이언트를 거절
+	if t.client != nil {
+		conn.Close()
+		return
+	}
+
+	t.client = conn
+	fmt.Println("Client Connected")
+
+	// 클라이언트로부터 연결이 성공적으로 수락되면 View로 이벤트를 보냄
+	runtime.EventsEmit(*t.ctx, "server_accept_success", true)
 }
 
-// 클라이언트 연결 수락 시에 어떤 로직을 할지,
-func (t *TCPServer) handleConnection(conn net.Conn) {
-	defer conn.Close()
-}
-
+// Close는 현재 실행 중인 서버 및 클라이언트 연결을 모두 닫습니다.
 func (t *TCPServer) Close() {
 	if t.listener != nil {
 		t.listener.Close()
+	}
+
+	if t.client != nil {
+		t.client.Close()
 	}
 }
