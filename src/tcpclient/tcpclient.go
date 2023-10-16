@@ -8,6 +8,7 @@ import (
 	"github.com/wailsapp/wails/v2/pkg/runtime"
 )
 
+// connectState: 서버에 연결 되었다는 유무
 type TCPClient struct {
 	ctx          *context.Context
 	conn         net.Conn

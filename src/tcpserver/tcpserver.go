@@ -10,6 +10,8 @@ import (
 
 // netstat -tuln
 
+// serverListeningState: 서버 실행 유무
+// clientListeningState: 클라이언트 접속 유무
 type TCPServer struct {
 	ctx                  *context.Context
 	port                 int
