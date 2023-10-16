@@ -10,10 +10,13 @@ import { GetPort } from "../../wailsjs/go/tcpserver/TCPServer"
 import Alert from "../components/common/Alert"
 
 import "../styles/pages/connect_server_page_style.css"
+import Loading from "../components/common/Loading"
 
 const ConnectServerPage = () => {
   const navigate = useNavigate()
   const [portState, setPortState] = useState<number>()
+  // 상대 PC가 실행 중인 PC에 연결을 했는지...
+  const [connectListeningLoading, setConnectListeningLoading] = useState<boolean>(false)
 
   useEffect(() => {
     InitialConnectServerPage()
@@ -43,24 +46,30 @@ const ConnectServerPage = () => {
       return
     }
 
-    console.log(serverConnectState);
-
-    navigate("/dir")
+    setConnectListeningLoading(() => true)
   }
 
   return (
     <Fragment>
-      <div className="connect_server_page">
-        <Alert text="연결할 PC의 포트를 입력하세요." />
-      </div>
-      <div className="connect_server_page_port_inp_areas">
-        <div className="connect_server_page_port_inp_area">
-          <input type="text" inputMode="numeric" value={portState} placeholder="포트를 입력하세요." onChange={ChangePortStateHandler}/>
+      { !connectListeningLoading ? 
+      <Fragment>
+        <div className="connect_server_page">
+          <Alert text="연결할 PC의 포트를 입력하세요." />
         </div>
-        <div className="connect_server_page_port_inp_area">
-          <button type="button" onClick={StartClientHandler}>서버 연결</button>
+        <div className="connect_server_page_port_inp_areas">
+          <div className="connect_server_page_port_inp_area">
+            <input type="text" inputMode="numeric" value={portState} placeholder="포트를 입력하세요." onChange={ChangePortStateHandler}/>
+          </div>
+          <div className="connect_server_page_port_inp_area">
+            <button type="button" onClick={StartClientHandler}>서버 연결</button>
+          </div>
         </div>
-      </div>
+      </Fragment>
+      :
+      <Fragment>
+        <Loading />
+      </Fragment>
+      }
     </Fragment>
   )
 }
