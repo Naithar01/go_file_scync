@@ -35,7 +35,7 @@ func (t *TCPServer) GetPort() int {
 
 // ReStartServer는 실행 중인 서버를 종료하고 앱을 다시로드합니다.
 func (t *TCPServer) ReStartServer() {
-	t.Close()
+	t.CloseServerAndDisconnectClient()
 	runtime.WindowReload(*t.ctx)
 }
 
@@ -104,12 +104,24 @@ func (t *TCPServer) acceptConnections() {
 }
 
 // Close는 현재 실행 중인 서버 및 클라이언트 연결을 모두 닫습니다.
-func (t *TCPServer) Close() {
+func (t *TCPServer) CloseServerAndDisconnectClient() {
 	if t.listener != nil {
 		t.listener.Close()
 	}
 
 	if t.client != nil {
+		t.client.Close()
+	}
+}
+
+// 프로그램 종료 시에 종료 문구를 보내야지 됨
+func (t *TCPServer) Shutdown(ctx context.Context) {
+	fmt.Println("ShutDown Program")
+	if t.client != nil {
+		_, err := t.client.Write([]byte("close server"))
+		if err != nil {
+			fmt.Println("Error sending close signal:", err)
+		}
 		t.client.Close()
 	}
 }
