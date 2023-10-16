@@ -91,6 +91,7 @@ func (t *TCPServer) acceptConnections() {
 			// fmt.Println("Error accepting connection:", err) 클라이언트로부터 연결 받기 실패 오류
 			continue
 		}
+		fmt.Println("Client Connect")
 		t.clientListeningState = true
 		go t.handleConnection(conn)
 	}

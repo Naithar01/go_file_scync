@@ -44,6 +44,7 @@ func (c *TCPClient) StartClient(ip string, port int) bool {
 		return false
 	}
 
+	fmt.Println(("Connect Success"))
 	c.connectState = true
 	runtime.MessageDialog(*c.ctx, runtime.MessageDialogOptions{
 		Type:          runtime.InfoDialog,
