@@ -98,3 +98,15 @@ func (a *App) CustomErrorDialog(errorMessage string) {
 		CancelButton:  "",
 	})
 }
+
+// Custom Info Dialog
+func (a *App) CustomEInfoDialog(InfoMessage string) {
+	runtime.MessageDialog(a.ctx, runtime.MessageDialogOptions{
+		Type:          runtime.InfoDialog,
+		Title:         "Info",
+		Message:       InfoMessage,
+		Buttons:       nil,
+		DefaultButton: "",
+		CancelButton:  "",
+	})
+}
