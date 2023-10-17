@@ -86,6 +86,8 @@ func (c *TCPClient) ReceiveMessages() {
 
 		if message == "close server" {
 			fmt.Println("Server has closed. Disconnecting...")
+			runtime.EventsEmit(*c.ctx, "client_server_disconnect", true)
+			c.connectState = false
 			c.Close()
 		}
 	}

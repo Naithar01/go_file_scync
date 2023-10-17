@@ -6,6 +6,10 @@ export function Close() {
   return window['go']['tcpclient']['TCPClient']['Close']();
 }
 
+export function ReceiveMessages() {
+  return window['go']['tcpclient']['TCPClient']['ReceiveMessages']();
+}
+
 export function StartClient(arg1, arg2) {
   return window['go']['tcpclient']['TCPClient']['StartClient'](arg1, arg2);
 }

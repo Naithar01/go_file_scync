@@ -80,6 +80,12 @@ func (t *TCPServer) startServer() error {
 
 	go t.acceptConnections()
 
+	runtime.EventsOn(*t.ctx, "client_server_disconnect", func(optionalData ...interface{}) {
+		t.client.Close()
+		t.client = nil
+		fmt.Println("Client Disconnect")
+	})
+
 	return nil
 }
 
