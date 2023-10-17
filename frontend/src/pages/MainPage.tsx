@@ -1,8 +1,10 @@
 import { Fragment, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 import { OpenDirectory } from "../../wailsjs/go/main/App";
 import { InitialSnycDirectoryListPage } from "../../wailsjs/go/initial/Initial";
 import { file, main } from "../../wailsjs/go/models";
+import { EventsOn } from "../../wailsjs/runtime/runtime"
 
 import DirectoryList from "../components/directory/DirectoryList";
 import Loading from "../components/common/Loading";
@@ -14,9 +16,15 @@ export interface RenameFileData {
 }
 
 const MainPage = () => {
-	const [isLoading ,setIsLoading] = useState<boolean>(true)
+	const navigate = useNavigate()
+  
+  const [isLoading ,setIsLoading] = useState<boolean>(true)
   const [projectData, setProjectData] = useState<main.ResponseFileStruct>()
   const [resFileData, setResFileData] = useState<RenameFileData[]>()
+
+  EventsOn("client_server_disconnect", function() {
+    navigate("connect")
+  })
 
   // const [isOpen, setIsOpen] = useState<boolean>(true)
 
