@@ -44,7 +44,7 @@ func (c *TCPClient) StartClient(ip string, port int) bool {
 		return false
 	}
 
-	fmt.Println(("Connect Success"))
+	fmt.Println("서버에 연결 성공")
 	c.connectState = true
 	runtime.MessageDialog(*c.ctx, runtime.MessageDialogOptions{
 		Type:          runtime.InfoDialog,
@@ -76,18 +76,17 @@ func (c *TCPClient) ReceiveMessages() {
 		buffer := make([]byte, 1024)
 		n, err := c.conn.Read(buffer)
 		if err != nil {
-			fmt.Println("Error receiving message:", err)
+			fmt.Println("메시지 받기 실패 에러: ", err)
 			c.Close()
 			return
 		}
 
 		message := string(buffer[:n])
-		fmt.Println("Received message:", message)
+		fmt.Println("받은 문구:", message)
 
 		if message == "close server" {
-			fmt.Println("Server has closed. Disconnecting...")
+			fmt.Println("서버 닫힘, 연결 끊기")
 			runtime.EventsEmit(*c.ctx, "client_server_disconnect", true)
-			c.connectState = false
 			c.Close()
 		}
 	}

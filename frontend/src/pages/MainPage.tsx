@@ -23,7 +23,7 @@ const MainPage = () => {
   const [resFileData, setResFileData] = useState<RenameFileData[]>()
 
   EventsOn("client_server_disconnect", function() {
-    navigate("connect")
+    navigate("/connect")
   })
 
   // const [isOpen, setIsOpen] = useState<boolean>(true)

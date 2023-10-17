@@ -76,37 +76,40 @@ func (t *TCPServer) startServer() error {
 		return err
 	}
 	t.listener = listener
-	fmt.Printf("TCP server is listening on port %d\n", t.port)
+	fmt.Printf("서버 실행중... 포트: %d\n", t.port)
 
 	go t.acceptConnections()
-
-	runtime.EventsOn(*t.ctx, "client_server_disconnect", func(optionalData ...interface{}) {
-		t.client.Close()
-		t.client = nil
-		fmt.Println("Client Disconnect")
-	})
 
 	return nil
 }
 
 // acceptConnections는 클라이언트 연결을 수락하고 처리합니다.
 func (t *TCPServer) acceptConnections() {
-	conn, err := t.listener.Accept()
-	if err != nil {
-		return
+	for {
+		conn, err := t.listener.Accept()
+		if err != nil {
+			continue
+		}
+
+		// 이미 연결된 클라이언트가 있다면 새로운 클라이언트를 거절
+		if t.client != nil {
+			fmt.Println("클라이언트가 이미 연결 중")
+			conn.Close()
+			continue
+		}
+
+		t.client = conn
+		fmt.Println("클라이언트 연결 됨")
+
+		// 클라이언트로부터 연결이 성공적으로 수락되면 View로 이벤트를 보냄
+		runtime.EventsEmit(*t.ctx, "server_accept_success", true)
+
+		runtime.EventsOn(*t.ctx, "client_server_disconnect", func(optionalData ...interface{}) {
+			t.client.Close()
+			t.client = nil
+			fmt.Println("클라이언트 연결 끊김")
+		})
 	}
-
-	// 이미 연결된 클라이언트가 있다면 새로운 클라이언트를 거절
-	if t.client != nil {
-		conn.Close()
-		return
-	}
-
-	t.client = conn
-	fmt.Println("Client Connected")
-
-	// 클라이언트로부터 연결이 성공적으로 수락되면 View로 이벤트를 보냄
-	runtime.EventsEmit(*t.ctx, "server_accept_success", true)
 }
 
 // Close는 현재 실행 중인 서버 및 클라이언트 연결을 모두 닫습니다.
@@ -129,5 +132,6 @@ func (t *TCPServer) Shutdown(ctx context.Context) {
 			fmt.Println("Error sending close signal:", err)
 		}
 		t.client.Close()
+		t.client = nil
 	}
 }

@@ -21,6 +21,8 @@ const ConnectServerPage = () => {
   const [acceptSuccessState, setAcceptSuccessState] = useState<Boolean>(false)
 
   useEffect(() => {
+    setConnectListeningIsLoading(false)
+    setAcceptSuccessState(false)
     InitialConnectServerPage()
   }, [])
 
