@@ -8,7 +8,7 @@ import (
 	"github.com/wailsapp/wails/v2/pkg/runtime"
 )
 
-// connectState: 서버에 연결 되었다는 유무
+// TCPClient는 서버에 대한 클라이언트 연결을 관리합니다.
 type TCPClient struct {
 	ctx          *context.Context
 	conn         net.Conn
@@ -17,15 +17,14 @@ type TCPClient struct {
 	connectState bool
 }
 
+// NewTCPClient는 새 TCPClient 인스턴스를 생성합니다.
 func NewTCPClient(ctx *context.Context) *TCPClient {
 	return &TCPClient{
-		ctx:          ctx,
-		conn:         nil,
-		connectState: false,
+		ctx: ctx,
 	}
 }
 
-// 클라이언트 연결 시작
+// StartClient는 서버에 연결을 시도하고 클라이언트를 초기화합니다.
 func (c *TCPClient) StartClient(ip string, port int) bool {
 	c.ip = ip
 	c.port = port

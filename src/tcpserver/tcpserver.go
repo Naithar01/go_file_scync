@@ -9,7 +9,6 @@ import (
 )
 
 // TCPServer는 서버 및 클라이언트 연결을 관리합니다.
-// 클라이언트 접속 유무는 client filed의 nil 확인
 type TCPServer struct {
 	ctx                  *context.Context
 	port                 int
@@ -21,10 +20,7 @@ type TCPServer struct {
 // NewTCPServer는 새 TCPServer 인스턴스를 생성합니다.
 func NewTCPServer(ctx *context.Context) *TCPServer {
 	return &TCPServer{
-		ctx:                  ctx,
-		listener:             nil,
-		serverListeningState: false,
-		client:               nil,
+		ctx: ctx,
 	}
 }
 
@@ -104,6 +100,7 @@ func (t *TCPServer) acceptConnections() {
 		// 클라이언트로부터 연결이 성공적으로 수락되면 View로 이벤트를 보냄
 		runtime.EventsEmit(*t.ctx, "server_accept_success", true)
 
+		// 클라이언트 연결 끊김 이벤트 핸들러 등록
 		runtime.EventsOn(*t.ctx, "client_server_disconnect", func(optionalData ...interface{}) {
 			t.client.Close()
 			t.client = nil
@@ -112,7 +109,7 @@ func (t *TCPServer) acceptConnections() {
 	}
 }
 
-// Close는 현재 실행 중인 서버 및 클라이언트 연결을 모두 닫습니다.
+// CloseServerAndDisconnectClient는 현재 실행 중인 서버 및 클라이언트 연결을 모두 닫습니다.
 func (t *TCPServer) CloseServerAndDisconnectClient() {
 	if t.listener != nil {
 		t.listener.Close()
