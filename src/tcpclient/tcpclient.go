@@ -3,6 +3,7 @@ package tcpclient
 import (
 	"context"
 	"fmt"
+	"go_file_sync/src/logs"
 	"net"
 
 	"github.com/wailsapp/wails/v2/pkg/runtime"
@@ -43,7 +44,7 @@ func (c *TCPClient) StartClient(ip string, port int) bool {
 		return false
 	}
 
-	fmt.Println("서버에 연결 성공")
+	logs.PrintMsgLog("서버에 연결 성공")
 	c.connectState = true
 	runtime.MessageDialog(*c.ctx, runtime.MessageDialogOptions{
 		Type:          runtime.InfoDialog,
@@ -75,16 +76,16 @@ func (c *TCPClient) ReceiveMessages() {
 		buffer := make([]byte, 1024)
 		n, err := c.conn.Read(buffer)
 		if err != nil {
-			fmt.Println("메시지 받기 실패 에러: ", err)
+			logs.PrintMsgLog(fmt.Sprintf("메시지 받기 실패 에러: %s\n", err.Error()))
 			c.Close()
 			return
 		}
 
 		message := string(buffer[:n])
-		fmt.Println("받은 문구:", message)
+		logs.PrintMsgLog(fmt.Sprintf("서버로부터 받은 문구: %s\n", message))
 
 		if message == "close server" {
-			fmt.Println("서버 닫힘, 연결 끊기")
+			logs.PrintMsgLog("서버 닫힘, 연결 끊기")
 			runtime.EventsEmit(*c.ctx, "client_server_disconnect", true)
 			c.Close()
 		}
