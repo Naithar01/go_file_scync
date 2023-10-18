@@ -21,10 +21,22 @@ func NewApp() *App {
 	return &App{}
 }
 
-// startup is called when the app starts. The context is saved
-// so we can call the runtime methods
 func (a *App) startup(ctx context.Context) {
 	a.ctx = ctx
+}
+
+func (b *App) beforeClose(ctx context.Context) (prevent bool) {
+	dialog, err := runtime.MessageDialog(ctx, runtime.MessageDialogOptions{
+		Type:    runtime.QuestionDialog,
+		Title:   "프로그램 종료",
+		Message: "프로그램을 종료하시겠습니까?",
+	})
+
+	if err != nil {
+		return false
+	}
+
+	return dialog != "Yes"
 }
 
 func (a *App) applicationMenu() *menu.Menu {

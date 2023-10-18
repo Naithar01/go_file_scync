@@ -38,6 +38,7 @@ func main() {
 		BackgroundColour: &options.RGBA{R: 255, G: 255, B: 255, A: 0},
 		OnStartup:        app.startup,
 		OnShutdown:       tcpServer.Shutdown,
+		OnBeforeClose:    app.beforeClose,
 		Menu:             app.applicationMenu(),
 		Bind: []interface{}{
 			app,
