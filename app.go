@@ -100,7 +100,7 @@ func (a *App) CustomErrorDialog(errorMessage string) {
 }
 
 // Custom Info Dialog
-func (a *App) CustomEInfoDialog(InfoMessage string) {
+func (a *App) CustomInfoDialog(InfoMessage string) {
 	runtime.MessageDialog(a.ctx, runtime.MessageDialogOptions{
 		Type:          runtime.InfoDialog,
 		Title:         "Info",
