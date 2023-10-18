@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"go_file_sync/src/file"
+	"go_file_sync/src/logs"
 
 	"github.com/wailsapp/wails/v2/pkg/menu"
 	"github.com/wailsapp/wails/v2/pkg/menu/keys"
@@ -22,10 +23,11 @@ func NewApp() *App {
 }
 
 func (a *App) startup(ctx context.Context) {
+	logs.LoadLogFile()
 	a.ctx = ctx
 }
 
-func (b *App) beforeClose(ctx context.Context) (prevent bool) {
+func (a *App) beforeClose(ctx context.Context) (prevent bool) {
 	dialog, err := runtime.MessageDialog(ctx, runtime.MessageDialogOptions{
 		Type:    runtime.QuestionDialog,
 		Title:   "프로그램 종료",
@@ -36,7 +38,12 @@ func (b *App) beforeClose(ctx context.Context) (prevent bool) {
 		return false
 	}
 
-	return dialog != "Yes"
+	if dialog == "Yes" {
+		logs.PrintMsgLog("프로그램 종료")
+		return false
+	}
+
+	return true
 }
 
 func (a *App) applicationMenu() *menu.Menu {
