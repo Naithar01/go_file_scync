@@ -33,8 +33,8 @@ func (i *Initial) InitialInputPortPage() {
 }
 
 // Initial ConnectServerPage Setting...
-func (i *Initial) InitialConnectServerPage() {
-	runtime.WindowSetTitle(*i.ctx, "go_file_sync - Connect Server")
+func (i *Initial) InitialConnectServerPage(port string) {
+	runtime.WindowSetTitle(*i.ctx, "go_file_sync - Connect Server - "+port)
 	runtime.WindowSetMinSize(*i.ctx, 500, 500)
 	runtime.WindowSetSize(*i.ctx, 500, 500)
 	runtime.WindowCenter(*i.ctx)
