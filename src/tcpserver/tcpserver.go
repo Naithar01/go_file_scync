@@ -71,8 +71,8 @@ func (t *TCPServer) SetServerPort(port int) bool {
 	return true
 }
 
-// startServer는 서버를 시작합니다.
-func (t *TCPServer) startServer() error {
+// 실제 서버를 실행하는 부분
+func (t *TCPServer) bindServer() error {
 	listenAddress := fmt.Sprintf(":%d", t.port)
 	listener, err := net.Listen("tcp", listenAddress)
 	if err != nil {
@@ -80,13 +80,21 @@ func (t *TCPServer) startServer() error {
 	}
 	t.listener = listener
 	logs.PrintMsgLog(fmt.Sprintf("서버 실행중... 포트: %d\n", t.port))
+	return nil
+}
+
+// startServer는 서버를 시작
+func (t *TCPServer) startServer() error {
+	if err := t.bindServer(); err != nil {
+		return err
+	}
 
 	go t.acceptConnections()
 
 	return nil
 }
 
-// acceptConnections는 클라이언트 연결을 수락하고 처리합니다.
+// 클라이언트 연결을 수락하고 처리
 func (t *TCPServer) acceptConnections() {
 	for {
 		conn, err := t.listener.Accept()
@@ -94,29 +102,37 @@ func (t *TCPServer) acceptConnections() {
 			continue
 		}
 
-		// 이미 연결된 클라이언트가 있다면 새로운 클라이언트를 거절
 		if t.client != nil {
-			logs.PrintMsgLog("클라이언트가 이미 연결 중")
-			conn.Close()
-			continue
+			t.handleExistingClientConnection(conn)
+		} else {
+			t.handleNewClientConnection(conn)
 		}
-
-		t.client = conn
-		logs.PrintMsgLog("클라이언트 연결 됨")
-
-		// 클라이언트로부터 연결이 성공적으로 수락되면 View로 이벤트를 보냄
-		runtime.EventsEmit(*t.ctx, "server_accept_success", true)
-
-		// 클라이언트 연결 끊김 이벤트 핸들러 등록
-		runtime.EventsOn(*t.ctx, "client_server_disconnect", func(_ ...interface{}) {
-			t.client.Close()
-			t.client = nil
-			logs.PrintMsgLog("클라이언트 연결 끊김")
-		})
 	}
 }
 
-// CloseServerAndDisconnectClient는 현재 실행 중인 서버 및 클라이언트 연결을 모두 닫습니다.
+// 이미 연결된 클라이언트를 처리
+func (t *TCPServer) handleExistingClientConnection(conn net.Conn) {
+	logs.PrintMsgLog("클라이언트가 이미 연결 중")
+	conn.Close()
+}
+
+// 새로운 클라이언트 연결을 처리
+func (t *TCPServer) handleNewClientConnection(conn net.Conn) {
+	t.client = conn
+	logs.PrintMsgLog("클라이언트 연결 됨")
+
+	// 클라이언트로부터 연결이 성공적으로 수락되면 View로 이벤트를 보냄
+	runtime.EventsEmit(*t.ctx, "server_accept_success", true)
+
+	// 클라이언트 연결 끊김 이벤트 핸들러 등록
+	runtime.EventsOn(*t.ctx, "client_server_disconnect", func(_ ...interface{}) {
+		t.client.Close()
+		t.client = nil
+		logs.PrintMsgLog("클라이언트 연결 끊김")
+	})
+}
+
+// 현재 실행 중인 서버 및 클라이언트 연결을 모두 닫음
 func (t *TCPServer) CloseServerAndDisconnectClient() {
 	if t.listener != nil {
 		t.listener.Close()
