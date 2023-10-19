@@ -31,13 +31,21 @@ func NewTCPClient(ctx *context.Context) *TCPClient {
 	}
 }
 
-// StartClient는 서버에 연결을 시도하고 클라이언트를 초기화합니다.
+func (c *TCPClient) connectToServer(ip string, port int) (net.Conn, error) {
+	serverAddress := fmt.Sprintf("%s:%d", ip, port)
+	conn, err := net.Dial("tcp", serverAddress)
+	if err != nil {
+		return nil, err
+	}
+	return conn, nil
+}
+
+// 서버에 연결을 시도하고 클라이언트를 초기화
 func (c *TCPClient) StartClient(ip string, port int) bool {
 	c.ip = ip
 	c.port = port
 
-	err := c.connectToServer()
-
+	conn, err := c.connectToServer(ip, port)
 	if err != nil {
 		runtime.MessageDialog(*c.ctx, runtime.MessageDialogOptions{
 			Type:          runtime.ErrorDialog,
@@ -50,8 +58,12 @@ func (c *TCPClient) StartClient(ip string, port int) bool {
 		return false
 	}
 
+	c.conn = conn
+
+	// 클라이언트와 서버 연결 성공
 	logs.PrintMsgLog("서버에 연결 성공")
 	c.connectState = true
+
 	runtime.MessageDialog(*c.ctx, runtime.MessageDialogOptions{
 		Type:          runtime.InfoDialog,
 		Title:         "Connected",
@@ -65,16 +77,30 @@ func (c *TCPClient) StartClient(ip string, port int) bool {
 	return true
 }
 
-func (c *TCPClient) connectToServer() error {
-	serverAddress := fmt.Sprintf("%s:%d", c.ip, c.port)
-	conn, err := net.Dial("tcp", serverAddress)
-	if err != nil {
-		return err
-	}
-	c.conn = conn
+func (c *TCPClient) handleMessage(buffer []byte, n int) {
+	var message Message
 
-	// 클라이언트와 서버 연결 성공
-	return nil
+	err := json.Unmarshal(buffer[:n], &message)
+	if err != nil {
+		runtime.MessageDialog(*c.ctx, runtime.MessageDialogOptions{
+			Type:          runtime.ErrorDialog,
+			Title:         "Error",
+			Message:       "데이터 수신에 실패하였습니다.",
+			Buttons:       nil,
+			DefaultButton: "",
+			CancelButton:  "",
+		})
+		logs.PrintMsgLog(fmt.Sprintf("데이터 수신에 실패하였습니다.: %s\n", err.Error()))
+		return
+	}
+
+	logs.PrintMsgLog(fmt.Sprintf("서버로부터 받은 헤더: %s\n", message.Type))
+	switch message.Type {
+	case "close server":
+		logs.PrintMsgLog("서버 닫힘, 연결 끊기")
+		runtime.EventsEmit(*c.ctx, "client_server_disconnect", true)
+		c.Close()
+	}
 }
 
 func (c *TCPClient) ReceiveMessages() {
@@ -88,28 +114,7 @@ func (c *TCPClient) ReceiveMessages() {
 			return
 		}
 
-		var message Message
-
-		err = json.Unmarshal(buffer[:n], &message)
-		if err != nil {
-			runtime.MessageDialog(*c.ctx, runtime.MessageDialogOptions{
-				Type:          runtime.ErrorDialog,
-				Title:         "Error",
-				Message:       "데이터 수신에 실패하였습니다.",
-				Buttons:       nil,
-				DefaultButton: "",
-				CancelButton:  "",
-			})
-			logs.PrintMsgLog(fmt.Sprintf("데이터 수신에 실패하였습니다.: %s\n", err.Error()))
-		}
-
-		logs.PrintMsgLog(fmt.Sprintf("서버로부터 받은 헤더: %s\n", message.Type))
-		switch message.Type {
-		case "close server":
-			logs.PrintMsgLog("서버 닫힘, 연결 끊기")
-			runtime.EventsEmit(*c.ctx, "client_server_disconnect", true)
-			c.Close()
-		}
+		c.handleMessage(buffer, n)
 	}
 }
 
