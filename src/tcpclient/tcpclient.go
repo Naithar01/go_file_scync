@@ -2,6 +2,7 @@ package tcpclient
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"go_file_sync/src/logs"
 	"net"
@@ -16,6 +17,11 @@ type TCPClient struct {
 	ip           string
 	port         int
 	connectState bool
+}
+
+type Message struct {
+	Type    string      `json:"type"`
+	Content interface{} `json:"content"`
 }
 
 // NewTCPClient는 새 TCPClient 인스턴스를 생성합니다.
@@ -74,17 +80,32 @@ func (c *TCPClient) connectToServer() error {
 func (c *TCPClient) ReceiveMessages() {
 	for {
 		buffer := make([]byte, 1024)
+
 		n, err := c.conn.Read(buffer)
-		if err != nil {
+		if err != nil && c.conn != nil {
 			logs.PrintMsgLog(fmt.Sprintf("메시지 받기 실패 에러: %s\n", err.Error()))
 			c.Close()
 			return
 		}
 
-		message := string(buffer[:n])
-		logs.PrintMsgLog(fmt.Sprintf("서버로부터 받은 문구: %s\n", message))
+		var message Message
 
-		if message == "close server" {
+		err = json.Unmarshal(buffer[:n], &message)
+		if err != nil {
+			runtime.MessageDialog(*c.ctx, runtime.MessageDialogOptions{
+				Type:          runtime.ErrorDialog,
+				Title:         "Error",
+				Message:       "데이터 수신에 실패하였습니다.",
+				Buttons:       nil,
+				DefaultButton: "",
+				CancelButton:  "",
+			})
+			logs.PrintMsgLog(fmt.Sprintf("데이터 수신에 실패하였습니다.: %s\n", err.Error()))
+		}
+
+		logs.PrintMsgLog(fmt.Sprintf("서버로부터 받은 헤더: %s\n", message.Type))
+		switch message.Type {
+		case "close server":
 			logs.PrintMsgLog("서버 닫힘, 연결 끊기")
 			runtime.EventsEmit(*c.ctx, "client_server_disconnect", true)
 			c.Close()

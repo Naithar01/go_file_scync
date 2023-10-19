@@ -2,6 +2,7 @@ package tcpserver
 
 import (
 	"context"
+	"encoding/json"
 	"fmt"
 	"go_file_sync/src/logs"
 	"net"
@@ -16,6 +17,11 @@ type TCPServer struct {
 	listener             net.Listener
 	serverListeningState bool
 	client               net.Conn
+}
+
+type Message struct {
+	Type    string      `json:"type"`
+	Content interface{} `json:"content"`
 }
 
 // NewTCPServer는 새 TCPServer 인스턴스를 생성합니다.
@@ -121,11 +127,30 @@ func (t *TCPServer) CloseServerAndDisconnectClient() {
 	}
 }
 
-// 프로그램 종료 시에 종료 문구를 보내야지 됨
+// 프로그램 종료 시에 종료 문구를 보냄
 func (t *TCPServer) Shutdown(ctx context.Context) {
 	logs.PrintMsgLog("프로그램 종료")
 	if t.client != nil {
-		_, err := t.client.Write([]byte("close server"))
+		message := Message{
+			Type:    "close server",
+			Content: nil,
+		}
+
+		// JSON 직렬화
+		wrtieData, err := json.Marshal(message)
+		if err != nil {
+			runtime.MessageDialog(*t.ctx, runtime.MessageDialogOptions{
+				Type:          runtime.ErrorDialog,
+				Title:         "Error",
+				Message:       "데이터 송신에 실패하였습니다.",
+				Buttons:       nil,
+				DefaultButton: "",
+				CancelButton:  "",
+			})
+			logs.PrintMsgLog(fmt.Sprintf("데이터 송신에 실패하였습니다.: %s\n", err.Error()))
+		}
+
+		_, err = t.client.Write(wrtieData)
 		if err != nil {
 			logs.PrintMsgLog(fmt.Sprintf("Error sending close signal: %s\n", err.Error()))
 		}
