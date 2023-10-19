@@ -15,6 +15,7 @@ type File struct {
 	Depth         int       `json:"depth"`
 }
 
+// 선택한 폴더에 있는 파일, 하위 폴더에 존재하는 파일들의 목록을 수집
 func NewFiles(directoryPath string, rootDepth int) ([]File, error) {
 	var files []File
 	err := filepath.Walk(directoryPath, func(path string, info os.FileInfo, err error) error {
@@ -50,6 +51,7 @@ func NewFiles(directoryPath string, rootDepth int) ([]File, error) {
 	return files, nil
 }
 
+// 폴더 이름별로 파일을 변수화
 func ParseDirectoryFiles(filesInfo []File) map[string][]File {
 	var fileDir = map[string][]File{}
 
