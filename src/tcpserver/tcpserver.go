@@ -97,7 +97,6 @@ func (t *TCPServer) acceptConnections() {
 		if t.client != nil {
 			t.client.Close()
 			t.client = conn
-			t.sendWelcomeMessage()
 		}
 
 		t.client = conn
@@ -154,32 +153,6 @@ func (t *TCPServer) ReceiveMessages() {
 		}
 
 		t.handleMessage(buffer, n)
-	}
-}
-
-func (t *TCPServer) sendWelcomeMessage() {
-	message := Message{
-		Type:    "welcome",
-		Content: "Connect Success",
-	}
-
-	// JSON 직렬화
-	writeData, err := json.Marshal(message)
-	if err != nil {
-		runtime.MessageDialog(*t.ctx, runtime.MessageDialogOptions{
-			Type:          runtime.ErrorDialog,
-			Title:         "Error",
-			Message:       "데이터 전송에 실패하였습니다.",
-			Buttons:       nil,
-			DefaultButton: "",
-			CancelButton:  "",
-		})
-		logs.PrintMsgLog(fmt.Sprintf("데이터 전송에 실패하였습니다.: %s\n", err.Error()))
-	}
-
-	_, err = t.client.Write(writeData)
-	if err != nil {
-		logs.PrintMsgLog(fmt.Sprintf("Error sending close signal: %s\n", err.Error()))
 	}
 }
 

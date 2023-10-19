@@ -61,7 +61,6 @@ func (c *TCPClient) StartClient(ip string, port int) bool {
 	// 클라이언트와 서버 연결 성공
 	logs.PrintMsgLog("상대 PC 서버에 연결 성공")
 
-	c.sendWelcomeMessage()
 	go c.ReceiveMessages() // 클라이언트가 메시지를 받을 수 있도록 고루틴 시작
 	return true
 }
@@ -103,33 +102,6 @@ func (c *TCPClient) ReceiveMessages() {
 		}
 
 		c.handleMessage(buffer, n)
-	}
-}
-
-// 클라이언트가 서버에 연결한 이후 서버에 현재 PC에서 실행중인 포트를 보냄
-func (c *TCPClient) sendWelcomeMessage() {
-	message := Message{
-		Type:    "welcome",
-		Content: "Connect Success",
-	}
-
-	// JSON 직렬화
-	writeData, err := json.Marshal(message)
-	if err != nil {
-		runtime.MessageDialog(*c.ctx, runtime.MessageDialogOptions{
-			Type:          runtime.ErrorDialog,
-			Title:         "Error",
-			Message:       "데이터 전송에 실패하였습니다.",
-			Buttons:       nil,
-			DefaultButton: "",
-			CancelButton:  "",
-		})
-		logs.PrintMsgLog(fmt.Sprintf("데이터 전송에 실패하였습니다.: %s\n", err.Error()))
-	}
-
-	_, err = c.conn.Write(writeData)
-	if err != nil {
-		logs.PrintMsgLog(fmt.Sprintf("Error sending close signal: %s\n", err.Error()))
 	}
 }
 
