@@ -125,21 +125,6 @@ func (t *TCPServer) acceptConnections() {
 	}
 }
 
-// 이미 연결된 클라이언트를 처리
-func (t *TCPServer) handleExistingClientConnection(conn net.Conn) {
-	logs.PrintMsgLog("클라이언트가 이미 연결 중")
-	conn.Close()
-}
-
-// 새로운 클라이언트 연결을 처리
-func (t *TCPServer) handleNewClientConnection(conn net.Conn) {
-	t.client = conn
-	logs.PrintMsgLog("클라이언트 연결 됨")
-
-	// 클라이언트로부터 연결이 성공적으로 수락되면 View로 이벤트를 보냄
-	runtime.EventsEmit(*t.ctx, "server_accept_success", true)
-}
-
 // 현재 실행 중인 서버 및 클라이언트 연결을 모두 닫음
 func (t *TCPServer) CloseServerAndDisconnectClient() {
 	if t.listener != nil {
