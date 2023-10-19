@@ -1,28 +1,29 @@
 package logs
 
 import (
-	"io"
 	"log"
 	"os"
 )
 
+// 23.10.20 Dev Mode
+
 var logFile *os.File
 
 func LoadLogFile() {
-	loadLogFile, err := os.OpenFile("logfile.log", os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
+	// loadLogFile, err := os.OpenFile("logfile.log", os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0666)
 
-	if err != nil {
-		panic(err)
-	}
+	// if err != nil {
+	// 	panic(err)
+	// }
 
-	multiWriter := io.MultiWriter(loadLogFile, os.Stdout)
-	log.SetOutput(multiWriter)
+	// multiWriter := io.MultiWriter(loadLogFile, os.Stdout)
+	// log.SetOutput(multiWriter)
 
-	logFile = loadLogFile
+	// logFile = loadLogFile
 }
 
 func CloseLogFile() {
-	logFile.Close()
+	// logFile.Close()
 }
 
 func PrintMsgLog(msg string) {
