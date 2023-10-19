@@ -107,6 +107,15 @@ func (t *TCPServer) acceptConnections() {
 		} else {
 			t.handleNewClientConnection(conn)
 		}
+
+		// 클라이언트 연결 끊김 이벤트 핸들러 등록
+		runtime.EventsOn(*t.ctx, "client_server_disconnect", func(_ ...interface{}) {
+			if t.client != nil {
+				t.client.Close()
+				t.client = nil
+				logs.PrintMsgLog("클라이언트 연결 끊김")
+			}
+		})
 	}
 }
 
@@ -123,13 +132,6 @@ func (t *TCPServer) handleNewClientConnection(conn net.Conn) {
 
 	// 클라이언트로부터 연결이 성공적으로 수락되면 View로 이벤트를 보냄
 	runtime.EventsEmit(*t.ctx, "server_accept_success", true)
-
-	// 클라이언트 연결 끊김 이벤트 핸들러 등록
-	runtime.EventsOn(*t.ctx, "client_server_disconnect", func(_ ...interface{}) {
-		t.client.Close()
-		t.client = nil
-		logs.PrintMsgLog("클라이언트 연결 끊김")
-	})
 }
 
 // 현재 실행 중인 서버 및 클라이언트 연결을 모두 닫음
