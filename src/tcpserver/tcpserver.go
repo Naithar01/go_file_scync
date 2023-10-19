@@ -7,13 +7,16 @@ import (
 	"go_file_sync/src/logs"
 	"io"
 	"net"
+	"sync"
 
 	"github.com/wailsapp/wails/v2/pkg/runtime"
 )
 
 // TCPServer는 서버 및 클라이언트 연결을 관리합니다.
 type TCPServer struct {
-	ctx      *context.Context
+	ctx *context.Context
+	m   sync.Mutex
+
 	port     int
 	listener net.Listener
 	client   net.Conn
@@ -100,7 +103,9 @@ func (t *TCPServer) acceptConnections() {
 			t.client = conn
 		}
 
+		t.m.Lock()
 		t.client = conn
+		t.m.Unlock()
 		logs.PrintMsgLog("상대 PC로부터 연결을 받음")
 
 		// 클라이언트로부터 연결이 성공적으로 수락되면 View로 이벤트를 보냄
@@ -160,6 +165,8 @@ func (t *TCPServer) ReceiveMessages() {
 
 // 프로그램 종료 시에 종료 문구를 보냄
 func (t *TCPServer) Shutdown(ctx context.Context) {
+	t.m.Lock()
+	defer t.m.Unlock()
 	if t.client != nil {
 		message := Message{
 			Type:    "close server",

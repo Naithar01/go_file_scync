@@ -7,13 +7,16 @@ import (
 	"go_file_sync/src/logs"
 	"io"
 	"net"
+	"sync"
 
 	"github.com/wailsapp/wails/v2/pkg/runtime"
 )
 
 // TCPClient는 서버에 대한 클라이언트 연결을 관리합니다.
 type TCPClient struct {
-	ctx  *context.Context
+	ctx *context.Context
+	m   sync.Mutex
+
 	conn net.Conn
 	ip   string
 	port int
@@ -42,6 +45,7 @@ func (c *TCPClient) connectToServer(ip string, port int) (net.Conn, error) {
 
 // 서버에 연결을 시도하고 클라이언트를 초기화
 func (c *TCPClient) StartClient(ip string, port int) bool {
+	c.m.Lock()
 	c.ip = ip
 	c.port = port
 
@@ -58,6 +62,7 @@ func (c *TCPClient) StartClient(ip string, port int) bool {
 		return false
 	}
 	c.conn = conn
+	c.m.Unlock()
 
 	// 클라이언트와 서버 연결 성공
 	logs.PrintMsgLog("상대 PC 서버에 연결 성공")
