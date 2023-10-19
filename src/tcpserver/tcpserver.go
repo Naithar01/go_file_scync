@@ -110,7 +110,6 @@ func (t *TCPServer) acceptConnections() {
 		runtime.EventsOn(*t.ctx, "server_shutdown", func(_ ...interface{}) {
 			if t.client != nil {
 				t.client.Close()
-				t.client = nil
 			}
 		})
 

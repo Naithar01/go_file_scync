@@ -86,9 +86,9 @@ func (c *TCPClient) handleMessage(buffer []byte, n int) {
 	logs.PrintMsgLog(fmt.Sprintf("서버로부터 받은 헤더: %s\n", message.Type))
 	switch message.Type {
 	case "close server":
+		c.conn.Close()
 		logs.PrintMsgLog("상대 PC로부터 연결 해제 - 서버 종료")
 		runtime.EventsEmit(*c.ctx, "server_shutdown", true)
-		c.conn.Close()
 	}
 }
 
