@@ -106,7 +106,7 @@ func (t *TCPServer) acceptConnections() {
 		runtime.EventsEmit(*t.ctx, "server_accept_success", true)
 
 		// 클라이언트 연결 끊김 이벤트 핸들러 등록
-		runtime.EventsOn(*t.ctx, "client_server_disconnect", func(_ ...interface{}) {
+		runtime.EventsOn(*t.ctx, "server_shutdown", func(_ ...interface{}) {
 			if t.client != nil {
 				t.client.Close()
 				t.client = nil

@@ -86,7 +86,7 @@ func (c *TCPClient) handleMessage(buffer []byte, n int) {
 	switch message.Type {
 	case "close server":
 		logs.PrintMsgLog("상대 PC로부터 연결 해제 - 서버 종료")
-		runtime.EventsEmit(*c.ctx, "client_server_disconnect", true)
+		runtime.EventsEmit(*c.ctx, "server_shutdown", true)
 		c.conn.Close()
 	}
 }

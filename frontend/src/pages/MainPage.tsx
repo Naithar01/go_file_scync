@@ -22,7 +22,7 @@ const MainPage = () => {
   const [projectData, setProjectData] = useState<main.ResponseFileStruct>()
   const [resFileData, setResFileData] = useState<RenameFileData[]>()
 
-  EventsOn("client_server_disconnect", function() {
+  EventsOn("server_shutdown", function() {
     navigate("/connect")
   })
 

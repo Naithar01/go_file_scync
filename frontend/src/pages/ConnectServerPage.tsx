@@ -77,7 +77,7 @@ const ConnectServerPage = () => {
 
   // 상대 PC와의 연결이 끊겼다면 State 초기화
   // 혹은 연결 대기 중에 상대 PC 서버가 종료 상태라면
-  EventsOn("client_server_disconnect", () => {
+  EventsOn("server_shutdown", () => {
     setAcceptSuccessState(false)
     setConnectListeningIsLoading(false)
   })
