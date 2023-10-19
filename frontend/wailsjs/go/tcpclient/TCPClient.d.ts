@@ -5,4 +5,6 @@ export function Close():Promise<void>;
 
 export function ReceiveMessages():Promise<void>;
 
+export function SendAutoConnectServer(arg1:number):Promise<void>;
+
 export function StartClient(arg1:string,arg2:number):Promise<boolean>;

@@ -122,6 +122,48 @@ func (t *TCPServer) acceptConnections() {
 				logs.PrintMsgLog("클라이언트 연결 끊김")
 			}
 		})
+
+		go t.ReceiveMessages()
+	}
+}
+
+func (t *TCPServer) handleMessage(buffer []byte, n int) {
+	var message Message
+
+	err := json.Unmarshal(buffer[:n], &message)
+	if err != nil {
+		runtime.MessageDialog(*t.ctx, runtime.MessageDialogOptions{
+			Type:          runtime.ErrorDialog,
+			Title:         "Error",
+			Message:       "데이터 수신에 실패하였습니다.",
+			Buttons:       nil,
+			DefaultButton: "",
+			CancelButton:  "",
+		})
+		logs.PrintMsgLog(fmt.Sprintf("데이터 수신에 실패하였습니다.: %s\n", err.Error()))
+		return
+	}
+
+	logs.PrintMsgLog(fmt.Sprintf("서버로부터 받은 헤더: %s\n", message.Type))
+	switch message.Type {
+	case "auto connect":
+		logs.PrintMsgLog("상대 PC 자동 연결")
+		runtime.EventsEmit(*t.ctx, "server_auto_connect", message.Content)
+	}
+}
+
+func (t *TCPServer) ReceiveMessages() {
+	for {
+		buffer := make([]byte, 1024)
+
+		n, err := t.client.Read(buffer)
+		if err != nil {
+			logs.PrintMsgLog(fmt.Sprintf("메시지 받기 실패 에러: %s\n", err.Error()))
+			t.CloseServerAndDisconnectClient()
+			return
+		}
+
+		t.handleMessage(buffer, n)
 	}
 }
 
@@ -144,7 +186,7 @@ func (t *TCPServer) sendCloseMessage() {
 	}
 
 	// JSON 직렬화
-	wrtieData, err := json.Marshal(message)
+	writeData, err := json.Marshal(message)
 	if err != nil {
 		runtime.MessageDialog(*t.ctx, runtime.MessageDialogOptions{
 			Type:          runtime.ErrorDialog,
@@ -157,13 +199,12 @@ func (t *TCPServer) sendCloseMessage() {
 		logs.PrintMsgLog(fmt.Sprintf("데이터 송신에 실패하였습니다.: %s\n", err.Error()))
 	}
 
-	_, err = t.client.Write(wrtieData)
+	_, err = t.client.Write(writeData)
 	if err != nil {
 		logs.PrintMsgLog(fmt.Sprintf("Error sending close signal: %s\n", err.Error()))
 	}
 	t.client.Close()
 	t.client = nil
-
 }
 
 // 프로그램 종료 시에 종료 문구를 보냄

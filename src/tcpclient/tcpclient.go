@@ -58,20 +58,15 @@ func (c *TCPClient) StartClient(ip string, port int) bool {
 		return false
 	}
 
+	if c.conn != nil {
+		return true
+	}
+
 	c.conn = conn
 
 	// 클라이언트와 서버 연결 성공
 	logs.PrintMsgLog("서버에 연결 성공")
 	c.connectState = true
-
-	runtime.MessageDialog(*c.ctx, runtime.MessageDialogOptions{
-		Type:          runtime.InfoDialog,
-		Title:         "Connected",
-		Message:       "Connected to the server",
-		Buttons:       nil,
-		DefaultButton: "",
-		CancelButton:  "",
-	})
 
 	go c.ReceiveMessages() // 클라이언트가 메시지를 받을 수 있도록 고루틴 시작
 	return true
@@ -108,7 +103,7 @@ func (c *TCPClient) ReceiveMessages() {
 		buffer := make([]byte, 1024)
 
 		n, err := c.conn.Read(buffer)
-		if err != nil && c.conn != nil {
+		if err != nil {
 			logs.PrintMsgLog(fmt.Sprintf("메시지 받기 실패 에러: %s\n", err.Error()))
 			c.Close()
 			return
@@ -122,5 +117,32 @@ func (c *TCPClient) Close() {
 	if c.conn != nil {
 		c.connectState = false
 		c.conn.Close()
+	}
+}
+
+// 클라이언트가 서버에 연결한 이후 서버에 현재 PC에서 실행중인 포트를 보냄
+func (c *TCPClient) SendAutoConnectServer(port int) {
+	message := Message{
+		Type:    "auto connect",
+		Content: port,
+	}
+
+	// JSON 직렬화
+	writeData, err := json.Marshal(message)
+	if err != nil {
+		runtime.MessageDialog(*c.ctx, runtime.MessageDialogOptions{
+			Type:          runtime.ErrorDialog,
+			Title:         "Error",
+			Message:       "데이터 송신에 실패하였습니다.",
+			Buttons:       nil,
+			DefaultButton: "",
+			CancelButton:  "",
+		})
+		logs.PrintMsgLog(fmt.Sprintf("데이터 송신에 실패하였습니다.: %s\n", err.Error()))
+	}
+
+	_, err = c.conn.Write(writeData)
+	if err != nil {
+		logs.PrintMsgLog(fmt.Sprintf("Error sending close signal: %s\n", err.Error()))
 	}
 }

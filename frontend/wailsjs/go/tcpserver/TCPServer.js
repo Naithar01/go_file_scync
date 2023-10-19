@@ -14,6 +14,10 @@ export function ReStartServer() {
   return window['go']['tcpserver']['TCPServer']['ReStartServer']();
 }
 
+export function ReceiveMessages() {
+  return window['go']['tcpserver']['TCPServer']['ReceiveMessages']();
+}
+
 export function SetServerPort(arg1) {
   return window['go']['tcpserver']['TCPServer']['SetServerPort'](arg1);
 }

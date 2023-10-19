@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom"
 
 import { CustomErrorDialog, CustomInfoDialog } from "../../wailsjs/go/main/App"
 import { InitialConnectServerPage } from "../../wailsjs/go/initial/Initial"
-import { StartClient } from "../../wailsjs/go/tcpclient/TCPClient"
+import { SendAutoConnectServer, StartClient } from "../../wailsjs/go/tcpclient/TCPClient"
 import { GetPort } from "../../wailsjs/go/tcpserver/TCPServer"
 import { EventsOn } from "../../wailsjs/runtime/runtime"
 
@@ -39,7 +39,9 @@ const ConnectServerPage = () => {
 
   // 현재 실행 중인 서버의 Port는 접속 불가능 하게
   const StartClientHandler = async () => {
-    if (await GetPort() == portState) {
+    const serverPort = await GetPort()
+    
+    if (serverPort == portState) {
       CustomErrorDialog("현재 PC에서 실행 중인 서버에 접속할 수 없습니다.")
       return
     }
@@ -53,6 +55,8 @@ const ConnectServerPage = () => {
     if (!serverConnectState) {
       return
     }
+
+    await SendAutoConnectServer(serverPort)
 
     setConnectListeningIsLoading(true)
 
@@ -76,6 +80,18 @@ const ConnectServerPage = () => {
   EventsOn("client_server_disconnect", () => {
     setAcceptSuccessState(false)
     setConnectListeningIsLoading(false)
+  })
+  
+  EventsOn("server_auto_connect", async (port) => {
+    setAcceptSuccessState(true)
+
+    const serverConnectState = await StartClient("127.0.0.1", port)
+
+    if (!serverConnectState) {
+      return
+    }
+
+    navigate("/dir")
   })
 
   return (

@@ -7,4 +7,6 @@ export function GetPort():Promise<number>;
 
 export function ReStartServer():Promise<void>;
 
+export function ReceiveMessages():Promise<void>;
+
 export function SetServerPort(arg1:number):Promise<boolean>;
