@@ -31,7 +31,7 @@ func NewTCPServer(ctx *context.Context) *TCPServer {
 	}
 }
 
-// GetPort는 현재 설정된 포트를 반환합니다.
+// 현재 설정된 포트를 반환합니다.
 func (t *TCPServer) GetPort() int {
 	return t.port
 }
@@ -103,10 +103,16 @@ func (t *TCPServer) acceptConnections() {
 		}
 
 		if t.client != nil {
-			t.handleExistingClientConnection(conn)
-		} else {
-			t.handleNewClientConnection(conn)
+			logs.PrintMsgLog("클라이언트가 이미 연결 중")
+			conn.Close()
+			continue
 		}
+
+		t.client = conn
+		logs.PrintMsgLog("클라이언트 연결 됨")
+
+		// 클라이언트로부터 연결이 성공적으로 수락되면 View로 이벤트를 보냄
+		runtime.EventsEmit(*t.ctx, "server_accept_success", true)
 
 		// 클라이언트 연결 끊김 이벤트 핸들러 등록
 		runtime.EventsOn(*t.ctx, "client_server_disconnect", func(_ ...interface{}) {
@@ -177,7 +183,6 @@ func (t *TCPServer) sendCloseMessage() {
 
 // 프로그램 종료 시에 종료 문구를 보냄
 func (t *TCPServer) Shutdown(ctx context.Context) {
-	logs.PrintMsgLog("프로그램 종료")
 	if t.client != nil {
 		t.sendCloseMessage()
 	}
