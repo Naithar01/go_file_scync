@@ -8,6 +8,7 @@ import { EventsOn } from "../../wailsjs/runtime/runtime"
 
 import DirectoryList from "../components/directory/DirectoryList";
 import Loading from "../components/common/Loading";
+import { SendDirectory } from "../../wailsjs/go/tcpserver/TCPServer";
 
 export interface RenameFileData {
   key: string;
@@ -58,6 +59,9 @@ const MainPage = () => {
       setResFileData(() => {
         return renameFile(res)
       })
+
+      // 선택한 폴더의 내용을 상대 PC에게 보내줌
+      await SendDirectory(res.files)
       
 		} catch (error) {
 			console.error("Error fetching data:", error);

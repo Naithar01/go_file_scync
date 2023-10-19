@@ -79,14 +79,14 @@ func (t *TCPServer) SetServerPort(port int) bool {
 		})
 		return false
 	}
-	runtime.MessageDialog(*t.ctx, runtime.MessageDialogOptions{
-		Type:          runtime.InfoDialog,
-		Title:         "Server Start Success",
-		Message:       "TCP server is listening",
-		Buttons:       nil,
-		DefaultButton: "",
-		CancelButton:  "",
-	})
+	// runtime.MessageDialog(*t.ctx, runtime.MessageDialogOptions{
+	// 	Type:          runtime.InfoDialog,
+	// 	Title:         "Server Start Success",
+	// 	Message:       "TCP server is listening",
+	// 	Buttons:       nil,
+	// 	DefaultButton: "",
+	// 	CancelButton:  "",
+	// })
 	return true
 }
 
@@ -163,10 +163,43 @@ func (t *TCPServer) ReceiveMessages() {
 	}
 }
 
+// 선택 된 폴더의 내용을 클라이언트한테 보냄
+func (t *TCPServer) SendDirectory(files interface{}) {
+	t.m.Lock()
+	defer t.m.Unlock()
+
+	if t.client != nil {
+		message := Message{
+			Type:    "directory",
+			Content: files,
+		}
+
+		// JSON 직렬화
+		writeData, err := json.Marshal(message)
+		if err != nil {
+			runtime.MessageDialog(*t.ctx, runtime.MessageDialogOptions{
+				Type:          runtime.ErrorDialog,
+				Title:         "Error",
+				Message:       "데이터 전송에 실패하였습니다.",
+				Buttons:       nil,
+				DefaultButton: "",
+				CancelButton:  "",
+			})
+			logs.PrintMsgLog(fmt.Sprintf("데이터 전송에 실패하였습니다.: %s\n", err.Error()))
+		}
+
+		_, err = t.client.Write(writeData)
+		if err != nil {
+			logs.PrintMsgLog(fmt.Sprintf("Error sending close signal: %s\n", err.Error()))
+		}
+	}
+}
+
 // 프로그램 종료 시에 종료 문구를 보냄
 func (t *TCPServer) Shutdown(ctx context.Context) {
 	t.m.Lock()
 	defer t.m.Unlock()
+
 	if t.client != nil {
 		message := Message{
 			Type:    "close server",

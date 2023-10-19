@@ -5,4 +5,6 @@ export function GetPort():Promise<number>;
 
 export function ReceiveMessages():Promise<void>;
 
+export function SendDirectory(arg1:any):Promise<void>;
+
 export function SetServerPort(arg1:number):Promise<boolean>;

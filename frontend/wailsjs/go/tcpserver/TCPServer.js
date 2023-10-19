@@ -10,6 +10,10 @@ export function ReceiveMessages() {
   return window['go']['tcpserver']['TCPServer']['ReceiveMessages']();
 }
 
+export function SendDirectory(arg1) {
+  return window['go']['tcpserver']['TCPServer']['SendDirectory'](arg1);
+}
+
 export function SetServerPort(arg1) {
   return window['go']['tcpserver']['TCPServer']['SetServerPort'](arg1);
 }

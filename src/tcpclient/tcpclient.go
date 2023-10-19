@@ -1,6 +1,7 @@
 package tcpclient
 
 import (
+	"bytes"
 	"context"
 	"encoding/json"
 	"fmt"
@@ -76,14 +77,6 @@ func (c *TCPClient) handleMessage(buffer []byte, n int) {
 
 	err := json.Unmarshal(buffer[:n], &message)
 	if err != nil {
-		runtime.MessageDialog(*c.ctx, runtime.MessageDialogOptions{
-			Type:          runtime.ErrorDialog,
-			Title:         "Error",
-			Message:       "데이터 수신에 실패하였습니다.",
-			Buttons:       nil,
-			DefaultButton: "",
-			CancelButton:  "",
-		})
 		logs.PrintMsgLog(fmt.Sprintf("데이터 수신에 실패하였습니다.: %s\n", err.Error()))
 		return
 	}
@@ -94,22 +87,37 @@ func (c *TCPClient) handleMessage(buffer []byte, n int) {
 		c.conn.Close()
 		logs.PrintMsgLog("상대 PC로부터 연결 해제 - 서버 종료")
 		runtime.EventsEmit(*c.ctx, "server_shutdown", true)
+	case "directory":
+		fmt.Println(message.Content)
 	}
 }
 
 func (c *TCPClient) ReceiveMessages() {
 	for c.conn != nil {
-		buffer := make([]byte, 1024)
+		var buffer []byte
+		tempBuffer := make([]byte, 1024) // 임시 버퍼
 
-		n, err := c.conn.Read(buffer)
-		if err != nil {
-			if err != io.EOF {
-				logs.PrintMsgLog(fmt.Sprintf("메시지 받기 실패 에러: %s\n", err.Error()))
+		for {
+			n, err := c.conn.Read(tempBuffer)
+			if err != nil {
+				if err != io.EOF {
+					logs.PrintMsgLog(fmt.Sprintf("메시지 받기 실패 에러: %s\n", err.Error()))
+				}
+				return
 			}
-			return
+
+			// tempBuffer에서 n만큼 데이터를 추출하여 buffer에 추가
+			buffer = append(buffer, tempBuffer[:n]...)
+			fmt.Println(buffer)
+
+			// 끝났는지 확인 (예를 들어, JSON 디코딩 가능한 형태)
+			if bytes.Contains(buffer, []byte("}\n")) {
+				break
+			}
 		}
 
-		c.handleMessage(buffer, n)
+		// buffer를 언마샬링
+		c.handleMessage(buffer, len(buffer))
 	}
 }
 
