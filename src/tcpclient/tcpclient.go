@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"go_file_sync/src/logs"
+	"io"
 	"net"
 
 	"github.com/wailsapp/wails/v2/pkg/runtime"
@@ -97,7 +98,9 @@ func (c *TCPClient) ReceiveMessages() {
 
 		n, err := c.conn.Read(buffer)
 		if err != nil {
-			logs.PrintMsgLog(fmt.Sprintf("메시지 받기 실패 에러: %s\n", err.Error()))
+			if err != io.EOF {
+				logs.PrintMsgLog(fmt.Sprintf("메시지 받기 실패 에러: %s\n", err.Error()))
+			}
 			return
 		}
 
