@@ -12,11 +12,10 @@ import (
 
 // TCPClient는 서버에 대한 클라이언트 연결을 관리합니다.
 type TCPClient struct {
-	ctx          *context.Context
-	conn         net.Conn
-	ip           string
-	port         int
-	connectState bool
+	ctx  *context.Context
+	conn net.Conn
+	ip   string
+	port int
 }
 
 type Message struct {
@@ -57,16 +56,10 @@ func (c *TCPClient) StartClient(ip string, port int) bool {
 		})
 		return false
 	}
-
-	if c.conn != nil {
-		return true
-	}
-
 	c.conn = conn
 
 	// 클라이언트와 서버 연결 성공
 	logs.PrintMsgLog("서버에 연결 성공")
-	c.connectState = true
 
 	go c.ReceiveMessages() // 클라이언트가 메시지를 받을 수 있도록 고루틴 시작
 	return true
@@ -94,7 +87,6 @@ func (c *TCPClient) handleMessage(buffer []byte, n int) {
 	case "close server":
 		logs.PrintMsgLog("서버 닫힘, 연결 끊기")
 		runtime.EventsEmit(*c.ctx, "client_server_disconnect", true)
-		c.Close()
 	}
 }
 
@@ -105,18 +97,10 @@ func (c *TCPClient) ReceiveMessages() {
 		n, err := c.conn.Read(buffer)
 		if err != nil {
 			logs.PrintMsgLog(fmt.Sprintf("메시지 받기 실패 에러: %s\n", err.Error()))
-			c.Close()
 			return
 		}
 
 		c.handleMessage(buffer, n)
-	}
-}
-
-func (c *TCPClient) Close() {
-	if c.conn != nil {
-		c.connectState = false
-		c.conn.Close()
 	}
 }
 

@@ -12,11 +12,10 @@ import (
 
 // TCPServer는 서버 및 클라이언트 연결을 관리합니다.
 type TCPServer struct {
-	ctx                  *context.Context
-	port                 int
-	listener             net.Listener
-	serverListeningState bool
-	client               net.Conn
+	ctx      *context.Context
+	port     int
+	listener net.Listener
+	client   net.Conn
 }
 
 type Message struct {
@@ -36,12 +35,6 @@ func (t *TCPServer) GetPort() int {
 	return t.port
 }
 
-// ReStartServer는 실행 중인 서버를 종료하고 앱을 다시로드합니다.
-func (t *TCPServer) ReStartServer() {
-	t.CloseServerAndDisconnectClient()
-	runtime.WindowReload(*t.ctx)
-}
-
 // SetServerPort는 서버를 지정된 포트에서 실행합니다.
 func (t *TCPServer) SetServerPort(port int) bool {
 	t.port = port
@@ -59,7 +52,6 @@ func (t *TCPServer) SetServerPort(port int) bool {
 		})
 		return false
 	}
-	t.serverListeningState = true
 	runtime.MessageDialog(*t.ctx, runtime.MessageDialogOptions{
 		Type:          runtime.InfoDialog,
 		Title:         "Server Start Success",
@@ -103,9 +95,8 @@ func (t *TCPServer) acceptConnections() {
 		}
 
 		if t.client != nil {
-			logs.PrintMsgLog("클라이언트가 이미 연결 중")
-			conn.Close()
-			continue
+			t.client.Close()
+			t.client = conn
 		}
 
 		t.client = conn
@@ -153,28 +144,16 @@ func (t *TCPServer) handleMessage(buffer []byte, n int) {
 }
 
 func (t *TCPServer) ReceiveMessages() {
-	for {
+	for t.client != nil {
 		buffer := make([]byte, 1024)
 
 		n, err := t.client.Read(buffer)
 		if err != nil {
 			logs.PrintMsgLog(fmt.Sprintf("메시지 받기 실패 에러: %s\n", err.Error()))
-			t.CloseServerAndDisconnectClient()
 			return
 		}
 
 		t.handleMessage(buffer, n)
-	}
-}
-
-// 현재 실행 중인 서버 및 클라이언트 연결을 모두 닫음
-func (t *TCPServer) CloseServerAndDisconnectClient() {
-	if t.listener != nil {
-		t.listener.Close()
-	}
-
-	if t.client != nil {
-		t.client.Close()
 	}
 }
 

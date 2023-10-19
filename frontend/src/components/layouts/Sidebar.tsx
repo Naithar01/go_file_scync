@@ -4,8 +4,6 @@ import { useNavigate } from "react-router-dom"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faBars, faX, faArrowRightArrowLeft } from "@fortawesome/free-solid-svg-icons"
 
-import { ReStartServer } from "../../../wailsjs/go/tcpserver/TCPServer"
-
 import "../../styles/common/sidebar_style.css"
 
 const Sidebar = () => {
