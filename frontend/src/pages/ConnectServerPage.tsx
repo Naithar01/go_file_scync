@@ -83,13 +83,13 @@ const ConnectServerPage = () => {
   })
   
   EventsOn("server_auto_connect", async (port) => {
-    setAcceptSuccessState(true)
-
     const serverConnectState = await StartClient("127.0.0.1", port)
 
-    if (!serverConnectState) {
+    if (!serverConnectState || acceptSuccessState) {
       return
     }
+
+    setAcceptSuccessState(true)
 
     navigate("/dir")
   })

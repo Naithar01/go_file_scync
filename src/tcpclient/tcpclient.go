@@ -59,7 +59,7 @@ func (c *TCPClient) StartClient(ip string, port int) bool {
 	c.conn = conn
 
 	// 클라이언트와 서버 연결 성공
-	logs.PrintMsgLog("서버에 연결 성공")
+	logs.PrintMsgLog("상대 PC 서버에 연결 성공")
 
 	go c.ReceiveMessages() // 클라이언트가 메시지를 받을 수 있도록 고루틴 시작
 	return true
@@ -85,13 +85,14 @@ func (c *TCPClient) handleMessage(buffer []byte, n int) {
 	logs.PrintMsgLog(fmt.Sprintf("서버로부터 받은 헤더: %s\n", message.Type))
 	switch message.Type {
 	case "close server":
-		logs.PrintMsgLog("서버 닫힘, 연결 끊기")
+		logs.PrintMsgLog("상대 PC로부터 연결 해제 - 서버 종료")
 		runtime.EventsEmit(*c.ctx, "client_server_disconnect", true)
+		c.conn.Close()
 	}
 }
 
 func (c *TCPClient) ReceiveMessages() {
-	for {
+	for c.conn != nil {
 		buffer := make([]byte, 1024)
 
 		n, err := c.conn.Read(buffer)
@@ -117,16 +118,15 @@ func (c *TCPClient) SendAutoConnectServer(port int) {
 		runtime.MessageDialog(*c.ctx, runtime.MessageDialogOptions{
 			Type:          runtime.ErrorDialog,
 			Title:         "Error",
-			Message:       "데이터 송신에 실패하였습니다.",
+			Message:       "데이터가 올바르지 않습니다.",
 			Buttons:       nil,
 			DefaultButton: "",
 			CancelButton:  "",
 		})
-		logs.PrintMsgLog(fmt.Sprintf("데이터 송신에 실패하였습니다.: %s\n", err.Error()))
 	}
 
 	_, err = c.conn.Write(writeData)
 	if err != nil {
-		logs.PrintMsgLog(fmt.Sprintf("Error sending close signal: %s\n", err.Error()))
+		logs.PrintMsgLog(fmt.Sprintf("데이터 전송에 실패하였습니다.: %s\n", err.Error()))
 	}
 }
