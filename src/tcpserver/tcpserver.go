@@ -143,34 +143,40 @@ func (t *TCPServer) CloseServerAndDisconnectClient() {
 	}
 }
 
+// 종료 메시지 보내는 로직
+func (t *TCPServer) sendCloseMessage() {
+	message := Message{
+		Type:    "close server",
+		Content: nil,
+	}
+
+	// JSON 직렬화
+	wrtieData, err := json.Marshal(message)
+	if err != nil {
+		runtime.MessageDialog(*t.ctx, runtime.MessageDialogOptions{
+			Type:          runtime.ErrorDialog,
+			Title:         "Error",
+			Message:       "데이터 송신에 실패하였습니다.",
+			Buttons:       nil,
+			DefaultButton: "",
+			CancelButton:  "",
+		})
+		logs.PrintMsgLog(fmt.Sprintf("데이터 송신에 실패하였습니다.: %s\n", err.Error()))
+	}
+
+	_, err = t.client.Write(wrtieData)
+	if err != nil {
+		logs.PrintMsgLog(fmt.Sprintf("Error sending close signal: %s\n", err.Error()))
+	}
+	t.client.Close()
+	t.client = nil
+
+}
+
 // 프로그램 종료 시에 종료 문구를 보냄
 func (t *TCPServer) Shutdown(ctx context.Context) {
 	logs.PrintMsgLog("프로그램 종료")
 	if t.client != nil {
-		message := Message{
-			Type:    "close server",
-			Content: nil,
-		}
-
-		// JSON 직렬화
-		wrtieData, err := json.Marshal(message)
-		if err != nil {
-			runtime.MessageDialog(*t.ctx, runtime.MessageDialogOptions{
-				Type:          runtime.ErrorDialog,
-				Title:         "Error",
-				Message:       "데이터 송신에 실패하였습니다.",
-				Buttons:       nil,
-				DefaultButton: "",
-				CancelButton:  "",
-			})
-			logs.PrintMsgLog(fmt.Sprintf("데이터 송신에 실패하였습니다.: %s\n", err.Error()))
-		}
-
-		_, err = t.client.Write(wrtieData)
-		if err != nil {
-			logs.PrintMsgLog(fmt.Sprintf("Error sending close signal: %s\n", err.Error()))
-		}
-		t.client.Close()
-		t.client = nil
+		t.sendCloseMessage()
 	}
 }
