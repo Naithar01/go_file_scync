@@ -95,7 +95,7 @@ func (c *TCPClient) handleMessage(buffer []byte, n int) {
 func (c *TCPClient) ReceiveMessages() {
 	for c.conn != nil {
 		var buffer []byte
-		tempBuffer := make([]byte, 1024) // 임시 버퍼
+		tempBuffer := make([]byte, 1024) // Temporary buffer
 
 		for {
 			n, err := c.conn.Read(tempBuffer)
@@ -106,18 +106,18 @@ func (c *TCPClient) ReceiveMessages() {
 				return
 			}
 
-			// tempBuffer에서 n만큼 데이터를 추출하여 buffer에 추가
 			buffer = append(buffer, tempBuffer[:n]...)
-			fmt.Println(buffer)
 
-			// 끝났는지 확인 (예를 들어, JSON 디코딩 가능한 형태)
-			if bytes.Contains(buffer, []byte("}\n")) {
-				break
+			// Attempt to decode the received data as JSON
+			var message Message
+			decoder := json.NewDecoder(bytes.NewReader(buffer))
+			if err := decoder.Decode(&message); err == nil {
+				// Successfully decoded a JSON object
+				c.handleMessage(buffer[:decoder.InputOffset()], len(buffer[:decoder.InputOffset()]))
+				// Trim processed data from the buffer
+				buffer = buffer[decoder.InputOffset():]
 			}
 		}
-
-		// buffer를 언마샬링
-		c.handleMessage(buffer, len(buffer))
 	}
 }
 
