@@ -50,9 +50,6 @@ const MainPage = () => {
 				FetchFileData()
 				return
 			}
-			setIsLoading(() => {
-        return false
-      });
       setProjectData(() => {
         return res
       })
@@ -63,6 +60,9 @@ const MainPage = () => {
       // 선택한 폴더의 내용을 상대 PC에게 보내줌
       await SendDirectory(res.files)
       
+      // 폴더 정보를 상대 PC로 부터 받아오면 
+      //  로딩 종료
+      //  정보를 변수로 저장
 		} catch (error) {
 			console.error("Error fetching data:", error);
 			FetchFileData()
