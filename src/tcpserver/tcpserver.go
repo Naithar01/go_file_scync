@@ -1,6 +1,7 @@
 package tcpserver
 
 import (
+	"bytes"
 	"context"
 	"encoding/json"
 	"fmt"
@@ -127,14 +128,6 @@ func (t *TCPServer) handleMessage(buffer []byte, n int) {
 
 	err := json.Unmarshal(buffer[:n], &message)
 	if err != nil {
-		runtime.MessageDialog(*t.ctx, runtime.MessageDialogOptions{
-			Type:          runtime.ErrorDialog,
-			Title:         "Error",
-			Message:       "데이터 수신에 실패하였습니다.",
-			Buttons:       nil,
-			DefaultButton: "",
-			CancelButton:  "",
-		})
 		logs.PrintMsgLog(fmt.Sprintf("데이터 수신에 실패하였습니다.: %s\n", err.Error()))
 		return
 	}
@@ -149,17 +142,30 @@ func (t *TCPServer) handleMessage(buffer []byte, n int) {
 
 func (t *TCPServer) ReceiveMessages() {
 	for t.client != nil {
-		buffer := make([]byte, 1024)
+		var buffer []byte
+		tempBuffer := make([]byte, 1024) // Temporary buffer
 
-		n, err := t.client.Read(buffer)
-		if err != nil {
-			if err != io.EOF {
-				logs.PrintMsgLog(fmt.Sprintf("메시지 받기 실패 에러: %s\n", err.Error()))
+		for {
+			n, err := t.client.Read(tempBuffer)
+			if err != nil {
+				if err != io.EOF {
+					logs.PrintMsgLog(fmt.Sprintf("메시지 받기 실패 에러: %s\n", err.Error()))
+				}
+				return
 			}
-			return
-		}
 
-		t.handleMessage(buffer, n)
+			buffer = append(buffer, tempBuffer[:n]...)
+
+			// Attempt to decode the received data as JSON
+			var message Message
+			decoder := json.NewDecoder(bytes.NewReader(buffer))
+			if err := decoder.Decode(&message); err == nil {
+				// Successfully decoded a JSON object
+				t.handleMessage(buffer[:decoder.InputOffset()], len(buffer[:decoder.InputOffset()]))
+				// Trim processed data from the buffer
+				buffer = buffer[decoder.InputOffset():]
+			}
+		}
 	}
 }
 
