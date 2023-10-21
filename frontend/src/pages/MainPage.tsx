@@ -20,15 +20,14 @@ const MainPage = () => {
 	const navigate = useNavigate()
   
   const [isLoading ,setIsLoading] = useState<boolean>(true)
-  const [projectData, setProjectData] = useState<main.ResponseFileStruct>()
   const [resFileData, setResFileData] = useState<RenameFileData[]>()
+  const [connectedClientFileData, setConnectedClientFileData] = useState<RenameFileData[]>()
 
   EventsOn("server_shutdown", function() {
     navigate("/connect")
   })
 
   // const [isOpen, setIsOpen] = useState<boolean>(true)
-
   // const ToggleModal = (): void => {
   //   setIsOpen((prev) => {
   //     return !prev
@@ -50,19 +49,12 @@ const MainPage = () => {
 				FetchFileData()
 				return
 			}
-      setProjectData(() => {
-        return res
-      })
       setResFileData(() => {
         return renameFile(res)
       })
 
       // 선택한 폴더의 내용을 상대 PC에게 보내줌
-      await SendDirectory(res.files)
-      
-      // 폴더 정보를 상대 PC로 부터 받아오면 
-      //  로딩 종료
-      //  정보를 변수로 저장
+      await SendDirectory(res)
 		} catch (error) {
 			console.error("Error fetching data:", error);
 			FetchFileData()
@@ -92,12 +84,25 @@ const MainPage = () => {
     return renameFileData
   }
 
+  // 폴더 정보를 상대 PC로 부터 받아오면 
+    //  로딩 종료
+    //  정보를 변수로 저장
+  EventsOn("connectedDirectoryData", async (data: main.ResponseFileStruct) => {
+    setConnectedClientFileData(() => {
+      return renameFile(data)
+    })
+    setIsLoading(() => false)
+  })
+
   return (
     <Fragment>
       { isLoading ? 
       <Loading />
       :
-      resFileData && <DirectoryList resFileData={resFileData} />
+      <div className="main">
+        {resFileData && <DirectoryList resFileData={resFileData} type='server' />}
+        {connectedClientFileData && <DirectoryList resFileData={connectedClientFileData} type='conn' />}
+      </div>
       }
     </Fragment>
   )

@@ -9,9 +9,9 @@ import { GetPort } from "../../wailsjs/go/tcpserver/TCPServer"
 import { EventsOn } from "../../wailsjs/runtime/runtime"
 
 import Alert from "../components/common/Alert"
+import Loading from "../components/common/Loading"
 
 import "../styles/pages/connect_server_page_style.css"
-import Loading from "../components/common/Loading"
 
 const ConnectServerPage = () => {
   const navigate = useNavigate()

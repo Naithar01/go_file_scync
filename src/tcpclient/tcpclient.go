@@ -88,7 +88,8 @@ func (c *TCPClient) handleMessage(buffer []byte, n int) {
 		logs.PrintMsgLog("상대 PC로부터 연결 해제 - 서버 종료")
 		runtime.EventsEmit(*c.ctx, "server_shutdown", true)
 	case "directory":
-		fmt.Println(message.Content)
+		logs.PrintMsgLog("상대 PC로부터 폴더 정보를 받음")
+		runtime.EventsEmit(*c.ctx, "connectedDirectoryData", message.Content)
 	}
 }
 
