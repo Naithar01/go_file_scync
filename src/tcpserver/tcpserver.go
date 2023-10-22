@@ -123,6 +123,7 @@ func (t *TCPServer) acceptConnections() {
 	}
 }
 
+// 클라이언트로부터 받은 메시지를 Type에 맞게 동작함
 func (t *TCPServer) handleMessage(buffer []byte, n int) {
 	var message Message
 
@@ -140,6 +141,7 @@ func (t *TCPServer) handleMessage(buffer []byte, n int) {
 	}
 }
 
+// 클라이언트로부터 메시지를 받음
 func (t *TCPServer) ReceiveMessages() {
 	for t.client != nil {
 		var buffer []byte
@@ -232,5 +234,6 @@ func (t *TCPServer) Shutdown(ctx context.Context) {
 		}
 		t.client.Close()
 		t.listener.Close()
+		t.client = nil
 	}
 }
