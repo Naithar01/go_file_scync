@@ -23,7 +23,6 @@ func NewApp() *App {
 }
 
 func (a *App) startup(ctx context.Context) {
-	logs.LoadLogFile()
 	a.ctx = ctx
 }
 
@@ -108,24 +107,10 @@ func (a *App) OpenDirectory() ResponseFileStruct {
 
 // Custom Error Dialog
 func (a *App) CustomErrorDialog(errorMessage string) {
-	runtime.MessageDialog(a.ctx, runtime.MessageDialogOptions{
-		Type:          runtime.ErrorDialog,
-		Title:         "Error",
-		Message:       errorMessage,
-		Buttons:       nil,
-		DefaultButton: "",
-		CancelButton:  "",
-	})
+	logs.CustomErrorDialog(a.ctx, errorMessage)
 }
 
 // Custom Info Dialog
 func (a *App) CustomInfoDialog(InfoMessage string) {
-	runtime.MessageDialog(a.ctx, runtime.MessageDialogOptions{
-		Type:          runtime.InfoDialog,
-		Title:         "Info",
-		Message:       InfoMessage,
-		Buttons:       nil,
-		DefaultButton: "",
-		CancelButton:  "",
-	})
+	logs.CustomInfoDialog(a.ctx, InfoMessage)
 }

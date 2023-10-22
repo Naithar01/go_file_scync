@@ -2,7 +2,7 @@ import { Fragment, useEffect, useState } from "react"
 import { useNavigate } from "react-router-dom"
 
 
-import { CustomErrorDialog, CustomInfoDialog } from "../../wailsjs/go/main/App"
+import { CustomErrorDialog } from "../../wailsjs/go/main/App"
 import { InitialConnectServerPage } from "../../wailsjs/go/initial/Initial"
 import { SendAutoConnectServer, StartClient } from "../../wailsjs/go/tcpclient/TCPClient"
 import { GetPort } from "../../wailsjs/go/tcpserver/TCPServer"
