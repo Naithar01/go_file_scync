@@ -70,24 +70,10 @@ func (t *TCPServer) SetServerPort(port int) bool {
 	err := t.startServer()
 
 	if err != nil {
-		runtime.MessageDialog(*t.ctx, runtime.MessageDialogOptions{
-			Type:          runtime.ErrorDialog,
-			Title:         "Error",
-			Message:       "Port is already in use",
-			Buttons:       nil,
-			DefaultButton: "",
-			CancelButton:  "",
-		})
+		logs.CustomErrorDialog(*t.ctx, "Port is already in use")
 		return false
 	}
-	// runtime.MessageDialog(*t.ctx, runtime.MessageDialogOptions{
-	// 	Type:          runtime.InfoDialog,
-	// 	Title:         "Server Start Success",
-	// 	Message:       "TCP server is listening",
-	// 	Buttons:       nil,
-	// 	DefaultButton: "",
-	// 	CancelButton:  "",
-	// })
+	// logs.CustomInfoDialog(*t.ctx, "TCP server is listening")
 	return true
 }
 
@@ -185,14 +171,7 @@ func (t *TCPServer) SendDirectory(files interface{}) {
 		// JSON 직렬화
 		writeData, err := json.Marshal(message)
 		if err != nil {
-			runtime.MessageDialog(*t.ctx, runtime.MessageDialogOptions{
-				Type:          runtime.ErrorDialog,
-				Title:         "Error",
-				Message:       "데이터 전송에 실패하였습니다.",
-				Buttons:       nil,
-				DefaultButton: "",
-				CancelButton:  "",
-			})
+			logs.CustomErrorDialog(*t.ctx, "데이터 전송에 실패하였습니다.")
 			logs.PrintMsgLog(fmt.Sprintf("데이터 전송에 실패하였습니다.: %s\n", err.Error()))
 		}
 
@@ -217,14 +196,7 @@ func (t *TCPServer) Shutdown(ctx context.Context) {
 		// JSON 직렬화
 		writeData, err := json.Marshal(message)
 		if err != nil {
-			runtime.MessageDialog(*t.ctx, runtime.MessageDialogOptions{
-				Type:          runtime.ErrorDialog,
-				Title:         "Error",
-				Message:       "데이터 전송에 실패하였습니다.",
-				Buttons:       nil,
-				DefaultButton: "",
-				CancelButton:  "",
-			})
+			logs.CustomErrorDialog(*t.ctx, "데이터 전송에 실패하였습니다.")
 			logs.PrintMsgLog(fmt.Sprintf("데이터 전송에 실패하였습니다.: %s\n", err.Error()))
 		}
 

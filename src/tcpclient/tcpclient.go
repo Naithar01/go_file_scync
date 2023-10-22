@@ -52,14 +52,7 @@ func (c *TCPClient) StartClient(ip string, port int) bool {
 
 	conn, err := c.connectToServer(ip, port)
 	if err != nil {
-		runtime.MessageDialog(*c.ctx, runtime.MessageDialogOptions{
-			Type:          runtime.ErrorDialog,
-			Title:         "Error",
-			Message:       "Could not connect to the server",
-			Buttons:       nil,
-			DefaultButton: "",
-			CancelButton:  "",
-		})
+		logs.CustomErrorDialog(*c.ctx, "Could not connect to the server")
 		return false
 	}
 	c.conn = conn
@@ -133,14 +126,8 @@ func (c *TCPClient) SendAutoConnectServer(port int) {
 	// JSON 직렬화
 	writeData, err := json.Marshal(message)
 	if err != nil {
-		runtime.MessageDialog(*c.ctx, runtime.MessageDialogOptions{
-			Type:          runtime.ErrorDialog,
-			Title:         "Error",
-			Message:       "데이터가 올바르지 않습니다.",
-			Buttons:       nil,
-			DefaultButton: "",
-			CancelButton:  "",
-		})
+		logs.CustomErrorDialog(*c.ctx, "데이터가 올바르지 않습니다.")
+		return
 	}
 
 	_, err = c.conn.Write(writeData)
