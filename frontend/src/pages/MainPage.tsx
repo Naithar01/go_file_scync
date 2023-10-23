@@ -27,13 +27,15 @@ const MainPage = () => {
     navigate("/connect")
   })
 
-  // const [isOpen, setIsOpen] = useState<boolean>(true)
-  // const ToggleModal = (): void => {
-  //   setIsOpen((prev) => {
-  //     return !prev
-  //   })
-  //   return 
-  // }
+  // 폴더 정보를 상대 PC로 부터 받아오면 
+  //  로딩 종료
+  //  정보를 변수로 저장
+  EventsOn("connectedDirectoryData", async (data: main.ResponseFileStruct) => {
+    setConnectedClientFileData(() => {
+      return renameFile(data)
+    })
+    setIsLoading(() => false)
+  })
 
   useEffect(() => {
     InitialSnycDirectoryListPage()
@@ -83,16 +85,6 @@ const MainPage = () => {
     }
     return renameFileData
   }
-
-  // 폴더 정보를 상대 PC로 부터 받아오면 
-    //  로딩 종료
-    //  정보를 변수로 저장
-  EventsOn("connectedDirectoryData", async (data: main.ResponseFileStruct) => {
-    setConnectedClientFileData(() => {
-      return renameFile(data)
-    })
-    setIsLoading(() => false)
-  })
 
   return (
     <Fragment>

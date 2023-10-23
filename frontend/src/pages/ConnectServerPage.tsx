@@ -20,6 +20,34 @@ const ConnectServerPage = () => {
   const [connectListeningIsLoading, setConnectListeningIsLoading] = useState<boolean>(false)
   const [acceptSuccessState, setAcceptSuccessState] = useState<boolean>(false)
 
+  // 상대 PC 연결 이후에 로딩 상태라면...
+  // 상대 PC 연결을 안 하고 연결을 받았다면...
+  EventsOn("server_accept_success", () => {
+    setAcceptSuccessState(true)
+    if (connectListeningIsLoading) {
+      navigate("/dir")
+    }
+  })
+
+  // 상대 PC와의 연결이 끊겼다면 State 초기화
+  // 혹은 연결 대기 중에 상대 PC 서버가 종료 상태라면
+  EventsOn("server_shutdown", () => {
+    setAcceptSuccessState(false)
+    setConnectListeningIsLoading(false)
+  })
+  
+  EventsOn("server_auto_connect", async (port) => {
+    const serverConnectState = await StartClient("127.0.0.1", port)
+
+    if (!serverConnectState || acceptSuccessState) {
+      return
+    }
+
+    setAcceptSuccessState(true)
+
+    navigate("/dir")
+  })
+  
   useEffect(() => {
     setAcceptSuccessState(false)
     setConnectListeningIsLoading(false)
@@ -65,34 +93,6 @@ const ConnectServerPage = () => {
       navigate("/dir")
     }
   }
-
-  // 상대 PC 연결 이후에 로딩 상태라면...
-  // 상대 PC 연결을 안 하고 연결을 받았다면...
-  EventsOn("server_accept_success", () => {
-    setAcceptSuccessState(true)
-    if (connectListeningIsLoading) {
-      navigate("/dir")
-    }
-  })
-
-  // 상대 PC와의 연결이 끊겼다면 State 초기화
-  // 혹은 연결 대기 중에 상대 PC 서버가 종료 상태라면
-  EventsOn("server_shutdown", () => {
-    setAcceptSuccessState(false)
-    setConnectListeningIsLoading(false)
-  })
-  
-  EventsOn("server_auto_connect", async (port) => {
-    const serverConnectState = await StartClient("127.0.0.1", port)
-
-    if (!serverConnectState || acceptSuccessState) {
-      return
-    }
-
-    setAcceptSuccessState(true)
-
-    navigate("/dir")
-  })
 
   return (
     <Fragment>
