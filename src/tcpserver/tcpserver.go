@@ -207,5 +207,6 @@ func (t *TCPServer) Shutdown(ctx context.Context) {
 		t.client.Close()
 		t.listener.Close()
 		t.client = nil
+		t.listener = nil
 	}
 }
