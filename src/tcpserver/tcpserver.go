@@ -133,7 +133,7 @@ func (t *TCPServer) ReceiveMessages() {
 		var buffer []byte
 		tempBuffer := make([]byte, 1024) // Temporary buffer
 
-		for {
+		for t.client != nil {
 			n, err := t.client.Read(tempBuffer)
 			if err != nil {
 				if err != io.EOF {

@@ -46,6 +46,10 @@ func (c *TCPClient) connectToServer(ip string, port int) (net.Conn, error) {
 
 // 서버에 연결을 시도하고 클라이언트를 초기화
 func (c *TCPClient) StartClient(ip string, port int) bool {
+	if c.conn != nil {
+		return false
+	}
+
 	c.m.Lock()
 	c.ip = ip
 	c.port = port
@@ -92,7 +96,7 @@ func (c *TCPClient) ReceiveMessages() {
 		var buffer []byte
 		tempBuffer := make([]byte, 1024) // Temporary buffer
 
-		for {
+		for c.conn != nil {
 			n, err := c.conn.Read(tempBuffer)
 			if err != nil {
 				if err != io.EOF {
