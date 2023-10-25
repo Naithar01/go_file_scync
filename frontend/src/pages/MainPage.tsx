@@ -22,6 +22,7 @@ const MainPage = () => {
   const [isLoading ,setIsLoading] = useState<boolean>(true)
   const [resFileData, setResFileData] = useState<RenameFileData[]>()
   const [connectedClientFileData, setConnectedClientFileData] = useState<RenameFileData[]>()
+  const [rootPath, setRootPath] = useState<string>("")
 
   EventsOn("server_shutdown", function() {
     navigate("/connect")
@@ -51,9 +52,11 @@ const MainPage = () => {
 				FetchFileData()
 				return
 			}
+
       setResFileData(() => {
         return renameFile(res)
       })
+      setRootPath(() => res.root_path)
 
       // 선택한 폴더의 내용을 상대 PC에게 보내줌
       await SendDirectory(res)

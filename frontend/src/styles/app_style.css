@@ -18,6 +18,7 @@
 .connect_folderStructure {
   width: 50%;
   border-left: 1px solid #d8dee4;
+  background: repeating-linear-gradient(45deg, #f0f0f0, #f0f0f0 10px, #d8dee4 10px, #d8dee4 20px); /* 빗무늬 배경 */
 }
 
 .folderStructure, 
