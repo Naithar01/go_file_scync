@@ -29,7 +29,7 @@ const DirectoryTree = ({ name, depth, files, isLastDir }: Props) => {
     <span className="folder-icon" onClick={toggleExpansion}>
       {isExpanded ? "📂" : "📁"} {name}
     </span>
-    {isExpanded && <FileList files={files} depth={depth} />}
+    {isExpanded && <FileList files={files} depth={depth} dir_path={name} />}
   </div>
   )
 }

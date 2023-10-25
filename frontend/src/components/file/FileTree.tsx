@@ -2,11 +2,12 @@ type Props = {
   name: string; 
   depth: number; 
   isLastFile: boolean;
+  dir_path: string;
 }
 
-const FileTree = ({ name, depth, isLastFile }: Props) => {
+const FileTree = ({ name, depth, isLastFile, dir_path }: Props) => {
   return (
-    <div className="file" >
+    <div className={`file ${(depth == 1 ? name : dir_path + "/" + name)}`} >
       {depth > 0 && (
         <span className="vertical-line">{isLastFile ? "└" : "├"}</span>
       )}
