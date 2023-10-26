@@ -9,9 +9,10 @@ type Props = {
   depth: number;
   files: file.File[];
   isLastDir: boolean;
+  root_path: string;
 }
 
-const DirectoryTree = ({ name, depth, files, isLastDir }: Props) => {
+const DirectoryTree = ({ name, depth, files, isLastDir, root_path }: Props) => {
   const [isExpanded, setExpanded] = useState(false);
 
   const toggleExpansion = () => {
@@ -29,7 +30,7 @@ const DirectoryTree = ({ name, depth, files, isLastDir }: Props) => {
     <span className="folder-icon" onClick={toggleExpansion}>
       {isExpanded ? "📂" : "📁"} {name}
     </span>
-    {isExpanded && <FileList files={files} depth={depth} dir_path={name} />}
+    {isExpanded && <FileList files={files} depth={depth} dir_path={name} root_path={root_path}/>}
   </div>
   )
 }

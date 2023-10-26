@@ -7,9 +7,10 @@ type Props = {
   depth: number;
   files: file.File[];
   dir_path: string;
+  root_path: string;
 }
 
-const FileList = ({files, depth, dir_path}: Props) => {
+const FileList = ({files, depth, dir_path, root_path}: Props) => {
   return (
     <Fragment>
       {files.map((fileItem, index) => (
@@ -19,6 +20,7 @@ const FileList = ({files, depth, dir_path}: Props) => {
           depth={depth + 1}
           isLastFile={index === files.length - 1}
           dir_path={dir_path}
+          root_path={root_path}
         />
       ))}
     </Fragment>
