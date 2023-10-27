@@ -106,9 +106,10 @@ func (c *TCPClient) handleMessage(buffer []byte, n int) {
 		}
 
 		filePath := filepath.Join(root_path, FileData.Content.FileName)
-
+		fmt.Println(filePath)
 		err := os.MkdirAll(filepath.Dir(filePath), os.ModePerm)
 		if err != nil {
+			fmt.Println(err.Error())
 			return
 		}
 

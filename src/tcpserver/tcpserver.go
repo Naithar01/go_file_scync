@@ -239,6 +239,7 @@ func (t *TCPServer) SendFile(file_path string, file_name string) error {
 		return nil
 	}
 
+	fmt.Println(file_path)
 	file_content, err := file.ReadFile(file_path)
 	if err != nil {
 		return err

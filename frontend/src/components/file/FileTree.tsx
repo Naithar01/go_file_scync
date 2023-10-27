@@ -19,7 +19,7 @@ const FileTree = ({ name, depth, isLastFile, dir_path, root_path }: Props) => {
     const file_name: string = e.currentTarget.className.slice(5)
     
     // 파일이 존재하는 경로 ( 최상위 폴더의 경우 Root와 Dir은 같기에 하나만 합침)
-    const file_path: string = root_path == dir_path ? root_path + "/" + file_name : root_path + "/" + dir_path  + "/" + file_name
+    const file_path: string = root_path == dir_path ? root_path + "/" + file_name : root_path + "/" + file_name
 
     SendFile(file_path, file_name)
   
