@@ -6,6 +6,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
+	"go_file_sync/src/file"
 	"go_file_sync/src/logs"
 	"go_file_sync/src/models"
 	"io"
@@ -119,7 +120,7 @@ func (t *TCPServer) handleMessage(buffer []byte, n int) {
 	logs.PrintMsgLog(fmt.Sprintf("서버로부터 받은 헤더: %s\n", message.Type))
 	switch message.Type {
 	case "auto connect":
-		var AutoConnect models.TCPAutoConnect
+		var AutoConnect models.AutoConnect
 		json.Unmarshal(buffer[:n], &AutoConnect)
 
 		logs.PrintMsgLog("상대 PC 자동 연결")
@@ -159,66 +160,76 @@ func (t *TCPServer) ReceiveMessages() {
 
 // 선택 된 폴더의 내용을 클라이언트한테 보냄
 func (t *TCPServer) SendDirectoryContent(files models.ResponseFileStruct) {
+	if t.client == nil {
+		return
+	}
+
 	t.m.Lock()
 	defer t.m.Unlock()
 
-	if t.client != nil {
-		message := models.Message{
-			Type:    "directory",
-			Content: files,
-		}
+	message := models.Message{
+		Type:    "directory",
+		Content: files,
+	}
 
-		// JSON 직렬화
-		writeData, err := json.Marshal(message)
-		if err != nil {
-			logs.CustomErrorDialog(*t.ctx, "데이터 전송에 실패하였습니다.")
-			logs.PrintMsgLog(fmt.Sprintf("데이터 전송에 실패하였습니다.: %s\n", err.Error()))
-		}
+	// JSON 직렬화
+	writeData, err := json.Marshal(message)
+	if err != nil {
+		logs.CustomErrorDialog(*t.ctx, "데이터 전송에 실패하였습니다.")
+		logs.PrintMsgLog(fmt.Sprintf("데이터 전송에 실패하였습니다.: %s\n", err.Error()))
+	}
 
-		_, err = t.client.Write(writeData)
-		if err != nil {
-			logs.PrintMsgLog(fmt.Sprintf("Error sending close signal: %s\n", err.Error()))
-		}
+	_, err = t.client.Write(writeData)
+	if err != nil {
+		logs.PrintMsgLog(fmt.Sprintf("Error sending close signal: %s\n", err.Error()))
 	}
 }
 
 // 프로그램 종료 시에 종료 문구를 보냄
 func (t *TCPServer) Shutdown(ctx context.Context) {
+	if t.client == nil {
+		return
+	}
+
 	t.m.Lock()
 	defer t.m.Unlock()
 
-	if t.client != nil {
-		message := models.Message{
-			Type:    "close server",
-			Content: nil,
-		}
-
-		// JSON 직렬화
-		writeData, err := json.Marshal(message)
-		if err != nil {
-			logs.CustomErrorDialog(*t.ctx, "데이터 전송에 실패하였습니다.")
-			logs.PrintMsgLog(fmt.Sprintf("데이터 전송에 실패하였습니다.: %s\n", err.Error()))
-		}
-
-		_, err = t.client.Write(writeData)
-		if err != nil {
-			logs.PrintMsgLog(fmt.Sprintf("Error sending close signal: %s\n", err.Error()))
-		}
-		t.client.Close()
-		t.listener.Close()
-		t.client = nil
-		t.listener = nil
+	message := models.Message{
+		Type:    "close server",
+		Content: nil,
 	}
+
+	// JSON 직렬화
+	writeData, err := json.Marshal(message)
+	if err != nil {
+		logs.CustomErrorDialog(*t.ctx, "데이터 전송에 실패하였습니다.")
+		logs.PrintMsgLog(fmt.Sprintf("데이터 전송에 실패하였습니다.: %s\n", err.Error()))
+	}
+
+	_, err = t.client.Write(writeData)
+	if err != nil {
+		logs.PrintMsgLog(fmt.Sprintf("Error sending close signal: %s\n", err.Error()))
+	}
+	t.client.Close()
+	t.listener.Close()
+	t.client = nil
+	t.listener = nil
 }
 
 // 선택한 파일을 클라이언트한테 보냄
-func (t *TCPServer) SendFile(file_path string) error {
+func (t *TCPServer) SendFile(file_path string, file_name string) error {
+	if t.client == nil {
+		return nil
+	}
+
+	t.m.Lock()
+	defer t.m.Unlock()
+
 	dialog, err := runtime.MessageDialog(*t.ctx, runtime.MessageDialogOptions{
 		Type:    runtime.QuestionDialog,
 		Title:   "파일 전송",
 		Message: "선택한 파일을 전송하시겠습니까?",
 	})
-
 	if err != nil {
 		return errors.New(err.Error())
 	}
@@ -228,21 +239,30 @@ func (t *TCPServer) SendFile(file_path string) error {
 		return nil
 	}
 
-	// file_content, err := file.ReadFile(file_path)
-	// if err != nil {
-	// 	return err
-	// }
-	// err = ioutil.WriteFile("test.jpeg", []byte(file_content), 0644)
-	// if err != nil {
-	// 	return err
-	// }
-
-	// file_content, err := file.ReadFile(file_path)
+	file_content, err := file.ReadFile(file_path)
 	if err != nil {
 		return err
 	}
 
-	// 파일 보내기 & 받기
+	message := models.FileData{
+		Type: "file",
+		Content: models.ReadFile{
+			FileName: file_name,
+			FileData: file_content,
+		},
+	}
+
+	// JSON 직렬화
+	writeData, err := json.Marshal(message)
+	if err != nil {
+		logs.CustomErrorDialog(*t.ctx, "데이터 전송에 실패하였습니다.")
+		logs.PrintMsgLog(fmt.Sprintf("데이터 전송에 실패하였습니다.: %s\n", err.Error()))
+	}
+
+	_, err = t.client.Write(writeData)
+	if err != nil {
+		logs.PrintMsgLog(fmt.Sprintf("Error sending close signal: %s\n", err.Error()))
+	}
 
 	return nil
 }

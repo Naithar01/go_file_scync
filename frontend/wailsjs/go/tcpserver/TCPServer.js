@@ -14,8 +14,8 @@ export function SendDirectoryContent(arg1) {
   return window['go']['tcpserver']['TCPServer']['SendDirectoryContent'](arg1);
 }
 
-export function SendFile(arg1) {
-  return window['go']['tcpserver']['TCPServer']['SendFile'](arg1);
+export function SendFile(arg1, arg2) {
+  return window['go']['tcpserver']['TCPServer']['SendFile'](arg1, arg2);
 }
 
 export function SetServerPort(arg1) {

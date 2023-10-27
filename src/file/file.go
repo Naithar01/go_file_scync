@@ -57,12 +57,12 @@ func ParseDirectoryFiles(filesInfo []models.File) map[string][]models.File {
 }
 
 // 경로에 있는 파일을 읽고 문자열로 반환
-func ReadFile(file_path string) (string, error) {
+func ReadFile(file_path string) ([]byte, error) {
 	content, err := ioutil.ReadFile(file_path)
 	if err != nil {
-		return "", err
+		return nil, err
 	}
-	return string(content), nil
+	return content, nil
 }
 
 // 새로운 파일 생성 및 내용 작성

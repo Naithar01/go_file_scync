@@ -33,7 +33,17 @@ type DirectoryContent struct {
 	Content ResponseFileStruct `json:"content"`
 }
 
-type TCPAutoConnect struct {
+type AutoConnect struct {
 	Type    string `json:"type"`
 	Content int    `json:"content"`
+}
+
+type ReadFile struct {
+	FileName string `json:"filename"`
+	FileData []byte `json:"filedata"`
+}
+
+type FileData struct {
+	Type    string   `json:"type"`
+	Content ReadFile `json:"content"`
 }

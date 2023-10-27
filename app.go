@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"go_file_sync/src/file"
+	"go_file_sync/src/global"
 	"go_file_sync/src/logs"
 	"go_file_sync/src/models"
 
@@ -78,21 +79,23 @@ func (a *App) OpenDirectory() models.ResponseFileStruct {
 
 	files, err := file.NewFiles(directory_path, 0)
 	if err != nil {
-		runtime.MessageDialog(a.ctx, runtime.MessageDialogOptions{
-			Type:          runtime.ErrorDialog,
-			Title:         "Error",
-			Message:       "Can't Find Directory",
-			Buttons:       nil,
-			DefaultButton: "",
-			CancelButton:  "",
-		})
+		logs.CustomErrorDialog(a.ctx, "Can't Find Directory")
 		return models.ResponseFileStruct{
 			Root_path: "",
 			Files:     nil,
 		}
 	}
 
+	// 파일 정보와, 선택한 폴더의 경로를 저장
 	a.Files = files
+	if err := global.SetRootPath(directory_path); err != nil {
+		logs.CustomErrorDialog(a.ctx, "Can't Find Directory")
+		return models.ResponseFileStruct{
+			Root_path: "",
+			Files:     nil,
+		}
+	}
+
 	fileDir := file.ParseDirectoryFiles(a.Files)
 	return models.ResponseFileStruct{
 		Root_path: directory_path,

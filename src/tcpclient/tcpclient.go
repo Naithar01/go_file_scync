@@ -5,10 +5,14 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"go_file_sync/src/global"
 	"go_file_sync/src/logs"
 	"go_file_sync/src/models"
 	"io"
+	"io/ioutil"
 	"net"
+	"os"
+	"path/filepath"
 	"sync"
 
 	"github.com/wailsapp/wails/v2/pkg/runtime"
@@ -90,6 +94,31 @@ func (c *TCPClient) handleMessage(buffer []byte, n int) {
 
 		logs.PrintMsgLog("상대 PC로부터 폴더 정보를 받음")
 		runtime.EventsEmit(*c.ctx, "connectedDirectoryData", DirectoryContent.Content)
+
+	case "file":
+		var FileData models.FileData
+		json.Unmarshal(buffer[:n], &FileData)
+		global.GetRootPath()
+
+		root_path := global.GetRootPath()
+		if len(root_path) == 0 {
+			return
+		}
+
+		filePath := filepath.Join(root_path, FileData.Content.FileName)
+
+		err := os.MkdirAll(filepath.Dir(filePath), os.ModePerm)
+		if err != nil {
+			return
+		}
+
+		err = ioutil.WriteFile(filePath, FileData.Content.FileData, 0644)
+		if err != nil {
+			logs.CustomErrorDialog(*c.ctx, "파일 수신에 실패하였습니다.")
+			return
+		}
+
+		logs.PrintMsgLog("상대 PC로부터 파일 데이터를 받음")
 	}
 }
 
