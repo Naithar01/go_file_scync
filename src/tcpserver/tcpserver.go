@@ -158,7 +158,7 @@ func (t *TCPServer) ReceiveMessages() {
 }
 
 // 선택 된 폴더의 내용을 클라이언트한테 보냄
-func (t *TCPServer) SendDirectoryContent(files interface{}) {
+func (t *TCPServer) SendDirectoryContent(files models.ResponseFileStruct) {
 	t.m.Lock()
 	defer t.m.Unlock()
 
