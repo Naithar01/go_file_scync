@@ -3,17 +3,17 @@ import { useNavigate } from "react-router-dom";
 
 import { OpenDirectory } from "../../wailsjs/go/main/App";
 import { InitialSnycDirectoryListPage } from "../../wailsjs/go/initial/Initial";
-import { file, main } from "../../wailsjs/go/models";
+import { models } from "../../wailsjs/go/models";
 import { EventsOn } from "../../wailsjs/runtime/runtime"
 
 import DirectoryList from "../components/directory/DirectoryList";
 import Loading from "../components/common/Loading";
-import { SendDirectory } from "../../wailsjs/go/tcpserver/TCPServer";
+import { SendDirectoryContent } from "../../wailsjs/go/tcpserver/TCPServer";
 
 export interface RenameFileData {
   key: string;
   depth: number;
-  files: file.File[];
+  files: models.File[];
 }
 
 const MainPage = () => {
@@ -31,7 +31,7 @@ const MainPage = () => {
   // 폴더 정보를 상대 PC로 부터 받아오면 
   //  로딩 종료
   //  정보를 변수로 저장
-  EventsOn("connectedDirectoryData", async (data: main.ResponseFileStruct) => {
+  EventsOn("connectedDirectoryData", async (data: models.ResponseFileStruct) => {
     setConnectedClientFileData(() => {
       return renameFile(data)
     })
@@ -57,7 +57,7 @@ const MainPage = () => {
       setRootPath(() => res.root_path)
 
       // 선택한 폴더의 내용을 상대 PC에게 보내줌
-      await SendDirectory(res)
+      await SendDirectoryContent(res)
 		} catch (error) {
 			console.error("Error fetching data:", error);
 			FetchFileData()
@@ -66,7 +66,7 @@ const MainPage = () => {
 
   // 이 함수는 주어진 파일 데이터를 가공하여 경로를 수정하고, 각 파일의 깊이를 계산한 후 이 정보를 배열로 정리하여 반환합니다.
   // 반환된 데이터는 RenameFileData 형식의 배열입니다.
-  const renameFile = (fileData: main.ResponseFileStruct): RenameFileData[] => {
+  const renameFile = (fileData: models.ResponseFileStruct): RenameFileData[] => {
     let renameFileData: RenameFileData[] = []
     for (const path_key in fileData.files) {
       let renameKey = path_key.replace(fileData.root_path, "")

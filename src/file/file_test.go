@@ -1,6 +1,7 @@
 package file
 
 import (
+	"go_file_sync/src/models"
 	"os"
 	"path/filepath"
 	"reflect"
@@ -12,7 +13,7 @@ func TestNewFiles(t *testing.T) {
 	testDir := "testdata"
 	rootDepth := 1
 
-	expectedFiles := []File{
+	expectedFiles := []models.File{
 		{
 			DirectoryPath: testDir,
 			FileName:      "file1.txt",
@@ -40,7 +41,7 @@ func TestNewFiles(t *testing.T) {
 }
 
 func TestParseDirectoryFiles(t *testing.T) {
-	files := []File{
+	files := []models.File{
 		{
 			DirectoryPath: "dir1",
 			FileName:      "file1.txt",
@@ -64,7 +65,7 @@ func TestParseDirectoryFiles(t *testing.T) {
 		},
 	}
 
-	expectedFileDir := map[string][]File{
+	expectedFileDir := map[string][]models.File{
 		"dir1": {
 			files[0],
 			files[1],

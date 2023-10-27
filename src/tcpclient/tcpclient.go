@@ -6,6 +6,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"go_file_sync/src/logs"
+	"go_file_sync/src/models"
 	"io"
 	"net"
 	"sync"
@@ -21,11 +22,6 @@ type TCPClient struct {
 	conn net.Conn
 	ip   string
 	port int
-}
-
-type Message struct {
-	Type    string      `json:"type"`
-	Content interface{} `json:"content"`
 }
 
 // NewTCPClient는 새 TCPClient 인스턴스를 생성합니다.
@@ -70,7 +66,7 @@ func (c *TCPClient) StartClient(ip string, port int) bool {
 }
 
 func (c *TCPClient) handleMessage(buffer []byte, n int) {
-	var message Message
+	var message models.Message
 
 	err := json.Unmarshal(buffer[:n], &message)
 	if err != nil {
@@ -81,11 +77,18 @@ func (c *TCPClient) handleMessage(buffer []byte, n int) {
 	logs.PrintMsgLog(fmt.Sprintf("서버로부터 받은 헤더: %s\n", message.Type))
 	switch message.Type {
 	case "close server":
+		var ShutdownMessage models.ServerShutdownMessage
+		json.Unmarshal(buffer[:n], &ShutdownMessage)
+
 		c.conn.Close()
 		c.conn = nil
 		logs.PrintMsgLog("상대 PC로부터 연결 해제 - 서버 종료")
-		runtime.EventsEmit(*c.ctx, "server_shutdown", true)
+		fmt.Println(ShutdownMessage.Content)
+		runtime.EventsEmit(*c.ctx, "server_shutdown", message.Content)
 	case "directory":
+		// var message Message
+		// json.Unmarshal(buffer[:n], &message)
+
 		logs.PrintMsgLog("상대 PC로부터 폴더 정보를 받음")
 		runtime.EventsEmit(*c.ctx, "connectedDirectoryData", message.Content)
 	}
@@ -108,7 +111,7 @@ func (c *TCPClient) ReceiveMessages() {
 			buffer = append(buffer, tempBuffer[:n]...)
 
 			// Attempt to decode the received data as JSON
-			var message Message
+			var message models.Message
 			decoder := json.NewDecoder(bytes.NewReader(buffer))
 			if err := decoder.Decode(&message); err == nil {
 				// Successfully decoded a JSON object
@@ -122,7 +125,7 @@ func (c *TCPClient) ReceiveMessages() {
 
 // 클라이언트가 서버에 연결한 이후 서버에 현재 PC에서 실행중인 포트를 보냄
 func (c *TCPClient) SendAutoConnectServer(port int) {
-	message := Message{
+	message := models.Message{
 		Type:    "auto connect",
 		Content: port,
 	}

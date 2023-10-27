@@ -1,11 +1,11 @@
 import { Fragment } from "react";
-import { file } from "../../../wailsjs/go/models";
+import { models } from "../../../wailsjs/go/models";
 
 import FileTree from "./FileTree";
 
 type Props = {
   depth: number;
-  files: file.File[];
+  files: models.File[];
   dir_path: string;
   root_path: string;
 }

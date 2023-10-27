@@ -5,6 +5,8 @@ export function GetPort():Promise<number>;
 
 export function ReceiveMessages():Promise<void>;
 
-export function SendDirectory(arg1:any):Promise<void>;
+export function SendDirectoryContent(arg1:any):Promise<void>;
+
+export function SendFile(arg1:string):Promise<void>;
 
 export function SetServerPort(arg1:number):Promise<boolean>;

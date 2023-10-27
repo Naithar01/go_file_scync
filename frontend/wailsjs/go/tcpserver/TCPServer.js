@@ -10,8 +10,12 @@ export function ReceiveMessages() {
   return window['go']['tcpserver']['TCPServer']['ReceiveMessages']();
 }
 
-export function SendDirectory(arg1) {
-  return window['go']['tcpserver']['TCPServer']['SendDirectory'](arg1);
+export function SendDirectoryContent(arg1) {
+  return window['go']['tcpserver']['TCPServer']['SendDirectoryContent'](arg1);
+}
+
+export function SendFile(arg1) {
+  return window['go']['tcpserver']['TCPServer']['SendFile'](arg1);
 }
 
 export function SetServerPort(arg1) {

@@ -4,6 +4,7 @@ import (
 	"context"
 	"go_file_sync/src/file"
 	"go_file_sync/src/logs"
+	"go_file_sync/src/models"
 
 	"github.com/wailsapp/wails/v2/pkg/menu"
 	"github.com/wailsapp/wails/v2/pkg/menu/keys"
@@ -14,7 +15,7 @@ import (
 type App struct {
 	ctx context.Context
 
-	Files []file.File
+	Files []models.File
 }
 
 // NewApp creates a new App application struct
@@ -56,14 +57,8 @@ func (a *App) applicationMenu() *menu.Menu {
 	)
 }
 
-type ResponseFileStruct struct {
-	Root_path string                 `json:"root_path"`
-	Files     map[string][]file.File `json:"files"`
-	File      file.File              `json:"file"`
-}
-
 // root path, files
-func (a *App) OpenDirectory() ResponseFileStruct {
+func (a *App) OpenDirectory() models.ResponseFileStruct {
 	directory_path, err := runtime.OpenDirectoryDialog(a.ctx, runtime.OpenDialogOptions{
 		DefaultDirectory:           "",
 		DefaultFilename:            "",
@@ -75,7 +70,7 @@ func (a *App) OpenDirectory() ResponseFileStruct {
 		TreatPackagesAsDirectories: true,
 	})
 	if err != nil {
-		return ResponseFileStruct{
+		return models.ResponseFileStruct{
 			Root_path: "",
 			Files:     nil,
 		}
@@ -91,7 +86,7 @@ func (a *App) OpenDirectory() ResponseFileStruct {
 			DefaultButton: "",
 			CancelButton:  "",
 		})
-		return ResponseFileStruct{
+		return models.ResponseFileStruct{
 			Root_path: "",
 			Files:     nil,
 		}
@@ -99,7 +94,7 @@ func (a *App) OpenDirectory() ResponseFileStruct {
 
 	a.Files = files
 	fileDir := file.ParseDirectoryFiles(a.Files)
-	return ResponseFileStruct{
+	return models.ResponseFileStruct{
 		Root_path: directory_path,
 		Files:     fileDir,
 	}

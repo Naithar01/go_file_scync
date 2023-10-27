@@ -1,4 +1,4 @@
-export namespace file {
+export namespace models {
 	
 	export class File {
 	    directorypath: string;
@@ -39,15 +39,10 @@ export namespace file {
 		    return a;
 		}
 	}
-
-}
-
-export namespace main {
-	
 	export class ResponseFileStruct {
 	    root_path: string;
 	    files: {[key: string]: File[]};
-	    file: file.File;
+	    file: File;
 	
 	    static createFrom(source: any = {}) {
 	        return new ResponseFileStruct(source);
@@ -57,7 +52,7 @@ export namespace main {
 	        if ('string' === typeof source) source = JSON.parse(source);
 	        this.root_path = source["root_path"];
 	        this.files = source["files"];
-	        this.file = this.convertValues(source["file"], file.File);
+	        this.file = this.convertValues(source["file"], File);
 	    }
 	
 		convertValues(a: any, classs: any, asMap: boolean = false): any {

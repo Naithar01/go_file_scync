@@ -4,8 +4,10 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
+	"errors"
 	"fmt"
 	"go_file_sync/src/logs"
+	"go_file_sync/src/models"
 	"io"
 	"net"
 	"sync"
@@ -21,11 +23,6 @@ type TCPServer struct {
 	port     int
 	listener net.Listener
 	client   net.Conn
-}
-
-type Message struct {
-	Type    string      `json:"type"`
-	Content interface{} `json:"content"`
 }
 
 // NewTCPServer는 새 TCPServer 인스턴스를 생성합니다.
@@ -111,7 +108,7 @@ func (t *TCPServer) acceptConnections() {
 
 // 클라이언트로부터 받은 메시지를 Type에 맞게 동작함
 func (t *TCPServer) handleMessage(buffer []byte, n int) {
-	var message Message
+	var message models.Message
 
 	err := json.Unmarshal(buffer[:n], &message)
 	if err != nil {
@@ -145,7 +142,7 @@ func (t *TCPServer) ReceiveMessages() {
 			buffer = append(buffer, tempBuffer[:n]...)
 
 			// Attempt to decode the received data as JSON
-			var message Message
+			var message models.Message
 			decoder := json.NewDecoder(bytes.NewReader(buffer))
 			if err := decoder.Decode(&message); err == nil {
 				// Successfully decoded a JSON object
@@ -158,12 +155,12 @@ func (t *TCPServer) ReceiveMessages() {
 }
 
 // 선택 된 폴더의 내용을 클라이언트한테 보냄
-func (t *TCPServer) SendDirectory(files interface{}) {
+func (t *TCPServer) SendDirectoryContent(files interface{}) {
 	t.m.Lock()
 	defer t.m.Unlock()
 
 	if t.client != nil {
-		message := Message{
+		message := models.Message{
 			Type:    "directory",
 			Content: files,
 		}
@@ -188,7 +185,7 @@ func (t *TCPServer) Shutdown(ctx context.Context) {
 	defer t.m.Unlock()
 
 	if t.client != nil {
-		message := Message{
+		message := models.Message{
 			Type:    "close server",
 			Content: nil,
 		}
@@ -209,4 +206,40 @@ func (t *TCPServer) Shutdown(ctx context.Context) {
 		t.client = nil
 		t.listener = nil
 	}
+}
+
+// 선택한 파일을 클라이언트한테 보냄
+func (t *TCPServer) SendFile(file_path string) error {
+	dialog, err := runtime.MessageDialog(*t.ctx, runtime.MessageDialogOptions{
+		Type:    runtime.QuestionDialog,
+		Title:   "파일 전송",
+		Message: "선택한 파일을 전송하시겠습니까?",
+	})
+
+	if err != nil {
+		return errors.New(err.Error())
+	}
+
+	// "No" 클릭 시에 팝업 종료
+	if dialog != "Yes" {
+		return nil
+	}
+
+	// file_content, err := file.ReadFile(file_path)
+	// if err != nil {
+	// 	return err
+	// }
+	// err = ioutil.WriteFile("test.jpeg", []byte(file_content), 0644)
+	// if err != nil {
+	// 	return err
+	// }
+
+	// file_content, err := file.ReadFile(file_path)
+	if err != nil {
+		return err
+	}
+
+	// 파일 보내기 & 받기
+
+	return nil
 }

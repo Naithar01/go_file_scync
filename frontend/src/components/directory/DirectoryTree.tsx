@@ -1,13 +1,13 @@
 import { useState } from "react";
 
-import { file } from "../../../wailsjs/go/models";
+import { models } from "../../../wailsjs/go/models";
 
 import FileList from "../file/FileList";
 
 type Props = {
   name: string;
   depth: number;
-  files: file.File[];
+  files: models.File[];
   isLastDir: boolean;
   root_path: string;
 }
