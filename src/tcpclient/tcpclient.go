@@ -83,14 +83,13 @@ func (c *TCPClient) handleMessage(buffer []byte, n int) {
 		c.conn.Close()
 		c.conn = nil
 		logs.PrintMsgLog("상대 PC로부터 연결 해제 - 서버 종료")
-		fmt.Println(ShutdownMessage.Content)
 		runtime.EventsEmit(*c.ctx, "server_shutdown", message.Content)
 	case "directory":
-		// var message Message
-		// json.Unmarshal(buffer[:n], &message)
+		var DirectoryContent models.DirectoryContent
+		json.Unmarshal(buffer[:n], &DirectoryContent)
 
 		logs.PrintMsgLog("상대 PC로부터 폴더 정보를 받음")
-		runtime.EventsEmit(*c.ctx, "connectedDirectoryData", message.Content)
+		runtime.EventsEmit(*c.ctx, "connectedDirectoryData", DirectoryContent.Content)
 	}
 }
 

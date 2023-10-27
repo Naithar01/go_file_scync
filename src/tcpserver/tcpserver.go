@@ -119,8 +119,11 @@ func (t *TCPServer) handleMessage(buffer []byte, n int) {
 	logs.PrintMsgLog(fmt.Sprintf("서버로부터 받은 헤더: %s\n", message.Type))
 	switch message.Type {
 	case "auto connect":
+		var AutoConnect models.TCPAutoConnect
+		json.Unmarshal(buffer[:n], &AutoConnect)
+
 		logs.PrintMsgLog("상대 PC 자동 연결")
-		runtime.EventsEmit(*t.ctx, "server_auto_connect", message.Content)
+		runtime.EventsEmit(*t.ctx, "server_auto_connect", AutoConnect.Content)
 	}
 }
 

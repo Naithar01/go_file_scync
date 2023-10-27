@@ -27,3 +27,13 @@ type ServerShutdownMessage struct {
 	Type    string `json:"type"`
 	Content error  `json:"content"`
 }
+
+type DirectoryContent struct {
+	Type    string             `json:"type"`
+	Content ResponseFileStruct `json:"content"`
+}
+
+type TCPAutoConnect struct {
+	Type    string `json:"type"`
+	Content int    `json:"content"`
+}
