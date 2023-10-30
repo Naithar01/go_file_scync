@@ -58,6 +58,34 @@ func (a *App) applicationMenu() *menu.Menu {
 	)
 }
 
+// Parse Directory
+func (a *App) ParseRootPath(directory_path string) models.ResponseFileStruct {
+	files, err := file.NewFiles(directory_path, 0)
+	if err != nil {
+		logs.CustomErrorDialog(a.ctx, err.Error())
+		return models.ResponseFileStruct{
+			Root_path: "",
+			Files:     nil,
+		}
+	}
+
+	// 파일 정보와, 선택한 폴더의 경로를 저장
+	a.Files = files
+	if err := global.SetRootPath(directory_path); err != nil {
+		logs.CustomErrorDialog(a.ctx, err.Error())
+		return models.ResponseFileStruct{
+			Root_path: "",
+			Files:     nil,
+		}
+	}
+
+	fileDir := file.ParseDirectoryFiles(a.Files)
+	return models.ResponseFileStruct{
+		Root_path: directory_path,
+		Files:     fileDir,
+	}
+}
+
 // root path, files
 func (a *App) OpenDirectory() models.ResponseFileStruct {
 	directory_path, err := runtime.OpenDirectoryDialog(a.ctx, runtime.OpenDialogOptions{
@@ -77,30 +105,7 @@ func (a *App) OpenDirectory() models.ResponseFileStruct {
 		}
 	}
 
-	files, err := file.NewFiles(directory_path, 0)
-	if err != nil {
-		logs.CustomErrorDialog(a.ctx, "Can't Find Directory")
-		return models.ResponseFileStruct{
-			Root_path: "",
-			Files:     nil,
-		}
-	}
-
-	// 파일 정보와, 선택한 폴더의 경로를 저장
-	a.Files = files
-	if err := global.SetRootPath(directory_path); err != nil {
-		logs.CustomErrorDialog(a.ctx, "Can't Find Directory")
-		return models.ResponseFileStruct{
-			Root_path: "",
-			Files:     nil,
-		}
-	}
-
-	fileDir := file.ParseDirectoryFiles(a.Files)
-	return models.ResponseFileStruct{
-		Root_path: directory_path,
-		Files:     fileDir,
-	}
+	return a.ParseRootPath(directory_path)
 }
 
 // Custom Error Dialog
@@ -111,4 +116,9 @@ func (a *App) CustomErrorDialog(errorMessage string) {
 // Custom Info Dialog
 func (a *App) CustomInfoDialog(InfoMessage string) {
 	logs.CustomInfoDialog(a.ctx, InfoMessage)
+}
+
+// Get environment variable Data
+func (a *App) GetRootPath() string {
+	return global.GetRootPath()
 }

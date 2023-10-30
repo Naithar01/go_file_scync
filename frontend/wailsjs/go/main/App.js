@@ -10,6 +10,14 @@ export function CustomInfoDialog(arg1) {
   return window['go']['main']['App']['CustomInfoDialog'](arg1);
 }
 
+export function GetRootPath() {
+  return window['go']['main']['App']['GetRootPath']();
+}
+
 export function OpenDirectory() {
   return window['go']['main']['App']['OpenDirectory']();
+}
+
+export function ParseRootPath(arg1) {
+  return window['go']['main']['App']['ParseRootPath'](arg1);
 }

@@ -106,10 +106,9 @@ func (c *TCPClient) handleMessage(buffer []byte, n int) {
 		}
 
 		filePath := filepath.Join(root_path, FileData.Content.FileName)
-		fmt.Println(filePath)
 		err := os.MkdirAll(filepath.Dir(filePath), os.ModePerm)
 		if err != nil {
-			fmt.Println(err.Error())
+			logs.PrintMsgLog(err.Error())
 			return
 		}
 
@@ -120,6 +119,7 @@ func (c *TCPClient) handleMessage(buffer []byte, n int) {
 		}
 
 		logs.PrintMsgLog("상대 PC로부터 파일 데이터를 받음")
+		runtime.EventsEmit(*c.ctx, "receive_file", nil)
 	}
 }
 

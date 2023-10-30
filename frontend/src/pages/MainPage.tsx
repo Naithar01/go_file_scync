@@ -1,7 +1,7 @@
 import { Fragment, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-import { OpenDirectory } from "../../wailsjs/go/main/App";
+import { GetRootPath, OpenDirectory, ParseRootPath } from "../../wailsjs/go/main/App";
 import { InitialSnycDirectoryListPage } from "../../wailsjs/go/initial/Initial";
 import { models } from "../../wailsjs/go/models";
 import { EventsOn } from "../../wailsjs/runtime/runtime"
@@ -24,11 +24,24 @@ const MainPage = () => {
   const [connectedClientFileData, setConnectedClientFileData] = useState<RenameFileData[]>()
   const [rootPath, setRootPath] = useState<string>("")
 
+  // 상대 PC 서버 종료 시에 페이지 이동 
   EventsOn("server_shutdown", function() {
     navigate("/connect")
   })
 
-  // 폴더 정보를 상대 PC로 부터 받아오면 
+  // 상대 PC 서버로부터 단일 파일 정보를 받아오면
+  //  RootPath로 지정 된 폴더에 파일들을 다시 조회 
+  EventsOn("receive_file", async () => {
+    setIsLoading(() => true)
+
+    const res = await ParseRootPath(await GetRootPath())
+    setResFileData(() => renameFile(res))
+    await SendDirectoryContent(res)
+
+    setIsLoading(() => false)
+  })
+
+  // 상대 PC 서버로부터 폴더 정보를 받아오면 
   //  로딩 종료
   //  정보를 변수로 저장
   EventsOn("connectedDirectoryData", async (data: models.ResponseFileStruct) => {

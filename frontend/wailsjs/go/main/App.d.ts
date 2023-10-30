@@ -6,4 +6,8 @@ export function CustomErrorDialog(arg1:string):Promise<void>;
 
 export function CustomInfoDialog(arg1:string):Promise<void>;
 
+export function GetRootPath():Promise<string>;
+
 export function OpenDirectory():Promise<models.ResponseFileStruct>;
+
+export function ParseRootPath(arg1:string):Promise<models.ResponseFileStruct>;
