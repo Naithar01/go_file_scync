@@ -15,6 +15,7 @@ import "../styles/pages/connect_server_page_style.css"
 
 const ConnectServerPage = () => {
   const navigate = useNavigate()
+  const [IPState, setIPState] = useState<string>()
   const [portState, setPortState] = useState<number>()
   // 상대 PC가 실행 중인 PC에 연결을 했는지...
   const [connectListeningIsLoading, setConnectListeningIsLoading] = useState<boolean>(false)
@@ -36,8 +37,12 @@ const ConnectServerPage = () => {
     setConnectListeningIsLoading(false)
   })
   
-  EventsOn("server_auto_connect", async (port) => {
-    const serverConnectState = await StartClient("127.0.0.1", port)
+  EventsOn("server_auto_connect", async (IPState, port) => {
+    if (!IPState) {
+      return
+    }
+
+    const serverConnectState = await StartClient(IPState, port)
 
     if (!serverConnectState || acceptSuccessState) {
       return
@@ -59,6 +64,13 @@ const ConnectServerPage = () => {
     })()
   }, [])
 
+  const ChangeIPStateHandler = (e: React.ChangeEvent<HTMLInputElement>): void => {
+    const enteredPort: string = e.target.value;
+    
+    setIPState(() => enteredPort)
+    return  
+  }
+
   const ChangePortStateHandler = (e: React.ChangeEvent<HTMLInputElement>): void => {
     const enteredPort: number = +e.target.value;
   
@@ -74,11 +86,11 @@ const ConnectServerPage = () => {
       return
     }
 
-    if (!portState) {
+    if (!portState || !IPState) {
       return
     }
 
-    const serverConnectState = await StartClient("127.0.0.1", portState)
+    const serverConnectState = await StartClient(IPState, portState)
 
     if (!serverConnectState) {
       return
@@ -99,11 +111,14 @@ const ConnectServerPage = () => {
       { !connectListeningIsLoading ? 
       <Fragment>
         <div className="connect_server_page">
-          <Alert text="연결할 PC의 포트를 입력하세요." />
+          <Alert text="연결할 PC의 IP, PORT를 입력하세요." />
         </div>
         <div className="connect_server_page_port_inp_areas">
           <div className="connect_server_page_port_inp_area">
-            <input type="text" inputMode="numeric" value={portState} placeholder="포트를 입력하세요." onChange={ChangePortStateHandler}/>
+            <input type="text" value={IPState} placeholder="IP를 입력하세요." onChange={ChangeIPStateHandler}/>
+          </div>
+          <div className="connect_server_page_port_inp_area">
+            <input type="text" inputMode="numeric" value={portState} placeholder="PORT를 입력하세요." onChange={ChangePortStateHandler}/>
           </div>
           <div className="connect_server_page_port_inp_area">
             <button type="button" onClick={StartClientHandler}>서버 연결</button>

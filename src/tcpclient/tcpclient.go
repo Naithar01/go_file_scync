@@ -155,8 +155,11 @@ func (c *TCPClient) ReceiveMessages() {
 // 클라이언트가 서버에 연결한 이후 서버에 현재 PC에서 실행중인 포트를 보냄
 func (c *TCPClient) SendAutoConnectServer(port int) {
 	message := models.Message{
-		Type:    "auto connect",
-		Content: port,
+		Type: "auto connect",
+		Content: models.AutoConnectContent{
+			IP:   global.GetOutboundIP().String(),
+			PORT: port,
+		},
 	}
 
 	// JSON 직렬화

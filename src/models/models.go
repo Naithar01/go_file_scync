@@ -34,8 +34,13 @@ type DirectoryContent struct {
 }
 
 type AutoConnect struct {
-	Type    string `json:"type"`
-	Content int    `json:"content"`
+	Type    string             `json:"type"`
+	Content AutoConnectContent `json:"content"`
+}
+
+type AutoConnectContent struct {
+	IP   string `json:"ip"`
+	PORT int    `json:"port"`
 }
 
 type ReadFile struct {

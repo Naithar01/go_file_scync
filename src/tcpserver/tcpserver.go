@@ -124,7 +124,7 @@ func (t *TCPServer) handleMessage(buffer []byte, n int) {
 		json.Unmarshal(buffer[:n], &AutoConnect)
 
 		logs.PrintMsgLog("상대 PC 자동 연결")
-		runtime.EventsEmit(*t.ctx, "server_auto_connect", AutoConnect.Content)
+		runtime.EventsEmit(*t.ctx, "server_auto_connect", AutoConnect.Content.IP, AutoConnect.Content.PORT)
 	}
 }
 
