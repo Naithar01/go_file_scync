@@ -2,6 +2,7 @@ package initial
 
 import (
 	"context"
+	"go_file_sync/src/global"
 
 	"github.com/wailsapp/wails/v2/pkg/runtime"
 )
@@ -34,7 +35,7 @@ func (i *Initial) InitialInputPortPage() {
 
 // Initial ConnectServerPage Setting...
 func (i *Initial) InitialConnectServerPage(port string) {
-	runtime.WindowSetTitle(*i.ctx, "go_file_sync - Connect Server - "+port)
+	runtime.WindowSetTitle(*i.ctx, "go_file_sync - Connect Server - "+global.GetOutboundIP().String()+":"+port)
 	runtime.WindowSetMinSize(*i.ctx, 500, 500)
 	runtime.WindowSetSize(*i.ctx, 500, 500)
 }

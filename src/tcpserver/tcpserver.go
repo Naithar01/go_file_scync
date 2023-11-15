@@ -7,6 +7,7 @@ import (
 	"errors"
 	"fmt"
 	"go_file_sync/src/file"
+	"go_file_sync/src/global"
 	"go_file_sync/src/logs"
 	"go_file_sync/src/models"
 	"io"
@@ -46,7 +47,7 @@ func (t *TCPServer) bindServer() error {
 		return err
 	}
 	t.listener = listener
-	logs.PrintMsgLog(fmt.Sprintf("서버 실행중... 포트: %d\n", t.port))
+	logs.PrintMsgLog(fmt.Sprintf("서버 실행중... 포트: %s:%d\n", global.GetOutboundIP().String(), t.port))
 	return nil
 }
 
