@@ -6,9 +6,10 @@ type Props = {
   isLastFile: boolean;
   dir_path: string;
   root_path: string;
+  duplication: boolean;
 }
 
-const FileTree = ({ name, depth, isLastFile, dir_path, root_path }: Props) => {
+const FileTree = ({ name, depth, isLastFile, dir_path, root_path, duplication }: Props) => {
 
   const SendFileHandler = (e: React.MouseEvent<HTMLDivElement>): void => {
     if (!e.currentTarget.className) {
@@ -32,7 +33,7 @@ const FileTree = ({ name, depth, isLastFile, dir_path, root_path }: Props) => {
         <span className="vertical-line">{isLastFile ? "└" : "├"}</span>
       )}
       <span className="vertical-line">{"─".repeat(depth * 1)}</span>
-      📄 {name}
+      📄 { name}  
     </div>
   )
 } 

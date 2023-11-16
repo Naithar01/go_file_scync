@@ -21,6 +21,7 @@ const FileList = ({files, depth, dir_path, root_path}: Props) => {
           isLastFile={index === files.length - 1}
           dir_path={dir_path}
           root_path={root_path}
+          duplication={fileItem.duplication}
         />
       ))}
     </Fragment>

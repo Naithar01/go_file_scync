@@ -5,10 +5,11 @@ import { GetRootPath, OpenDirectory, ParseRootPath } from "../../wailsjs/go/main
 import { InitialSnycDirectoryListPage } from "../../wailsjs/go/initial/Initial";
 import { models } from "../../wailsjs/go/models";
 import { EventsOn } from "../../wailsjs/runtime/runtime"
+import { SendDirectoryContent } from "../../wailsjs/go/tcpserver/TCPServer";
+import { markDuplicates } from "../utils/duplication"
 
 import DirectoryList from "../components/directory/DirectoryList";
 import Loading from "../components/common/Loading";
-import { SendDirectoryContent } from "../../wailsjs/go/tcpserver/TCPServer";
 
 export interface RenameFileData {
   key: string;
@@ -55,6 +56,16 @@ const MainPage = () => {
     InitialSnycDirectoryListPage()
     FetchFileData()
   }, []);
+
+  useEffect(() => {
+    if (connectedClientFileData?.length && resFileData?.length) {
+
+      let test1 = resFileData[0]
+      let test2 = connectedClientFileData[0]
+
+      markDuplicates(test1, test2)
+    }
+  }, [connectedClientFileData, resFileData])
 
   // 서버로부터 파일 정보와, 선택 된 폴더 경로를 받아옴
 	const FetchFileData = async (): Promise<void> => {

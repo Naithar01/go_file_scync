@@ -11,6 +11,7 @@ import "./styles/app_style.css"
 function App() {
 	return (
   <Routes>
+    {/* <Route path="/" element={<MainPage />}> */}
     <Route path="/" element={<InputPortPage />}>
     </Route>
     <Route path="/" element={<Layout />}>

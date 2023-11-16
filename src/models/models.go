@@ -16,6 +16,8 @@ type File struct {
 	FileSize      int64     `json:"filesize"`
 	FileModTime   time.Time `json:"filemodtime"`
 	Depth         int       `json:"depth"`
+	Duplication   bool      `json:"duplication"`
+	Latest        int       `json:"latest"`
 }
 
 type Message struct {

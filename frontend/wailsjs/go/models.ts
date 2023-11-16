@@ -7,6 +7,8 @@ export namespace models {
 	    // Go type: time
 	    filemodtime: any;
 	    depth: number;
+	    duplication: boolean;
+	    latest: number;
 	
 	    static createFrom(source: any = {}) {
 	        return new File(source);
@@ -19,6 +21,8 @@ export namespace models {
 	        this.filesize = source["filesize"];
 	        this.filemodtime = this.convertValues(source["filemodtime"], null);
 	        this.depth = source["depth"];
+	        this.duplication = source["duplication"];
+	        this.latest = source["latest"];
 	    }
 	
 		convertValues(a: any, classs: any, asMap: boolean = false): any {
