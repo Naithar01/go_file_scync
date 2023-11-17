@@ -10,6 +10,7 @@ import { markDuplicates } from "../utils/duplication"
 
 import DirectoryList from "../components/directory/DirectoryList";
 import Loading from "../components/common/Loading";
+import { markLatests } from "../utils/latest";
 
 export interface RenameFileData {
   key: string;
@@ -70,6 +71,7 @@ const MainPage = () => {
       let conRes = connectedClientFile
 
       markDuplicates(resFile, conRes)
+      markLatests(resFile, conRes)
 
       console.table(res.files);
       console.table(conRes.files);
