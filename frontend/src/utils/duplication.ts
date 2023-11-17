@@ -1,24 +1,25 @@
 import { models } from "../../wailsjs/go/models";
 import { RenameFileData } from "../pages/MainPage";
 
-export const markDuplicates = (firstDir: RenameFileData, secondDir: RenameFileData) => {
+export const markDuplicates = (firstDir: models.ResponseFileStruct, secondDir: models.ResponseFileStruct) => {
   for (const key in firstDir.files) {
-    if (secondDir.files[key]) {
-      const firstFiles = firstDir.files[key];
-      const secondFiles = secondDir.files[key];
+    const reNameFirstDirKey = key.replace(firstDir.root_path, "");
+    for (const key_nd in secondDir.files) {
+      const reNameSecondDirKey = key_nd.replace(secondDir.root_path, "");
+      if (reNameFirstDirKey == reNameSecondDirKey) {
+        // 해당 폴더 내의 파일 비교
+        const filesInFirstDir = firstDir.files[key];
+        const filesInSecondDir = secondDir.files[key_nd];
 
-        // @ts-ignore
-      for (const firstFile of firstFiles) {
-        // @ts-ignore
-        const duplicateFile = secondFiles.find(
-          (secondFile:models.File) => secondFile.filename === firstFile?.filename
-        );
+        filesInFirstDir.forEach(file1 => {
+          const duplicateFile = filesInSecondDir.find(file2 => file1.filename === file2.filename);
 
-        if (duplicateFile) {
-          // Marking duplicates by adding the 'duplication' property
-          firstFile.duplication = true;
-          duplicateFile.duplication = true;
-        }
+          if (duplicateFile) {
+            // 중복된 파일이면 duplication 속성을 true로 설정
+            file1.duplication = true;
+            duplicateFile.duplication = true;
+          }
+        });
       }
     }
   }

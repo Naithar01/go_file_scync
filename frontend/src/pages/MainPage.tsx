@@ -21,9 +21,15 @@ const MainPage = () => {
 	const navigate = useNavigate()
   
   const [isLoading ,setIsLoading] = useState<boolean>(true)
-  const [resFileData, setResFileData] = useState<RenameFileData[]>()
-  const [connectedClientFileData, setConnectedClientFileData] = useState<RenameFileData[]>()
+
+  // Root PC
   const [rootPath, setRootPath] = useState<string>("")
+  const [resFile, setResFile] = useState<models.ResponseFileStruct>()
+  const [resFileData, setResFileData] = useState<RenameFileData[]>()
+
+  // Connected PC 
+  const [connectedClientFile, setConnectedClientFile] = useState<models.ResponseFileStruct>()
+  const [connectedClientFileData, setConnectedClientFileData] = useState<RenameFileData[]>()
 
   // 상대 PC 서버 종료 시에 페이지 이동 
   EventsOn("server_shutdown", function() {
@@ -43,31 +49,35 @@ const MainPage = () => {
   })
 
   // 상대 PC 서버로부터 폴더 정보를 받아오면 
-  //  로딩 종료
   //  정보를 변수로 저장
   EventsOn("connectedDirectoryData", async (data: models.ResponseFileStruct) => {
-    setConnectedClientFileData(() => {
-      return renameFile(data)
-    })
-    setIsLoading(() => false)
+    setConnectedClientFile(() => data)
   })
 
+  // 페이지 입장 시에 페이지 셋팅
   useEffect(() => {
     InitialSnycDirectoryListPage()
     FetchFileData()
   }, []);
 
+  // DEV
+  // DEV
+  // DEV
+  // DEV
   useEffect(() => {
-    if (connectedClientFileData?.length && resFileData?.length) {
+    if (resFile && connectedClientFile) {
+      let res = resFile
+      let conRes = connectedClientFile
 
-      let test1 = resFileData[0]
-      let test2 = connectedClientFileData[0]
+      markDuplicates(resFile, conRes)
 
-      markDuplicates(test1, test2)
+      console.table(res.files);
+      console.table(conRes.files);
     }
-  }, [connectedClientFileData, resFileData])
+  }, [resFile, connectedClientFile])
 
   // 서버로부터 파일 정보와, 선택 된 폴더 경로를 받아옴
+  // 마지막에 가공 전 데이터를 보냄 
 	const FetchFileData = async (): Promise<void> => {
 		try {
 			const res = await OpenDirectory();
@@ -76,11 +86,8 @@ const MainPage = () => {
 				FetchFileData()
 				return
 			}
-
-      setResFileData(() => renameFile(res))
       setRootPath(() => res.root_path)
-
-      // 선택한 폴더의 내용을 상대 PC에게 보내줌
+      setResFile(() => res)
       await SendDirectoryContent(res)
 		} catch (error) {
 			console.error("Error fetching data:", error);
@@ -104,7 +111,6 @@ const MainPage = () => {
       renameFileData.push({
         key: renameKey == "" ? path_key : renameKey,
         depth: renameKey == "" ? 0: renameKey.split("/").length,
-        // @ts-ignore
         files: fileData.files[path_key],
       })
     }

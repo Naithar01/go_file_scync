@@ -15,7 +15,7 @@ import "../styles/pages/connect_server_page_style.css"
 
 const ConnectServerPage = () => {
   const navigate = useNavigate()
-  const [IPState, setIPState] = useState<string>()
+  const [IPState, setIPState] = useState<string>("localhost")
   const [portState, setPortState] = useState<number>()
   // 상대 PC가 실행 중인 PC에 연결을 했는지...
   const [connectListeningIsLoading, setConnectListeningIsLoading] = useState<boolean>(false)
