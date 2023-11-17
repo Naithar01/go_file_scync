@@ -34,7 +34,11 @@ const FileTree = ({ name, depth, isLastFile, dir_path, root_path, duplication, l
         <span className="vertical-line">{isLastFile ? "└" : "├"}</span>
       )}
       <span className="vertical-line">{"─".repeat(depth * 1)}</span>
-      📄 { name}  
+        <span style={{
+          color: (latest === 0) ? 'black' : (latest === 1) ? 'red' : 'blue',
+        }}>
+          📄 {name} 
+        </span>  
     </div>
   )
 } 

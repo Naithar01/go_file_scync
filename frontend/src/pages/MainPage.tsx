@@ -75,6 +75,7 @@ const MainPage = () => {
       setResFileData(() => renameFile(res))
       setConnectedClientFileData(() => renameFile(conRes))
 
+      setIsLoading(() => false)
     }
   }, [resFile, connectedClientFile])
 
