@@ -7,9 +7,10 @@ type Props = {
   dir_path: string;
   root_path: string;
   duplication: boolean;
+  latest: number
 }
 
-const FileTree = ({ name, depth, isLastFile, dir_path, root_path, duplication }: Props) => {
+const FileTree = ({ name, depth, isLastFile, dir_path, root_path, duplication, latest }: Props) => {
 
   const SendFileHandler = (e: React.MouseEvent<HTMLDivElement>): void => {
     if (!e.currentTarget.className) {

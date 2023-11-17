@@ -22,6 +22,7 @@ const FileList = ({files, depth, dir_path, root_path}: Props) => {
           dir_path={dir_path}
           root_path={root_path}
           duplication={fileItem.duplication}
+          latest={fileItem.latest}
         />
       ))}
     </Fragment>

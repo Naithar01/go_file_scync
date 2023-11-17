@@ -43,10 +43,9 @@ const MainPage = () => {
     setIsLoading(() => true)
 
     const res = await ParseRootPath(await GetRootPath())
-    setResFileData(() => renameFile(res))
-    await SendDirectoryContent(res)
 
-    setIsLoading(() => false)
+    setResFile(() => res)
+    await SendDirectoryContent(res)
   })
 
   // 상대 PC 서버로부터 폴더 정보를 받아오면 
@@ -70,11 +69,12 @@ const MainPage = () => {
       let res = resFile
       let conRes = connectedClientFile
 
-      markDuplicates(resFile, conRes)
-      markLatests(resFile, conRes)
+      markDuplicates(res, conRes)
+      markLatests(res, conRes)
 
-      console.table(res.files);
-      console.table(conRes.files);
+      setResFileData(() => renameFile(res))
+      setConnectedClientFileData(() => renameFile(conRes))
+
     }
   }, [resFile, connectedClientFile])
 
