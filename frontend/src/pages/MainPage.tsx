@@ -27,6 +27,7 @@ const MainPage = () => {
   const [rootPath, setRootPath] = useState<string>("")
   const [resFile, setResFile] = useState<models.ResponseFileStruct>()
   const [resFileData, setResFileData] = useState<RenameFileData[]>()
+  const [synchronizedFiles, setSynchronizedFiles] = useState<{filename: string, filepath: string}[]>()
 
   // Connected PC 
   const [connectedClientFile, setConnectedClientFile] = useState<models.ResponseFileStruct>()
@@ -69,6 +70,22 @@ const MainPage = () => {
 
       markDuplicates(res, conRes)
       markLatests(res, conRes)
+      // Check File Name
+      // DUPLICATION이 TRUE이면서 LATEST가 1이면 
+      // DUPLICATION이 FALSE이면서 LATEST가 0이면
+      let synchronized_file_name_list: {filename: string, filepath: string}[] = []
+      for (const directory_path in res.files) {
+        const directory_path_file = res.files[directory_path]
+      
+        directory_path_file.forEach(file => {
+          if (file.filename && file.duplication && file.latest == 1) {
+            synchronized_file_name_list.push({filename: file.filename, filepath: file.directorypath})
+          } else if (file.filename && !file.duplication && file.latest == 0) {
+            synchronized_file_name_list.push({filename: file.filename, filepath: file.directorypath})
+          }
+        })
+      }
+      setSynchronizedFiles(() => synchronized_file_name_list)
 
       setResFileData(() => renameFile(res))
       setConnectedClientFileData(() => renameFile(conRes))
