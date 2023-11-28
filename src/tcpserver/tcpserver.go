@@ -268,3 +268,32 @@ func (t *TCPServer) SendFile(file_path string, file_name string) error {
 
 	return nil
 }
+
+func (t *TCPServer) StartSyncFiles() {
+	if t.client == nil {
+		return
+	}
+
+	t.m.Lock()
+	defer t.m.Unlock()
+
+	message := models.Message{
+		Type:    "start_sync_files",
+		Content: nil,
+	}
+
+	// 동기화 시작을 자신 PC와 상대 PC에게 동일하게 알리기 위해 runtime 사용
+	runtime.EventsEmit(*t.ctx, "start_sync_files", true)
+
+	// JSON 직렬화
+	writeData, err := json.Marshal(message)
+	if err != nil {
+		logs.CustomErrorDialog(*t.ctx, "데이터 전송에 실패하였습니다.")
+		logs.PrintMsgLog(fmt.Sprintf("데이터 전송에 실패하였습니다.: %s\n", err.Error()))
+	}
+
+	_, err = t.client.Write(writeData)
+	if err != nil {
+		logs.PrintMsgLog(fmt.Sprintf("Error sending close signal: %s\n", err.Error()))
+	}
+}

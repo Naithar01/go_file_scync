@@ -94,7 +94,6 @@ func (c *TCPClient) handleMessage(buffer []byte, n int) {
 
 		logs.PrintMsgLog("상대 PC로부터 폴더 정보를 받음")
 		runtime.EventsEmit(*c.ctx, "connectedDirectoryData", DirectoryContent.Content)
-
 	case "file":
 		var FileData models.FileData
 		json.Unmarshal(buffer[:n], &FileData)
@@ -120,6 +119,9 @@ func (c *TCPClient) handleMessage(buffer []byte, n int) {
 
 		logs.PrintMsgLog("상대 PC로부터 파일 데이터를 받음")
 		runtime.EventsEmit(*c.ctx, "receive_file", nil)
+	case "start_sync_files":
+		// 동기화 시작을 자신 PC와 상대 PC에게 동일하게 알리기 위해 runtime 사용
+		runtime.EventsEmit(*c.ctx, "start_sync_files", true)
 	}
 }
 

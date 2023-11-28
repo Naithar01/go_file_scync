@@ -34,6 +34,11 @@ const MainPage = () => {
   const [connectedClientFile, setConnectedClientFile] = useState<models.ResponseFileStruct>()
   const [connectedClientFileData, setConnectedClientFileData] = useState<RenameFileData[]>()
 
+  // 각 PC의 폴더 동기화 시작을 RUNTIME으로 받으면 
+  EventsOn("start_sync_files", async () => {
+    setIsLoading(() => true)
+  })
+
   // 상대 PC 서버 종료 시에 페이지 이동 
   EventsOn("server_shutdown", function() {
     navigate("/connect")

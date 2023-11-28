@@ -11,3 +11,5 @@ export function SendDirectoryContent(arg1:models.ResponseFileStruct):Promise<voi
 export function SendFile(arg1:string,arg2:string):Promise<void>;
 
 export function SetServerPort(arg1:number):Promise<boolean>;
+
+export function StartSyncFiles():Promise<void>;

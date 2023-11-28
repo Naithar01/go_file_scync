@@ -2,6 +2,8 @@ import { Fragment, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { useSyncFileDataContext } from "../../contexts/SyncFileDataContext"
 
+import { StartSyncFiles } from "../../../wailsjs/go/tcpserver/TCPServer"
+
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faBars, faX, faArrowRightArrowLeft } from "@fortawesome/free-solid-svg-icons"
 
@@ -19,6 +21,15 @@ const Sidebar = () => {
     })
     return 
   }
+  
+  const SyncFilesHandler = async (): Promise<void> => {
+    if (synchronizedFiles?.length == 0) {
+      return
+    }
+
+    await StartSyncFiles()
+    return
+  }
 
   return (
     <Fragment>
@@ -29,7 +40,7 @@ const Sidebar = () => {
           </button>
         </div>
         <div className="sidebar_sync_toggle_icon">
-          <button className="sidebar_nav_toggle_btn" type="button" onClick={() => { alert(synchronizedFiles) }}>
+          <button className="sidebar_nav_toggle_btn" type="button" onClick={SyncFilesHandler}>
               <FontAwesomeIcon icon={faArrowRightArrowLeft} />
           </button>
         </div>
