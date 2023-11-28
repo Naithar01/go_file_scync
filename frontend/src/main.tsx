@@ -4,6 +4,7 @@ import { BrowserRouter } from 'react-router-dom'
 import App from './App'
 
 import './globalStyle.css'
+import { SyncFileDataProvider } from './contexts/SyncFileDataContext'
 
 const container = document.getElementById('root')
 
@@ -11,6 +12,8 @@ const root = createRoot(container!)
 
 root.render(
     <BrowserRouter>
+      <SyncFileDataProvider>
         <App/>
+      </SyncFileDataProvider>
     </BrowserRouter>
 )

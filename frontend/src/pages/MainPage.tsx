@@ -1,5 +1,6 @@
 import { Fragment, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useSyncFileDataContext } from "../contexts/SyncFileDataContext";
 
 import { GetRootPath, OpenDirectory, ParseRootPath } from "../../wailsjs/go/main/App";
 import { InitialSnycDirectoryListPage } from "../../wailsjs/go/initial/Initial";
@@ -20,6 +21,7 @@ export interface RenameFileData {
 
 const MainPage = () => {
 	const navigate = useNavigate()
+  const { updateSynchronizedFiles } = useSyncFileDataContext()
   
   const [isLoading ,setIsLoading] = useState<boolean>(true)
 
@@ -27,7 +29,6 @@ const MainPage = () => {
   const [rootPath, setRootPath] = useState<string>("")
   const [resFile, setResFile] = useState<models.ResponseFileStruct>()
   const [resFileData, setResFileData] = useState<RenameFileData[]>()
-  const [synchronizedFiles, setSynchronizedFiles] = useState<{filename: string, filepath: string}[]>()
 
   // Connected PC 
   const [connectedClientFile, setConnectedClientFile] = useState<models.ResponseFileStruct>()
@@ -85,7 +86,7 @@ const MainPage = () => {
           }
         })
       }
-      setSynchronizedFiles(() => synchronized_file_name_list)
+      updateSynchronizedFiles(synchronized_file_name_list)
 
       setResFileData(() => renameFile(res))
       setConnectedClientFileData(() => renameFile(conRes))

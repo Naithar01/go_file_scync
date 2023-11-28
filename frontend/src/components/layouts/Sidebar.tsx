@@ -1,5 +1,6 @@
 import { Fragment, useState } from "react"
 import { useNavigate } from "react-router-dom"
+import { useSyncFileDataContext } from "../../contexts/SyncFileDataContext"
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faBars, faX, faArrowRightArrowLeft } from "@fortawesome/free-solid-svg-icons"
@@ -8,6 +9,8 @@ import "../../styles/common/sidebar_style.css"
 
 const Sidebar = () => {
   const navigatate = useNavigate()
+  const { synchronizedFiles } = useSyncFileDataContext()
+
   const [isOpen, setIsOpen] = useState<boolean>(false)
 
   const ToggleSidebar = (): void => {
@@ -26,7 +29,7 @@ const Sidebar = () => {
           </button>
         </div>
         <div className="sidebar_sync_toggle_icon">
-          <button className="sidebar_nav_toggle_btn" type="button">
+          <button className="sidebar_nav_toggle_btn" type="button" onClick={() => { alert(synchronizedFiles) }}>
               <FontAwesomeIcon icon={faArrowRightArrowLeft} />
           </button>
         </div>
