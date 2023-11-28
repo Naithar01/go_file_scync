@@ -7,10 +7,10 @@ import { models } from "../../wailsjs/go/models";
 import { EventsOn } from "../../wailsjs/runtime/runtime"
 import { SendDirectoryContent } from "../../wailsjs/go/tcpserver/TCPServer";
 import { markDuplicates } from "../utils/duplication"
+import { markLatests } from "../utils/latest";
 
 import DirectoryList from "../components/directory/DirectoryList";
 import Loading from "../components/common/Loading";
-import { markLatests } from "../utils/latest";
 
 export interface RenameFileData {
   key: string;
@@ -60,10 +60,8 @@ const MainPage = () => {
     FetchFileData()
   }, []);
 
-  // DEV
-  // DEV
-  // DEV
-  // DEV
+  // 파일 송/수신 작업이 이루어졌을 때 
+  // 페이지 입장 시에 폴더 정보를 가져 왔을 때 
   useEffect(() => {
     if (resFile && connectedClientFile) {
       let res = resFile
