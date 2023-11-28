@@ -10,8 +10,12 @@
     top: 10%;
     left: 50%;
     transform: translate(-50%, -50%);
-    z-index: 1;
+    z-index: 101;
     transition: 0.5s;
+}
+
+.modal_content, .modal_header_title {
+  font-size: 2rem;
 }
 
 .modal_close_button {
@@ -22,7 +26,7 @@
 
 .modal_header {
     display: flex;
-    justify-content: flex-end;
+    justify-content: space-between;
     align-items: center;
     border-bottom: 1px solid #ddd;
     padding-bottom: 10px;

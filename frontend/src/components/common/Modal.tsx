@@ -6,9 +6,10 @@ interface Props {
   isOpen: boolean;
   onClose: () => void;
   children: React.ReactNode;
+  header_title: string;
 }
 
-const Modal = ({ isOpen, onClose, children }: Props) => {
+const Modal = ({ isOpen, onClose, children, header_title }: Props) => {
   if (!isOpen) {
     return null;
   }
@@ -17,9 +18,12 @@ const Modal = ({ isOpen, onClose, children }: Props) => {
     <Fragment>
         <div className="modal_wrap">
             <div className="modal_header">
-                <span className="modal_close_button" onClick={onClose}>
-                    &times;
-                </span>
+              <div className="modal_header_title">
+                { header_title }
+              </div>
+              <span className="modal_close_button" onClick={onClose}>
+                  &times;
+              </span>
             </div>
             <div className="modal_content">
                 {children}

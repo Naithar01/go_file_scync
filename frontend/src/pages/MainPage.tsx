@@ -12,6 +12,7 @@ import { markLatests } from "../utils/latest";
 
 import DirectoryList from "../components/directory/DirectoryList";
 import Loading from "../components/common/Loading";
+import Modal from "../components/common/Modal";
 
 export interface RenameFileData {
   key: string;
@@ -24,6 +25,14 @@ const MainPage = () => {
   const { updateSynchronizedFiles } = useSyncFileDataContext()
   
   const [isLoading ,setIsLoading] = useState<boolean>(true)
+  // Sync Files Modal - Files Info
+  const [isOpen, setIsOpen] = useState<boolean>(false)
+  const ToggleSyncModal = (): void => {
+    setIsOpen((prev) => {
+      return !prev
+    })
+    return 
+  }
 
   // Root PC
   const [rootPath, setRootPath] = useState<string>("")
@@ -37,6 +46,7 @@ const MainPage = () => {
   // 각 PC의 폴더 동기화 시작을 RUNTIME으로 받으면 
   EventsOn("start_sync_files", async () => {
     setIsLoading(() => true)
+    setIsOpen(() => true)
   })
 
   // 상대 PC 서버 종료 시에 페이지 이동 
@@ -150,6 +160,13 @@ const MainPage = () => {
         {resFileData && rootPath && <DirectoryList resFileData={resFileData} type='server' root_path={rootPath} />}
         {connectedClientFileData && <DirectoryList resFileData={connectedClientFileData} type='conn' root_path=""/>}
       </div>
+      }
+
+      {/* Sync Files Modal */}
+      { isOpen && 
+        <Modal isOpen={isOpen} onClose={ToggleSyncModal} header_title="파일 동기화 목록">
+          
+        </Modal> 
       }
     </Fragment>
   )
