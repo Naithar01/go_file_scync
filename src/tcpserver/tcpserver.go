@@ -269,7 +269,7 @@ func (t *TCPServer) SendFile(file_path string, file_name string) error {
 	return nil
 }
 
-func (t *TCPServer) StartSyncFiles() {
+func (t *TCPServer) StartSyncFiles(filesData []models.StartSyncFiles, fileCnt int) {
 	if t.client == nil {
 		return
 	}
@@ -279,7 +279,11 @@ func (t *TCPServer) StartSyncFiles() {
 
 	message := models.Message{
 		Type:    "start_sync_files",
-		Content: nil,
+		Content: filesData,
+	}
+
+	if fileCnt == 0 {
+		message.Content = nil
 	}
 
 	// 동기화 시작을 자신 PC와 상대 PC에게 동일하게 알리기 위해 runtime 사용

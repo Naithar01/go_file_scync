@@ -12,4 +12,4 @@ export function SendFile(arg1:string,arg2:string):Promise<void>;
 
 export function SetServerPort(arg1:number):Promise<boolean>;
 
-export function StartSyncFiles():Promise<void>;
+export function StartSyncFiles(arg1:Array<models.StartSyncFiles>,arg2:number):Promise<void>;

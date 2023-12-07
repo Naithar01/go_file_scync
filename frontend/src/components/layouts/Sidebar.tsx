@@ -27,7 +27,8 @@ const Sidebar = () => {
       return
     }
 
-    await StartSyncFiles()
+    console.log(synchronizedFiles);
+    await StartSyncFiles(synchronizedFiles!, synchronizedFiles!.length)
     return
   }
 

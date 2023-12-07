@@ -77,6 +77,20 @@ export namespace models {
 		    return a;
 		}
 	}
+	export class StartSyncFiles {
+	    filename: string;
+	    filepath: string;
+	
+	    static createFrom(source: any = {}) {
+	        return new StartSyncFiles(source);
+	    }
+	
+	    constructor(source: any = {}) {
+	        if ('string' === typeof source) source = JSON.parse(source);
+	        this.filename = source["filename"];
+	        this.filepath = source["filepath"];
+	    }
+	}
 
 }
 

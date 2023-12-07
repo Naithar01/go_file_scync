@@ -54,3 +54,8 @@ type FileData struct {
 	Type    string   `json:"type"`
 	Content ReadFile `json:"content"`
 }
+
+type StartSyncFiles struct {
+	Filename string `json:"filename"`
+	Filepath string `json:"filepath"`
+}
