@@ -1,17 +1,34 @@
 .input_port_page {
   font-size: 1.5rem;
+  margin: 0px 20px;
+  text-align: center;
 }
 
 .input_port_page_port_inp_areas {
   margin-top: 3rem;
 }
 
-.input_port_page_port_inp_area {
-  text-align: center;
+.input_port_page_port_inp_areas input {
+  padding: 10px;
   margin-bottom: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  width: 100%;
+  box-sizing: border-box;
+  font-size: 1em;
 }
 
-.input_port_page_port_inp_area > input,
-.input_port_page_port_inp_area > button {
-  padding: 3px;
+.input_port_page_port_inp_areas input:focus{
+  border-color: #0088cc;
+  outline: none;
+}
+
+.input_port_page_port_inp_area button {
+  background-color: #0088cc;
+  color: #fff;
+  padding: 10px 20px;
+  font-size: 1em;
+  border: none;
+  cursor: pointer;
+  border-radius: 5px;
 }

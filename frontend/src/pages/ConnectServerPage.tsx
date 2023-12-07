@@ -109,22 +109,16 @@ const ConnectServerPage = () => {
   return (
     <Fragment>
       { !connectListeningIsLoading ? 
-      <Fragment>
-        <div className="connect_server_page">
+      <div className="connect_server_page">
           <Alert text="연결할 PC의 IP, PORT를 입력하세요." />
-        </div>
         <div className="connect_server_page_port_inp_areas">
-          <div className="connect_server_page_port_inp_area">
-            <input type="text" value={IPState} placeholder="IP를 입력하세요." onChange={ChangeIPStateHandler}/>
-          </div>
-          <div className="connect_server_page_port_inp_area">
-            <input type="text" inputMode="numeric" value={portState} placeholder="PORT를 입력하세요." onChange={ChangePortStateHandler}/>
-          </div>
+          <input type="text" value={IPState} placeholder="IP를 입력하세요." onChange={ChangeIPStateHandler}/>
+          <input type="text" inputMode="numeric" value={portState} placeholder="PORT를 입력하세요." onChange={ChangePortStateHandler}/>
           <div className="connect_server_page_port_inp_area">
             <button type="button" onClick={StartClientHandler}>서버 연결</button>
           </div>
         </div>
-      </Fragment>
+      </div>
       :
       <Fragment>
         <Loading />
