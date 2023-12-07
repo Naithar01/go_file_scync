@@ -16,7 +16,7 @@ const Sidebar = () => {
 
   const [isOpen, setIsOpen] = useState<boolean>(false)
 
-  EventsOn("start_sync_files", (() => {
+  EventsOn("start_together_sync_files", (() => {
     StartTogeterSyncFiles(synchronizedFiles!, synchronizedFiles!.length)
   }))
 

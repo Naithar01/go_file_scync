@@ -59,3 +59,8 @@ type StartSyncFiles struct {
 	Filename string `json:"filename"`
 	Filepath string `json:"filepath"`
 }
+
+type StartSyncFilesContent struct {
+	Type    string           `json:"type"`
+	Content []StartSyncFiles `json:"content"`
+}
