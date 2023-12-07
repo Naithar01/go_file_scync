@@ -22,7 +22,7 @@ export interface RenameFileData {
 
 const MainPage = () => {
 	const navigate = useNavigate()
-  const { updateSynchronizedFiles } = useSyncFileDataContext()
+  const { synchronizedFiles, updateSynchronizedFiles } = useSyncFileDataContext()
   
   const [isLoading ,setIsLoading] = useState<boolean>(true)
   // Sync Files Modal - Files Info
@@ -165,7 +165,9 @@ const MainPage = () => {
       {/* Sync Files Modal */}
       { isOpen && 
         <Modal isOpen={isOpen} onClose={ToggleSyncModal} header_title="파일 동기화 목록">
-          
+          {synchronizedFiles && synchronizedFiles.map((file) => (
+            <p key={file.filepath}>{file.filename}</p>
+          ))}
         </Modal> 
       }
     </Fragment>

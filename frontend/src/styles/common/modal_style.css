@@ -7,7 +7,7 @@
     width: 80%;
     max-width: 600px;
     position: fixed;
-    top: 10%;
+    top: 20%;
     left: 50%;
     transform: translate(-50%, -50%);
     z-index: 101;
@@ -15,7 +15,7 @@
 }
 
 .modal_content, .modal_header_title {
-  font-size: 2rem;
+  font-size: 1.5rem;
 }
 
 .modal_close_button {
