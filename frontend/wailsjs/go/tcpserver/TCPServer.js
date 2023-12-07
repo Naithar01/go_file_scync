@@ -25,3 +25,7 @@ export function SetServerPort(arg1) {
 export function StartSyncFiles(arg1, arg2) {
   return window['go']['tcpserver']['TCPServer']['StartSyncFiles'](arg1, arg2);
 }
+
+export function StartTogeterSyncFiles(arg1, arg2) {
+  return window['go']['tcpserver']['TCPServer']['StartTogeterSyncFiles'](arg1, arg2);
+}

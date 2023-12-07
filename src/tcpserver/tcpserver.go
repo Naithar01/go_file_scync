@@ -301,3 +301,33 @@ func (t *TCPServer) StartSyncFiles(filesData []models.StartSyncFiles, fileCnt in
 		logs.PrintMsgLog(fmt.Sprintf("Error sending close signal: %s\n", err.Error()))
 	}
 }
+
+func (t *TCPServer) StartTogeterSyncFiles(filesData []models.StartSyncFiles, fileCnt int) {
+	if t.client == nil {
+		return
+	}
+
+	t.m.Lock()
+	defer t.m.Unlock()
+
+	message := models.Message{
+		Type:    "start_together_sync_files",
+		Content: filesData,
+	}
+
+	if fileCnt == 0 {
+		message.Content = nil
+	}
+
+	// JSON 직렬화
+	writeData, err := json.Marshal(message)
+	if err != nil {
+		logs.CustomErrorDialog(*t.ctx, "데이터 전송에 실패하였습니다.")
+		logs.PrintMsgLog(fmt.Sprintf("데이터 전송에 실패하였습니다.: %s\n", err.Error()))
+	}
+
+	_, err = t.client.Write(writeData)
+	if err != nil {
+		logs.PrintMsgLog(fmt.Sprintf("Error sending close signal: %s\n", err.Error()))
+	}
+}

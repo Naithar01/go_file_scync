@@ -45,8 +45,8 @@ const MainPage = () => {
 
   // 각 PC의 폴더 동기화 시작을 RUNTIME으로 받으면 
   EventsOn("start_sync_files", async () => {
-    setIsLoading(() => true)
-    setIsOpen(() => true)
+    // setIsLoading(() => true)
+    // setIsOpen(() => true)
   })
 
   // 상대 PC 서버 종료 시에 페이지 이동 

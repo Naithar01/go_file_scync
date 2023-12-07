@@ -1,8 +1,9 @@
 import { Fragment, useState } from "react"
 import { useNavigate } from "react-router-dom"
 import { useSyncFileDataContext } from "../../contexts/SyncFileDataContext"
+import { EventsOn } from "../../../wailsjs/runtime/runtime"
 
-import { StartSyncFiles } from "../../../wailsjs/go/tcpserver/TCPServer"
+import { StartSyncFiles, StartTogeterSyncFiles } from "../../../wailsjs/go/tcpserver/TCPServer"
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { faBars, faX, faArrowRightArrowLeft } from "@fortawesome/free-solid-svg-icons"
@@ -15,6 +16,11 @@ const Sidebar = () => {
 
   const [isOpen, setIsOpen] = useState<boolean>(false)
 
+  EventsOn("start_sync_files", (() => {
+    StartTogeterSyncFiles(synchronizedFiles!, synchronizedFiles!.length)
+  }))
+
+
   const ToggleSidebar = (): void => {
     setIsOpen((prev) => {
       return !prev
@@ -23,10 +29,6 @@ const Sidebar = () => {
   }
   
   const SyncFilesHandler = async (): Promise<void> => {
-    if (synchronizedFiles?.length == 0) {
-      return
-    }
-
     await StartSyncFiles(synchronizedFiles!, synchronizedFiles!.length)
     return
   }
