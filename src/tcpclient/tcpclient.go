@@ -120,24 +120,15 @@ func (c *TCPClient) handleMessage(buffer []byte, n int) {
 		logs.PrintMsgLog("상대 PC로부터 파일 데이터를 받음")
 		runtime.EventsEmit(*c.ctx, "receive_file", nil)
 	case "start_sync_files":
-		var FileDataInfo []models.StartSyncFilesContent
+		var FileDataInfo models.StartSyncFilesContent
 		json.Unmarshal(buffer[:n], &FileDataInfo)
-		fmt.Println("PC2야 동기화 시작하자!")
-		fmt.Println(FileDataInfo)
-		runtime.MessageDialog(*c.ctx, runtime.MessageDialogOptions{
-			Message: "Start Sync",
-		})
-		// 동기화 시작을 자신 PC와 상대 PC에게 동일하게 알리기 위해 runtime 사용
+		// PC UI를 로딩 상태로 업데이트
+		// PC 폴더 정보를 전송
 		runtime.EventsEmit(*c.ctx, "start_sync_files", true)
 		runtime.EventsEmit(*c.ctx, "start_together_sync_files", true)
 	case "start_together_sync_files":
-		var FileDataInfo []models.StartSyncFilesContent
+		var FileDataInfo models.StartSyncFilesContent
 		json.Unmarshal(buffer[:n], &FileDataInfo)
-		fmt.Println("그래 PC1아 동기화 시작하자!")
-		fmt.Println(FileDataInfo)
-		runtime.MessageDialog(*c.ctx, runtime.MessageDialogOptions{
-			Message: "Start Together Sync",
-		})
 	}
 }
 
