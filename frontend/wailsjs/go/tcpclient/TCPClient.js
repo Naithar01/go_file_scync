@@ -10,6 +10,10 @@ export function SendAutoConnectServer(arg1) {
   return window['go']['tcpclient']['TCPClient']['SendAutoConnectServer'](arg1);
 }
 
+export function SendStartFileEvent(arg1) {
+  return window['go']['tcpclient']['TCPClient']['SendStartFileEvent'](arg1);
+}
+
 export function StartClient(arg1, arg2) {
   return window['go']['tcpclient']['TCPClient']['StartClient'](arg1, arg2);
 }

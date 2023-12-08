@@ -21,6 +21,7 @@ import (
 type TCPServer struct {
 	ctx *context.Context
 	m   sync.Mutex
+	wg  sync.WaitGroup
 
 	port     int
 	listener net.Listener
@@ -128,6 +129,8 @@ func (t *TCPServer) handleMessage(buffer []byte, n int) {
 
 		logs.PrintMsgLog("상대 PC 자동 연결")
 		runtime.EventsEmit(*t.ctx, "server_auto_connect", AutoConnect.Content.IP, AutoConnect.Content.PORT)
+	case "send_sync_files":
+		logs.CustomInfoDialog(*t.ctx, "Good")
 	}
 }
 
@@ -279,27 +282,13 @@ func (t *TCPServer) SendSyncFile(file_path string, file_name string) error {
 	t.m.Lock()
 	defer t.m.Unlock()
 
-	dialog, err := runtime.MessageDialog(*t.ctx, runtime.MessageDialogOptions{
-		Type:    runtime.QuestionDialog,
-		Title:   "파일 전송",
-		Message: "선택한 파일을 전송하시겠습니까?",
-	})
-	if err != nil {
-		return errors.New(err.Error())
-	}
-
-	// "No" 클릭 시에 팝업 종료
-	if dialog != "Yes" {
-		return nil
-	}
-
 	// file_content, err := file.ReadFile(file_path)
 	// if err != nil {
 	// 	return err
 	// }
 
 	message := models.FileData{
-		Type: "SendSyncFile",
+		Type: "send_sync_file",
 		Content: models.ReadFile{
 			FileName: file_name,
 			// FileData: file_content,
@@ -355,10 +344,12 @@ func (t *TCPServer) StartSyncFiles(filesData []models.StartSyncFiles, fileCnt in
 		logs.PrintMsgLog(fmt.Sprintf("Error sending close signal: %s\n", err.Error()))
 	}
 
-	// 파일 전송 시작
-	for _, file := range t.sync_files {
-		t.SendSyncFile(file.Filepath, file.Filename)
-	}
+	// if fileCnt != 0 {
+	// 	// 파일 전송 시작
+	// 	for _, file := range filesData {
+	// 		t.SendSyncFile(file.Filepath, file.Filename)
+	// 	}
+	// }
 }
 
 func (t *TCPServer) StartTogeterSyncFiles(filesData []models.StartSyncFiles, fileCnt int) {
@@ -392,8 +383,10 @@ func (t *TCPServer) StartTogeterSyncFiles(filesData []models.StartSyncFiles, fil
 		logs.PrintMsgLog(fmt.Sprintf("Error sending close signal: %s\n", err.Error()))
 	}
 
-	// 파일 전송 시작
-	for _, file := range t.sync_files {
-		t.SendSyncFile(file.Filepath, file.Filename)
-	}
+	// if fileCnt != 0 {
+	// 	// 파일 전송 시작
+	// 	for _, file := range filesData {
+	// 		t.SendSyncFile(file.Filepath, file.Filename)
+	// 	}
+	// }
 }

@@ -22,6 +22,7 @@ import (
 type TCPClient struct {
 	ctx *context.Context
 	m   sync.Mutex
+	wg  sync.WaitGroup
 
 	conn net.Conn
 	ip   string
@@ -120,40 +121,23 @@ func (c *TCPClient) handleMessage(buffer []byte, n int) {
 		logs.PrintMsgLog("상대 PC로부터 파일 데이터를 받음")
 		runtime.EventsEmit(*c.ctx, "receive_file", nil)
 	case "start_sync_files":
+		c.wg.Add(1)
 		var FileDataInfo models.StartSyncFilesContent
 		json.Unmarshal(buffer[:n], &FileDataInfo)
 		// PC UI를 로딩 상태로 업데이트
 		// PC 폴더 정보를 전송
 		runtime.EventsEmit(*c.ctx, "start_sync_files", true)
 		runtime.EventsEmit(*c.ctx, "start_together_sync_files", true)
+		c.wg.Done()
+		c.SendStartFileEvent()
 	case "start_together_sync_files":
 		var FileDataInfo models.StartSyncFilesContent
 		json.Unmarshal(buffer[:n], &FileDataInfo)
-	case "SendSyncFile":
+		c.SendStartFileEvent()
+	case "send_sync_file":
 		var FileData models.FileData
+		json.Unmarshal(buffer[:n], &FileData)
 		fmt.Println(FileData.Content.FileName)
-		// json.Unmarshal(buffer[:n], &FileData)
-		// global.GetRootPath()
-
-		// root_path := global.GetRootPath()
-		// if len(root_path) == 0 {
-		// 	return
-		// }
-
-		// filePath := filepath.Join(root_path, FileData.Content.FileName)
-		// err := os.MkdirAll(filepath.Dir(filePath), os.ModePerm)
-		// if err != nil {
-		// 	logs.PrintMsgLog(err.Error())
-		// 	return
-		// }
-
-		// err = ioutil.WriteFile(filePath, FileData.Content.FileData, 0644)
-		// if err != nil {
-		// 	logs.CustomErrorDialog(*c.ctx, "파일 수신에 실패하였습니다.")
-		// 	return
-		// }
-
-		// logs.PrintMsgLog("상대 PC로부터 파일 데이터를 받음")
 	}
 }
 
@@ -194,6 +178,25 @@ func (c *TCPClient) SendAutoConnectServer(port int) {
 			IP:   global.GetOutboundIP().String(),
 			PORT: port,
 		},
+	}
+
+	// JSON 직렬화
+	writeData, err := json.Marshal(message)
+	if err != nil {
+		logs.CustomErrorDialog(*c.ctx, "데이터가 올바르지 않습니다.")
+		return
+	}
+
+	_, err = c.conn.Write(writeData)
+	if err != nil {
+		logs.PrintMsgLog(fmt.Sprintf("데이터 전송에 실패하였습니다.: %s\n", err.Error()))
+	}
+}
+
+func (c *TCPClient) SendStartFileEvent() {
+	message := models.Message{
+		Type:    "send_sync_files",
+		Content: nil,
 	}
 
 	// JSON 직렬화
