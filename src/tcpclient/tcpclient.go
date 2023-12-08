@@ -129,10 +129,14 @@ func (c *TCPClient) handleMessage(buffer []byte, n int) {
 		runtime.EventsEmit(*c.ctx, "start_sync_files", true)
 		runtime.EventsEmit(*c.ctx, "start_together_sync_files", true)
 		c.wg.Done()
+		c.wg.Wait()
 		c.SendStartFileEvent()
 	case "start_together_sync_files":
+		c.wg.Add(1)
 		var FileDataInfo models.StartSyncFilesContent
 		json.Unmarshal(buffer[:n], &FileDataInfo)
+		c.wg.Done()
+		c.wg.Wait()
 		c.SendStartFileEvent()
 	case "send_sync_file":
 		var FileData models.FileData

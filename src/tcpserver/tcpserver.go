@@ -130,7 +130,19 @@ func (t *TCPServer) handleMessage(buffer []byte, n int) {
 		logs.PrintMsgLog("상대 PC 자동 연결")
 		runtime.EventsEmit(*t.ctx, "server_auto_connect", AutoConnect.Content.IP, AutoConnect.Content.PORT)
 	case "send_sync_files":
-		logs.CustomInfoDialog(*t.ctx, "Good")
+		// 바로 종료 문구 전송 ( EX: "done_sync_files" )
+		// if len(t.sync_files) == 0 {
+		// }
+
+		t.wg.Add(len(t.sync_files))
+		for _, file := range t.sync_files {
+			go func(file models.StartSyncFiles) {
+				defer t.wg.Done()
+
+				t.SendSyncFile(file.Filepath, file.Filename)
+			}(file)
+		}
+		t.wg.Wait()
 	}
 }
 
@@ -343,13 +355,6 @@ func (t *TCPServer) StartSyncFiles(filesData []models.StartSyncFiles, fileCnt in
 	if err != nil {
 		logs.PrintMsgLog(fmt.Sprintf("Error sending close signal: %s\n", err.Error()))
 	}
-
-	// if fileCnt != 0 {
-	// 	// 파일 전송 시작
-	// 	for _, file := range filesData {
-	// 		t.SendSyncFile(file.Filepath, file.Filename)
-	// 	}
-	// }
 }
 
 func (t *TCPServer) StartTogeterSyncFiles(filesData []models.StartSyncFiles, fileCnt int) {
@@ -382,11 +387,4 @@ func (t *TCPServer) StartTogeterSyncFiles(filesData []models.StartSyncFiles, fil
 	if err != nil {
 		logs.PrintMsgLog(fmt.Sprintf("Error sending close signal: %s\n", err.Error()))
 	}
-
-	// if fileCnt != 0 {
-	// 	// 파일 전송 시작
-	// 	for _, file := range filesData {
-	// 		t.SendSyncFile(file.Filepath, file.Filename)
-	// 	}
-	// }
 }
