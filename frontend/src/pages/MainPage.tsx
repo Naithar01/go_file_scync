@@ -165,9 +165,10 @@ const MainPage = () => {
       {/* Sync Files Modal */}
       { isOpen && 
         <Modal isOpen={isOpen} onClose={ToggleSyncModal} header_title="파일 동기화 목록">
-          {synchronizedFiles && synchronizedFiles.map((file) => (
+          {synchronizedFiles ? synchronizedFiles.map((file) => (
             <p key={file.filepath}>{file.filename}</p>
-          ))}
+          )) : 
+          <p>동기화 파일이 존재하지 않습니다.</p>}
         </Modal> 
       }
     </Fragment>
