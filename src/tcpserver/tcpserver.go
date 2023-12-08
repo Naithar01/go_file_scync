@@ -25,6 +25,8 @@ type TCPServer struct {
 	port     int
 	listener net.Listener
 	client   net.Conn
+
+	sync_files []models.StartSyncFiles
 }
 
 // NewTCPServer는 새 TCPServer 인스턴스를 생성합니다.
@@ -269,6 +271,56 @@ func (t *TCPServer) SendFile(file_path string, file_name string) error {
 	return nil
 }
 
+func (t *TCPServer) SendSyncFile(file_path string, file_name string) error {
+	if t.client == nil {
+		return nil
+	}
+
+	t.m.Lock()
+	defer t.m.Unlock()
+
+	dialog, err := runtime.MessageDialog(*t.ctx, runtime.MessageDialogOptions{
+		Type:    runtime.QuestionDialog,
+		Title:   "파일 전송",
+		Message: "선택한 파일을 전송하시겠습니까?",
+	})
+	if err != nil {
+		return errors.New(err.Error())
+	}
+
+	// "No" 클릭 시에 팝업 종료
+	if dialog != "Yes" {
+		return nil
+	}
+
+	// file_content, err := file.ReadFile(file_path)
+	// if err != nil {
+	// 	return err
+	// }
+
+	message := models.FileData{
+		Type: "SendSyncFile",
+		Content: models.ReadFile{
+			FileName: file_name,
+			// FileData: file_content,
+		},
+	}
+
+	// JSON 직렬화
+	writeData, err := json.Marshal(message)
+	if err != nil {
+		logs.CustomErrorDialog(*t.ctx, "데이터 전송에 실패하였습니다.")
+		logs.PrintMsgLog(fmt.Sprintf("데이터 전송에 실패하였습니다.: %s\n", err.Error()))
+	}
+
+	_, err = t.client.Write(writeData)
+	if err != nil {
+		logs.PrintMsgLog(fmt.Sprintf("Error sending close signal: %s\n", err.Error()))
+	}
+
+	return nil
+}
+
 func (t *TCPServer) StartSyncFiles(filesData []models.StartSyncFiles, fileCnt int) {
 	if t.client == nil {
 		return
@@ -284,6 +336,8 @@ func (t *TCPServer) StartSyncFiles(filesData []models.StartSyncFiles, fileCnt in
 
 	if fileCnt == 0 {
 		message.Content = nil
+	} else {
+		t.sync_files = filesData
 	}
 
 	// 동기화 시작을 자신 PC와 상대 PC에게 동일하게 알리기 위해 runtime 사용
@@ -299,6 +353,11 @@ func (t *TCPServer) StartSyncFiles(filesData []models.StartSyncFiles, fileCnt in
 	_, err = t.client.Write(writeData)
 	if err != nil {
 		logs.PrintMsgLog(fmt.Sprintf("Error sending close signal: %s\n", err.Error()))
+	}
+
+	// 파일 전송 시작
+	for _, file := range t.sync_files {
+		t.SendSyncFile(file.Filepath, file.Filename)
 	}
 }
 
@@ -317,6 +376,8 @@ func (t *TCPServer) StartTogeterSyncFiles(filesData []models.StartSyncFiles, fil
 
 	if fileCnt == 0 {
 		message.Content = nil
+	} else {
+		t.sync_files = filesData
 	}
 
 	// JSON 직렬화
@@ -329,5 +390,10 @@ func (t *TCPServer) StartTogeterSyncFiles(filesData []models.StartSyncFiles, fil
 	_, err = t.client.Write(writeData)
 	if err != nil {
 		logs.PrintMsgLog(fmt.Sprintf("Error sending close signal: %s\n", err.Error()))
+	}
+
+	// 파일 전송 시작
+	for _, file := range t.sync_files {
+		t.SendSyncFile(file.Filepath, file.Filename)
 	}
 }

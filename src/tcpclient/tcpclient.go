@@ -129,6 +129,31 @@ func (c *TCPClient) handleMessage(buffer []byte, n int) {
 	case "start_together_sync_files":
 		var FileDataInfo models.StartSyncFilesContent
 		json.Unmarshal(buffer[:n], &FileDataInfo)
+	case "SendSyncFile":
+		var FileData models.FileData
+		fmt.Println(FileData.Content.FileName)
+		// json.Unmarshal(buffer[:n], &FileData)
+		// global.GetRootPath()
+
+		// root_path := global.GetRootPath()
+		// if len(root_path) == 0 {
+		// 	return
+		// }
+
+		// filePath := filepath.Join(root_path, FileData.Content.FileName)
+		// err := os.MkdirAll(filepath.Dir(filePath), os.ModePerm)
+		// if err != nil {
+		// 	logs.PrintMsgLog(err.Error())
+		// 	return
+		// }
+
+		// err = ioutil.WriteFile(filePath, FileData.Content.FileData, 0644)
+		// if err != nil {
+		// 	logs.CustomErrorDialog(*c.ctx, "파일 수신에 실패하였습니다.")
+		// 	return
+		// }
+
+		// logs.PrintMsgLog("상대 PC로부터 파일 데이터를 받음")
 	}
 }
 

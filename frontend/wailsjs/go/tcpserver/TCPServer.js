@@ -18,6 +18,10 @@ export function SendFile(arg1, arg2) {
   return window['go']['tcpserver']['TCPServer']['SendFile'](arg1, arg2);
 }
 
+export function SendSyncFile(arg1, arg2) {
+  return window['go']['tcpserver']['TCPServer']['SendSyncFile'](arg1, arg2);
+}
+
 export function SetServerPort(arg1) {
   return window['go']['tcpserver']['TCPServer']['SetServerPort'](arg1);
 }
