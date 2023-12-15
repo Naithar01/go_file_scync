@@ -41,11 +41,6 @@ const Sidebar = () => {
             <FontAwesomeIcon icon={faBars} />
           </button>
         </div>
-        <div className="sidebar_sync_toggle_icon">
-          <button className="sidebar_nav_toggle_btn" type="button" onClick={SyncFilesHandler}>
-              <FontAwesomeIcon icon={faArrowRightArrowLeft} />
-          </button>
-        </div>
       </nav>
       <div className={`sidebar ${isOpen == true ? 'active' : ''}`}>
         <div className="sidebar_header">

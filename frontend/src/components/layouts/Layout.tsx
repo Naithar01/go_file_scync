@@ -7,7 +7,6 @@ import "../../styles/common/layout_style.css"
 const Layout = () => {
   return (
     <div className="layout">
-      <Sidebar />
       <main>
         <Outlet />
       </main>
