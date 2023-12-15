@@ -12,6 +12,8 @@ import (
 	"go_file_sync/src/models"
 	"io"
 	"net"
+	"path/filepath"
+	"strings"
 	"sync"
 	"time"
 
@@ -295,16 +297,16 @@ func (t *TCPServer) SendSyncFile(file_path string, file_name string) error {
 	t.m.Lock()
 	defer t.m.Unlock()
 
-	// file_content, err := file.ReadFile(file_path)
-	// if err != nil {
-	// 	return err
-	// }
+	file_content, err := file.ReadFile(file_path)
+	if err != nil {
+		return err
+	}
 
 	message := models.FileData{
 		Type: "send_sync_file",
 		Content: models.ReadFile{
-			FileName: file_name,
-			// FileData: file_content,
+			FileName: filepath.Join(strings.ReplaceAll(file_path, global.GetRootPath(), ""), file_path),
+			FileData: file_content,
 		},
 	}
 
