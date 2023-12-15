@@ -13,6 +13,7 @@ import (
 	"io"
 	"net"
 	"sync"
+	"time"
 
 	"github.com/wailsapp/wails/v2/pkg/runtime"
 )
@@ -136,6 +137,7 @@ func (t *TCPServer) handleMessage(buffer []byte, n int) {
 
 		t.wg.Add(len(t.sync_files))
 		for _, file := range t.sync_files {
+			time.Sleep(1500 * time.Millisecond)
 			go func(file models.StartSyncFiles) {
 				defer t.wg.Done()
 
@@ -257,7 +259,6 @@ func (t *TCPServer) SendFile(file_path string, file_name string) error {
 		return nil
 	}
 
-	fmt.Println(file_path)
 	file_content, err := file.ReadFile(file_path)
 	if err != nil {
 		return err
